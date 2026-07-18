@@ -1,0 +1,49 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+
+# IntelliJ / VSCode
+.idea/
+*.iml
+.vscode/
+
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub/
+.pub-cache/
+build/
+
+# Generated files
+**/generated_plugin_registrant.dart
+
+# Android
+android/.gradle/
+android/local.properties
+android/key.properties
+
+# Crashlytics / Symbols
+app.*.symbols
+
+# Obfuscation
+app.*.map.json
+
+# Coverage
+coverage/
+
+# Firebase 
+google-services.json
+firebase_app_id_file.json
+
+# Env files
+.env
+.env.*
