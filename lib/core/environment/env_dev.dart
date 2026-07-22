@@ -1,18 +1,18 @@
 import 'env.dart';
 
 /// Dev-environment configuration. Currently flips the customer flow
-/// off so the router's `CustomerFlowGuard` redirects `/customers`
-/// to `/customers_placeholder`. Production environments should
-/// override `disableCustomerFlow` to return `false`.
+/// off so any redirect guard could divert `/customers`. Production
+/// environments should override `disableCustomerFlow` to return
+/// `false`.
 class EnvDev extends Env {
-  EnvDev();
+  const EnvDev();
 
   @override
-  bool get disableCustomerFlow => true;
+  bool get disableCustomerFlow => false;
 }
 
-/// Process-wide dev environment instance. Held at top-level so the
-/// router (and any other consumer) can read flags without injecting
-/// through constructors or going through Riverpod yet. Move behind
-/// a provider once more than one consumer needs to read it.
+/// Process-wide dev environment instance. Held at top-level so
+/// transitional callers can read flags without yet routing through
+/// `envProvider`. Move all callers behind the Riverpod provider as
+/// they are touched in subsequent tasks.
 final Env appEnv = EnvDev();

@@ -1,12 +1,9 @@
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:servicar/core/utils/either.dart';
 
 import '../../domain/entities/customer_entity.dart';
 import '../../domain/failures/customer_failure.dart';
 import '../../domain/repositories/customer_repository.dart';
 import '../datasources/local/customer_local_datasource.dart';
-import '../datasources/local/customer_local_datasource_impl.dart';
 import '../mappers/customer_mapper.dart';
 
 /// Offline-first implementation of [CustomerRepository]. Talks to the
@@ -15,6 +12,10 @@ import '../mappers/customer_mapper.dart';
 ///
 /// Methods return an `Either<Failure, T>` and short-circuit with a
 /// [CustomerStorageFailure] when the underlying datasource throws.
+///
+/// Riverpod binding for this repository lives in
+/// `lib/presentation/customer/logic/customer_use_case_providers.dart`
+/// — the same partition Lalafen uses for `features/prompts/providers/`.
 class CustomerRepositoryImpl implements CustomerRepository {
   const CustomerRepositoryImpl({
     required CustomerLocalDataSource localDataSource,
@@ -147,12 +148,3 @@ class CustomerRepositoryImpl implements CustomerRepository {
     return model?.toEntity();
   }
 }
-
-/// Riverpod binding (manual — no `@riverpod` codegen). The repository is
-/// a singleton bound to the Isar database; recreating on every read is
-/// wasteful so we expose it as a regular `Provider`.
-final customerRepositoryProvider = Provider<CustomerRepository>(
-  (ref) => CustomerRepositoryImpl(
-    localDataSource: ref.watch(customerLocalDataSourceProvider),
-  ),
-);

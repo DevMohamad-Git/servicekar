@@ -13,10 +13,12 @@ class CustomerSearchBarWidget extends StatefulWidget {
   final String initialValue;
 
   @override
-  State<CustomerSearchBarWidget> createState() => _CustomerSearchBarWidgetState();
+  State<CustomerSearchBarWidget> createState() =>
+      _CustomerSearchBarWidgetState();
 }
 
-class _CustomerSearchBarWidgetState extends State<CustomerSearchBarWidget> {
+class _CustomerSearchBarWidgetState
+    extends State<CustomerSearchBarWidget> {
   late final TextEditingController _controller =
       TextEditingController(text: widget.initialValue);
 
