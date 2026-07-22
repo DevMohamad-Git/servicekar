@@ -1,21 +1,51 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '../core/environment/env_dev.dart';
+import 'pages/temp_customer_list_page.dart';
+
 part 'router.gr.dart';
 
-/// Application router. Three routes today:
-/// - `/`          : landing page (sample).
-/// - `/customers` : sample route — will be backed by the customer feature
-///                  in a follow-up task. Kept as a placeholder so the
-///                  router can be wired and exercised end-to-end.
-/// - `/services`  : sample route — placeholder, not yet backed by a
-///                  feature module.
+/// Application router. Routes today:
+/// - `/`                     : [HomeRoute] — temporary HomePage
+///                             placeholder. Will be replaced by the real
+///                             home feature in a follow-up.
+/// - `/customers`            : sample route — will be backed by the
+///                             customer feature in a follow-up task.
+///                             Has an inline redirect guard (built via
+///                             [AutoRouteGuard.redirect]): when
+///                             [Env.disableCustomerFlow] is `true`,
+///                             navigation here is redirected to
+///                             `/customers_placeholder`.
+/// - `/customers_placeholder`: redirect target — lands on
+///                             [TempCustomerListPage].
+/// - `/services`             : sample route — placeholder, not yet
+///                             backed by a feature module.
 @AutoRouterConfig()
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
-        AutoRoute(page: MainRoute.page, path: '/', initial: true),
-        AutoRoute(page: CustomersSampleRoute.page, path: '/customers'),
+        AutoRoute(page: HomeRoute.page, path: '/', initial: true),
+        AutoRoute(
+          page: CustomersSampleRoute.page,
+          path: '/customers',
+          guards: [
+            // Inline redirect guard scoped to `/customers`. If the env
+            // flag flips the customer flow off, the original navigation
+            // is aborted and a push to `/customers_placeholder` is issued
+            // instead. The placeholder route has no matching guard, so
+            // the redirect cannot loop.
+            AutoRouteGuard.redirect(
+              (_) => appEnv.disableCustomerFlow
+                  ? const TempCustomerListRoute()
+                  : null,
+            ),
+          ],
+        ),
+        AutoRoute(
+          page: TempCustomerListRoute.page,
+          path: '/customers_placeholder',
+        ),
         AutoRoute(page: ServicesSampleRoute.page, path: '/services'),
       ];
 }
@@ -30,8 +60,8 @@ class AppRouter extends RootStackRouter {
 // ─────────────────────────────────────────────────────────────────────────
 
 @RoutePage()
-class MainPage extends StatelessWidget {
-  const MainPage({super.key});
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
