@@ -28,6 +28,21 @@ dependencies:
   flutter_svg: ^2.2.3
   responsive_framework: ^1.5.1
 
+  # ──────────────────────────────────────────────────────────────────────
+  # Offline-first persistence (planned; pin to a concrete version when
+  # the Isar collection layer is implemented — see
+  # `lib/features/customer/data/datasources/local/customer_local_datasource_impl.dart`).
+  #
+  #   isar: ^3.1.0+1
+  #   isar_flutter_libs: ^3.1.0+1
+  #   path_provider: ^2.1.4
+  #
+  # These are intentionally NOT in `dependencies` yet: pub.dev resolution
+  # is unavailable from this workspace, so the placeholder datasource
+  # throws [UnimplementedError] until connectivity is restored and the
+  # versions above are uncommented.
+  # ──────────────────────────────────────────────────────────────────────
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
