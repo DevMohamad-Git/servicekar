@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../config/l10n/l10n.dart';
 import '../../../injection/global_providers.dart';
 import '../logic/customer_use_case_providers.dart';
 
@@ -62,7 +63,7 @@ class _CreateCustomerPageState extends ConsumerState<CreateCustomerPage> {
     setState(() => _submitting = false);
     if (failure == null) {
       if (!context.mounted) return;
-      helper.displayToast(context, message: 'Customer created');
+      helper.displayToast(context, message: context.l10n.customerCreated);
       context.router.maybePop();
     } else {
       if (!context.mounted) return;
@@ -73,7 +74,7 @@ class _CreateCustomerPageState extends ConsumerState<CreateCustomerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('New customer')),
+      appBar: AppBar(title: Text(context.l10n.newCustomer)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -84,29 +85,34 @@ class _CreateCustomerPageState extends ConsumerState<CreateCustomerPage> {
               TextFormField(
                 key: const PageStorageKey('create_fullName'),
                 controller: _fullName,
-                decoration: const InputDecoration(labelText: 'Full name'),
+                decoration: InputDecoration(labelText: context.l10n.fullName),
                 validator: (v) =>
-                    (v == null || v.trim().isEmpty) ? 'Required' : null,
+                    (v == null || v.trim().isEmpty)
+                        ? context.l10n.required
+                        : null,
               ),
               const SizedBox(height: 12),
               TextFormField(
                 key: const PageStorageKey('create_phone'),
                 controller: _phone,
-                decoration: const InputDecoration(labelText: 'Phone number'),
+                decoration:
+                    InputDecoration(labelText: context.l10n.phoneNumber),
                 validator: (v) =>
-                    (v == null || v.trim().isEmpty) ? 'Required' : null,
+                    (v == null || v.trim().isEmpty)
+                        ? context.l10n.required
+                        : null,
               ),
               const SizedBox(height: 12),
               TextFormField(
                 key: const PageStorageKey('create_email'),
                 controller: _email,
-                decoration: const InputDecoration(labelText: 'Email'),
+                decoration: InputDecoration(labelText: context.l10n.email),
               ),
               const SizedBox(height: 12),
               TextFormField(
                 key: const PageStorageKey('create_address'),
                 controller: _address,
-                decoration: const InputDecoration(labelText: 'Address'),
+                decoration: InputDecoration(labelText: context.l10n.address),
               ),
               const SizedBox(height: 24),
               FilledButton(
@@ -117,7 +123,7 @@ class _CreateCustomerPageState extends ConsumerState<CreateCustomerPage> {
                         width: 18,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('Create'),
+                    : Text(context.l10n.create),
               ),
             ],
           ),

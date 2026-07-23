@@ -43,6 +43,29 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   # custom_lint: ^0.8.1
   # riverpod_lint: ^3.1.3
+
+flutter:
+  generate: true
+
+  # ─── Vazirmatn (Persian + Latin) ─────────────────────────────────
+  # Why bundled, not the Flutter default: Roboto / SF Arabic
+  # fall-backs render Persian text inconsistently across Android
+  # and iOS. Vazirmatn ships both Persian glyphs and ASCII
+  # digits in one family, so the project's "Latin numerals
+  # throughout" policy survives without a digit-swap helper. The
+  # three weights align one-to-one with `app_typography.dart`'s
+  # role weights: w400 (body), w600 (title / label), w700
+  # (display / headline). See `lib/config/themes/app_themes.dart`
+  # for the wiring.
+  fonts:
+    - family: Vazirmatn
+      fonts:
+        - asset: assets/fonts/vazirmatn/Vazirmatn-Regular.ttf
+        - asset: assets/fonts/vazirmatn/Vazirmatn-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/vazirmatn/Vazirmatn-Bold.ttf
+          weight: 700
+
 flutter_gen:
   output: lib/gen/
   integrations:

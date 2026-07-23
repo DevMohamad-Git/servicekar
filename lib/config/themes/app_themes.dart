@@ -75,9 +75,26 @@ mixin AppThemes {
       splashColor: kGrey4Color.withValues(alpha: 0.3),
       highlightColor: kGrey4Color.withValues(alpha: 0.6),
       colorScheme: colorScheme,
-      // ─── ServiceKar extensions (wired through the part files) ───
-      textTheme: buildAppTextTheme(base.textTheme),
-      primaryTextTheme: buildAppTextTheme(base.primaryTextTheme),
+      // ─── Vazirmatn (Persian + Latin) ────────────────────────────
+      // Bundled (NOT the Flutter / Roboto / SF-Arabic fallback)
+      // because Roboto/SF-Arabic fall-back render Persian text
+      // inconsistently across Android vs iOS. Vazirmatn ships
+      // both Persian glyphs AND ASCII digits in one family, so
+      // the project's "Latin numerals throughout" policy
+      // survives without a digit-swap helper. We apply the
+      // family on `textTheme` / `primaryTextTheme` via `.apply`
+      // rather than on `ThemeData.copyWith(fontFamily:)`
+      // because M3 widgets (AppBar title, button labels, body
+      // text, scaffold-wrapped DefaultTextStyle) all derive
+      // their style from the active textTheme — applying here
+      // is the single source of truth, no widget-by-widget
+      // override needed. Three weight assets (Regular w400,
+      // SemiBold w600, Bold w700) cover every weight constant
+      // used by `app_typography.dart`.
+      textTheme:
+          buildAppTextTheme(base.textTheme).apply(fontFamily: 'Vazirmatn'),
+      primaryTextTheme:
+          buildAppTextTheme(base.primaryTextTheme).apply(fontFamily: 'Vazirmatn'),
       filledButtonTheme: buildFilledButtonTheme(),
       elevatedButtonTheme: buildElevatedButtonTheme(),
       outlinedButtonTheme: buildOutlinedButtonTheme(),

@@ -29,13 +29,23 @@ class App extends ConsumerWidget {
       restorationScopeId: GeneralConstants.kRestorationScopeId,
       routerConfig: appRouter.config(),
       theme: AppThemes.light,
+      // ─── Persian RTL MVP (per README § Localization) ────────────
+      // MVP is Persian-only; the user-facing language is forced to
+      // `Locale('fa')`. Switching languages is out of scope for the
+      // MVP and will be wired via a `themeMode`-style provider in a
+      // future task. MaterialApp auto-applies `Directionality.rtl`
+      // for any RTL Locale (fa is RTL), so no manual wrap is needed.
+      // Digits stay Latin across the app per product decision — this
+      // aligns with Persian numeric conventions for technical users
+      // (prices, dates, phone numbers, invoice IDs).
+      locale: const Locale('fa'),
+      supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: AppLocalizations.supportedLocales,
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../config/l10n/l10n.dart';
 import '../../../config/routes/app_router.dart';
 import '../../../features/customer/domain/failures/customer_failure.dart';
 import '../../../injection/global_providers.dart';
@@ -51,17 +52,20 @@ class _CustomerDetailsPageState extends ConsumerState<CustomerDetailsPage>
     final helper = ref.read(appHelperProvider);
     final confirmed = await showDialog<bool>(
       context: context,
+      // The dialog builder's BuildContext is `ctx` — use it for
+      // l10n lookups so a future dialog-construction refactor can't
+      // accidentally grab the parent's `context`.
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete customer?'),
-        content: const Text('This cannot be undone.'),
+        title: Text(ctx.l10n.deleteCustomerDialogTitle),
+        content: Text(ctx.l10n.deleteCustomerDialogBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Cancel'),
+            child: Text(ctx.l10n.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('Delete'),
+            child: Text(ctx.l10n.delete),
           ),
         ],
       ),
@@ -72,7 +76,7 @@ class _CustomerDetailsPageState extends ConsumerState<CustomerDetailsPage>
         .submit(widget.customerId);
     if (!context.mounted) return;
     if (failure == null) {
-      helper.displayToast(context, message: 'Customer deleted');
+      helper.displayToast(context, message: context.l10n.customerDeleted);
       Navigator.of(context).pop();
     } else {
       helper.displayToast(context, message: failure, isError: true);
@@ -87,26 +91,27 @@ class _CustomerDetailsPageState extends ConsumerState<CustomerDetailsPage>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Customer details'),
-        actions: [            switch (state) {
-              AsyncData() => Row(
-                  children: [
-                    IconButton(
-                      tooltip: 'Edit',
-                      onPressed: () => context.router.push(
-                        EditCustomerRoute(customerId: widget.customerId),
-                      ),
-                      icon: const Icon(Icons.edit),
+        title: Text(context.l10n.customerDetails),
+        actions: [
+          switch (state) {
+            AsyncData() => Row(
+                children: [
+                  IconButton(
+                    tooltip: context.l10n.edit,
+                    onPressed: () => context.router.push(
+                      EditCustomerRoute(customerId: widget.customerId),
                     ),
-                    IconButton(
-                      tooltip: 'Delete',
-                      onPressed: () => _confirmDelete(context, ref),
-                      icon: const Icon(Icons.delete_outline),
-                    ),
-                  ],
-                ),
-              _ => const SizedBox.shrink(),
-            },
+                    icon: const Icon(Icons.edit),
+                  ),
+                  IconButton(
+                    tooltip: context.l10n.delete,
+                    onPressed: () => _confirmDelete(context, ref),
+                    icon: const Icon(Icons.delete_outline),
+                  ),
+                ],
+              ),
+            _ => const SizedBox.shrink(),
+          },
         ],
       ),
       body: switch (state) {

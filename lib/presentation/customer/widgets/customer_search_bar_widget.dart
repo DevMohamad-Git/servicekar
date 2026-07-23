@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../config/l10n/l10n.dart';
+
 /// Reusable search field used by the list page. Pure presentation: the
 /// caller wires [onChanged] to the controller.
 class CustomerSearchBarWidget extends StatefulWidget {
@@ -35,9 +37,13 @@ class _CustomerSearchBarWidgetState
       child: TextField(
         controller: _controller,
         onChanged: widget.onChanged,
+        // `InputDecoration` itself is non-const because
+        // `context.l10n.searchCustomers` is a runtime call; inner
+        // widgets like `prefixIcon` and `border` keep their own
+        // `const` keywords so Material 3 rebuild only the parts
+        // whose strings changed.
         decoration: InputDecoration(
-          // TODO: AppLocalizations.of(context).customersSearchHint
-          hintText: 'Search customers',
+          hintText: context.l10n.searchCustomers,
           prefixIcon: const Icon(Icons.search),
           border: const OutlineInputBorder(),
         ),

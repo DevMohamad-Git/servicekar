@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../config/l10n/l10n.dart';
 import '../../../config/routes/app_router.dart';
 import '../../../features/customer/domain/failures/customer_failure.dart';
 import '../logic/customer_use_case_providers.dart';
@@ -52,11 +53,10 @@ class _CustomerListPageState extends ConsumerState<CustomerListPage>
 
     return Scaffold(
       appBar: AppBar(
-        // TODO: AppLocalizations.of(context).customersListTitle
-        title: const Text('Customers'),
+        title: Text(context.l10n.customers),
         actions: [
           IconButton(
-            tooltip: 'Refresh', // TODO: l10n
+            tooltip: context.l10n.refresh,
             onPressed: () =>
                 ref.read(customerListControllerProvider.notifier).refresh(),
             icon: const Icon(Icons.refresh),
@@ -65,7 +65,7 @@ class _CustomerListPageState extends ConsumerState<CustomerListPage>
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.router.push(const CreateCustomerRoute()),
-        tooltip: 'Add customer',
+        tooltip: context.l10n.addCustomer,
         child: const Icon(Icons.add),
       ),
       body: Column(

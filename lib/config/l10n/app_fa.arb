@@ -1,0 +1,139 @@
+{
+  "@@locale": "fa",
+  "appName": "سرویس‌کار",
+  "@appName": {
+    "description": "Application name (AppBar title, splash, install metadata)."
+  },
+  "save": "ذخیره",
+  "@save": {
+    "description": "Submit button label for forms (Save in Edit pages)."
+  },
+  "cancel": "لغو",
+  "@cancel": {
+    "description": "Cancel button on dialogs and edit pages."
+  },
+  "delete": "حذف",
+  "@delete": {
+    "description": "Delete action label / dialog button."
+  },
+  "edit": "ویرایش",
+  "@edit": {
+    "description": "Edit action label / AppBar tooltip."
+  },
+  "add": "افزودن",
+  "@add": {
+    "description": "Generic add verb."
+  },
+  "search": "جستجو",
+  "@search": {
+    "description": "Generic search verb (hint placeholder)."
+  },
+  "customers": "مشتری‌ها",
+  "@customers": {
+    "description": "Customer-list page title and navigation tab."
+  },
+  "services": "سرویس‌ها",
+  "@services": {
+    "description": "Service-list page title and navigation tab."
+  },
+  "invoices": "فاکتورها",
+  "@invoices": {
+    "description": "Invoice-list page title and navigation tab."
+  },
+  "settings": "تنظیمات",
+  "@settings": {
+    "description": "Settings page title (reserved — not yet implemented in MVP)."
+  },
+  "error": "خطا",
+  "@error": {
+    "description": "Generic error label for snackbar and dialog title."
+  },
+  "retry": "تلاش دوباره",
+  "@retry": {
+    "description": "Retry button label on failed async states."
+  },
+  "emptyState": "موردی برای نمایش نیست",
+  "@emptyState": {
+    "description": "Default empty-state placeholder body text."
+  },
+  "refresh": "تازه‌سازی",
+  "@refresh": {
+    "description": "Refresh action label (IconButton tooltip on list pages)."
+  },
+  "addCustomer": "افزودن مشتری",
+  "@addCustomer": {
+    "description": "Add customer action label (FAB tooltip, empty-state CTA)."
+  },
+  "fullName": "نام و نام خانوادگی",
+  "@fullName": {
+    "description": "Customer form label for the full-name field."
+  },
+  "phoneNumber": "شماره تلفن",
+  "@phoneNumber": {
+    "description": "Customer form label for the phone-number field."
+  },
+  "email": "ایمیل",
+  "@email": {
+    "description": "Customer form label for the email field."
+  },
+  "address": "آدرس",
+  "@address": {
+    "description": "Customer form label for the postal-address field."
+  },
+  "required": "الزامی",
+  "@required": {
+    "description": "Form validator error message for empty mandatory fields."
+  },
+  "newCustomer": "مشتری جدید",
+  "@newCustomer": {
+    "description": "AppBar title of the new-customer page."
+  },
+  "editCustomer": "ویرایش مشتری",
+  "@editCustomer": {
+    "description": "AppBar title of the edit-customer page."
+  },
+  "customerDetails": "جزئیات مشتری",
+  "@customerDetails": {
+    "description": "AppBar title of the customer-details page."
+  },
+  "deleteCustomerDialogTitle": "حذف مشتری؟",
+  "@deleteCustomerDialogTitle": {
+    "description": "Confirmation dialog title for delete-customer action."
+  },
+  "deleteCustomerDialogBody": "این عمل قابل بازگشت نیست.",
+  "@deleteCustomerDialogBody": {
+    "description": "Confirmation dialog body explaining irreversibility."
+  },
+  "customerCreated": "مشتری ایجاد شد",
+  "@customerCreated": {
+    "description": "Snackbar message after a successful customer creation."
+  },
+  "customerUpdated": "مشتری به‌روز شد",
+  "@customerUpdated": {
+    "description": "Snackbar message after a successful customer update."
+  },
+  "customerDeleted": "مشتری حذف شد",
+  "@customerDeleted": {
+    "description": "Snackbar message after a successful customer deletion."
+  },
+  "openingCustomers": "در حال باز کردن مشتری‌ها…",
+  "@openingCustomers": {
+    "description": "Snackbar message on the home page before navigating to the customer list."
+  },
+  "create": "ایجاد",
+  "@create": {
+    "description": "Create button label (new-customer form submit)."
+  },
+  "emptyCustomersTitle": "هنوز مشتری ندارید",
+  "@emptyCustomersTitle": {
+    "description": "Title of the empty customer-list state."
+  },
+  "emptyCustomersBody": "برای شروع ردگیری تاریخچه‌ی سرویس، اولین مشتری خود را ایجاد کنید.",
+  "@emptyCustomersBody": {
+    "description": "Body of the empty customer-list state — explains how to start."
+  },
+  "searchCustomers": "جستجوی مشتری‌ها",
+  "@searchCustomers": {
+    "description": "Customer-search bar hint text."
+  }
+}

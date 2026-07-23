@@ -1,0 +1,113 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for English (`en`).
+class AppLocalizationsEn extends AppLocalizations {
+  AppLocalizationsEn([String locale = 'en']) : super(locale);
+
+  @override
+  String get appName => 'Servicar';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get add => 'Add';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get customers => 'Customers';
+
+  @override
+  String get services => 'Services';
+
+  @override
+  String get invoices => 'Invoices';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get error => 'Error';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get emptyState => 'Nothing to display';
+
+  @override
+  String get refresh => 'Refresh';
+
+  @override
+  String get addCustomer => 'Add customer';
+
+  @override
+  String get fullName => 'Full name';
+
+  @override
+  String get phoneNumber => 'Phone number';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get address => 'Address';
+
+  @override
+  String get required => 'Required';
+
+  @override
+  String get newCustomer => 'New customer';
+
+  @override
+  String get editCustomer => 'Edit customer';
+
+  @override
+  String get customerDetails => 'Customer details';
+
+  @override
+  String get deleteCustomerDialogTitle => 'Delete customer?';
+
+  @override
+  String get deleteCustomerDialogBody => 'This cannot be undone.';
+
+  @override
+  String get customerCreated => 'Customer created';
+
+  @override
+  String get customerUpdated => 'Customer updated';
+
+  @override
+  String get customerDeleted => 'Customer deleted';
+
+  @override
+  String get openingCustomers => 'Opening customers…';
+
+  @override
+  String get create => 'Create';
+
+  @override
+  String get emptyCustomersTitle => 'No customers yet';
+
+  @override
+  String get emptyCustomersBody =>
+      'Create your first customer to start tracking service history.';
+
+  @override
+  String get searchCustomers => 'Search customers';
+}

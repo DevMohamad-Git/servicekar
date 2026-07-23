@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../config/l10n/l10n.dart';
 import '../../../config/routes/app_router.dart';
 import '../../../injection/global_providers.dart';
 
@@ -17,22 +18,22 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Servicar')),
+      appBar: AppBar(title: Text(context.l10n.appName)),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Servicar'),
+            Text(context.l10n.appName),
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () {
                 ref.read(appHelperProvider).displayToast(
                       context,
-                      message: 'Opening customers…',
+                      message: context.l10n.openingCustomers,
                     );
                 context.router.push(const CustomerListRoute());
               },
-              child: const Text('Customers'),
+              child: Text(context.l10n.customers),
             ),
           ],
         ),
