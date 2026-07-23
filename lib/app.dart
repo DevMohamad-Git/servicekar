@@ -3,6 +3,15 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:servicar/config/config.dart';
+// Direct import for `AppLocalizations.delegate` and
+// `AppLocalizations.supportedLocales` (static members). Mirrors
+// `lalafen/lib/app.dart`: the Lalafen-aligned `l10n.dart` barrel
+// does NOT re-export `AppLocalizations` (`export` would diverge
+// from the upstream pattern), so the static surface reaches us
+// only via the original file under `arb/`. The build-context
+// extension `context.l10n.X` continues to flow through
+// `package:servicar/config/config.dart` → `l10n/l10n.dart`.
+import 'package:servicar/config/l10n/arb/app_localizations.dart';
 import 'core/constants/general_constants.dart';
 import 'injection/global_providers.dart';
 
