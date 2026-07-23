@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'config/l10n/arb/app_localizations.dart';
-import 'config/themes/app_themes.dart';
+import 'package:servicar/config/config.dart';
 import 'core/constants/general_constants.dart';
 import 'injection/global_providers.dart';
 
@@ -13,6 +12,11 @@ import 'injection/global_providers.dart';
 /// `lib/injection/global_providers.dart`) so a router swap (test,
 /// flavor, navigation guard) flows through Riverpod without
 /// re-creating MaterialApp.
+///
+/// Theme wiring mirrors `lalafen/lib/app.dart`: a single
+/// `AppThemes.light` (no `darkTheme:` argument — Lalafen ships
+/// light-only by design, see `lib/config/themes/app_themes.dart`
+/// for the rationale).
 class App extends ConsumerWidget {
   const App({super.key});
 
@@ -25,7 +29,6 @@ class App extends ConsumerWidget {
       restorationScopeId: GeneralConstants.kRestorationScopeId,
       routerConfig: appRouter.config(),
       theme: AppThemes.light,
-      darkTheme: AppThemes.dark,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
