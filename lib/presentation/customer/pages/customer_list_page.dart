@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../config/l10n/l10n.dart';
 import '../../../config/routes/app_router.dart';
 import '../../../features/customer/domain/failures/customer_failure.dart';
-import '../logic/customer_use_case_providers.dart';
+import '../../../injection/feature_injection/customer_providers.dart';
 import '../widgets/customer_card_widget.dart';
 import '../widgets/customer_search_bar_widget.dart';
 import '../widgets/empty_customer_state_widget.dart';

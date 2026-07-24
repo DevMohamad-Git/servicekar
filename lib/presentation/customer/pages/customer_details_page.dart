@@ -6,7 +6,7 @@ import '../../../config/l10n/l10n.dart';
 import '../../../config/routes/app_router.dart';
 import '../../../features/customer/domain/failures/customer_failure.dart';
 import '../../../injection/global_providers.dart';
-import '../logic/customer_use_case_providers.dart';
+import '../../../injection/feature_injection/customer_providers.dart';
 import '../widgets/customer_balance_widget.dart';
 
 /// Live-persistent customer details page.

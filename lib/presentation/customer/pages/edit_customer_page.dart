@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../config/l10n/l10n.dart';
 import '../../../injection/global_providers.dart';
-import '../logic/customer_use_case_providers.dart';
+import '../../../injection/feature_injection/customer_providers.dart';
 
 /// Edit customer page (Live Persistence form).
 ///

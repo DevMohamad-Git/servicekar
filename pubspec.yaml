@@ -28,6 +28,33 @@ dependencies:
   flutter_svg: ^2.2.3
   responsive_framework: ^1.5.1
 
+  # ─── Database ──────────────────────────────────────────────────
+  # Isar v3 is the README-recommended local database
+  # (SSoT per README § Coding Guidelines § Core Principles).
+  # This is the infrastructure-task migration only — collection
+  # schemas live with their owning feature module in week 2+.
+  # `isar_flutter_libs` ships the precompiled native binaries
+  # (mirrors the README § Technical Specifications intent of a
+  # zero-config local store on Android API 21+); `path_provider`
+  # resolves the application-documents root for the DB file.
+  # `isar_community` is the README § Coding Guidelines /
+  # § Technical Specifications database, picked here over the
+  # upstream `isar` because the upstream generator pins
+  # `analyzer <= 6.x` and the project's locked `analyzer` is
+  # `9.0.0` (transitive from `dart_style 3.1.3`).
+  # `isar_community` is a drop-in fork: the public API
+  # (`Isar.open`, `IsarCollection`, `CollectionSchema`, …)
+  # is identical, only the analyzer bound has been raised.
+  isar_community: ^3.3.2
+  # Native binaries for every supported platform — mirrors the
+  # README § Technical Specifications intent of a zero-config
+  # local store on Android API 21+.
+  isar_community_flutter_libs: ^3.3.2
+  # Resolves the application-documents directory for the DB file;
+  # also used by future file-system features (PDF invoices,
+  # customer attachments, etc.).
+  path_provider: ^2.1.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -39,6 +66,14 @@ dev_dependencies:
   auto_route_generator: ^10.5.0
 
   flutter_gen_runner: ^5.12.0
+
+  # Isar schema codegen. Runs only when a feature introduces a new
+  # @collection class (infrastructure-only tasks like this one do
+  # not invoke build_runner).
+  # Isar schema codegen. Will be invoked when a feature introduces
+  # its first `@collection` class (this infrastructure-only task
+  # does NOT call `dart run build_runner`).
+  isar_community_generator: ^3.3.2
 
   flutter_lints: ^6.0.0
   # custom_lint: ^0.8.1

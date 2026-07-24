@@ -24,14 +24,13 @@
 /// own that concern on purpose.
 ///
 /// Note on the README's `injection/feature_injection/[feature]_providers.dart`
-/// tier: that folder does not yet exist. Today's customer feature
-/// colocates its repositories + use-case providers in
-/// `presentation/customer/logic/customer_use_case_providers.dart`,
-/// which is a *known deviation* from the authorised tier —
-/// NOT an equally valid alternative. New features MUST register
-/// their providers under `injection/feature_injection/[feature]_providers.dart`
-/// per the README, and the customer module should be migrated to
-/// match during the first feature that follows it.
+/// tier: that folder is now in use. The customer feature's
+/// repositories + use-case providers live in
+/// `injection/feature_injection/customer_providers.dart`, matching the
+/// README `Provider Organization` table's "Feature-specific" row. New
+/// features MUST register their providers under
+/// `injection/feature_injection/[feature]_providers.dart` per the
+/// README.
 library;
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -72,7 +71,36 @@ export 'global_providers.dart';
 ///     feature would create a merge conflict on this file.
 ///   * It would fight Riverpod's own family / auto-dispose model.
 Future<ProviderContainer> configureDependencies() async {
-  final container = ProviderContainer();
+  // ─── Isar bootstrap (deliberately no-op today) ─────────────────
+  //
+  //   final db = await DatabaseService.open(
+  //     schemas: [/* first @collection schema will be listed here */],
+  //   );
+  //   // …then build the container with the override below.
+  //
+  // Why this stays commented out: Isar v3 throws
+  // `IsarError: At least one schema needs to be provided` when
+  // `Isar.open` is invoked with an empty schemas list, and the
+  // task that introduces this file is ordered ahead of any
+  // `@collection` class. The first feature to ship such a class
+  // (Customer Collection / Service Collection / …) is responsible
+  // for:
+  //   (a) running `dart run build_runner build` to generate its
+  //       collection schema,
+  //   (b) importing the generated schema above,
+  //   (c) uncommenting the two open() lines below,
+  //   (d) listing itself in the `schemas:` array.
+  // That preserves the README § SSoT "open once in bootstrap"
+  // guarantee without forcing a writeTxn-friendly persistence
+  // layer on day 0 (when no collection has shipped yet).
+  //
+  // The override list below is intentionally `const []` so the
+  // container can be built today; once (a)–(d) land, the call
+  // site grows to:
+  //   final container = ProviderContainer(
+  //     overrides: [isarInstanceProvider.overrideWithValue(db.isar)],
+  //   );
+  final container = ProviderContainer(overrides: const []);
 
   // Eager globals whose construction has setup work (or whose
   // future construction will — AppHelper is reserved for the

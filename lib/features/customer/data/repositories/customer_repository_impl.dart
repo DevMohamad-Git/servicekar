@@ -14,7 +14,7 @@ import '../mappers/customer_mapper.dart';
 /// [CustomerStorageFailure] when the underlying datasource throws.
 ///
 /// Riverpod binding for this repository lives in
-/// `lib/presentation/customer/logic/customer_use_case_providers.dart`
+/// `lib/injection/feature_injection/customer_providers.dart`
 /// — the same partition Lalafen uses for `features/prompts/providers/`.
 class CustomerRepositoryImpl implements CustomerRepository {
   const CustomerRepositoryImpl({

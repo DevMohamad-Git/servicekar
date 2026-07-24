@@ -1,4 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:isar_community/isar.dart';
 
 import '../config/routes/app_router.dart';
 import '../core/environment/env.dart';
@@ -27,3 +28,39 @@ final appHelperProvider = Provider<AppHelper>((ref) => AppHelper(ref));
 
 /// Single [AppRouter] bound to the app's lifetime.
 final appRouterProvider = Provider<AppRouter>((ref) => AppRouter());
+
+/// Project-wide Isar instance.
+///
+/// Today this provider is intentionally NOT overridden in
+/// `configureDependencies()`: Isar v3 throws when `Isar.open` is
+/// called with an empty schemas list, and the infrastructure task
+/// that introduces this file is ordered *ahead* of any
+/// `@collection` class. Reading the provider today therefore
+/// raises a [StateError] that points future engineers back at the
+/// bootstrap comment so the missing `open()` is obvious in the log.
+///
+/// Once the first `@collection` class ships (Customer Collection,
+/// Service Collection, …) the bootstrap in
+/// `lib/injection/injection.dart` will:
+///   1. `await DatabaseService.open(schemas: [...])` once;
+///   2. add `isarInstanceProvider.overrideWithValue(db.isar)` to
+///      the `ProviderContainer(overrides:)` list.
+///
+/// Pattern rationale: the global must be readable from any feature
+/// module as a synchronous [Isar] handle (Library-spec matches
+/// the README's "Open-Once-Source-of-Truth" rule), so the async
+/// open happens at bootstrap and the override eliminates the
+/// `AsyncValue` ladder at every call site.
+final isarInstanceProvider = Provider<Isar>((ref) {
+  throw StateError(
+    'isarInstanceProvider was read before Isar was opened in '
+    'configureDependencies(). Either:\n'
+    '  • no @collection has been shipped yet (the bootstrap is '
+    'deliberately no-op until the first schema arrives), OR\n'
+    '  • a feature reached for Isar before configureDependencies() '
+    'finished.\n'
+    'See `lib/injection/injection.dart` for the bootstrap recipe '
+    'and `lib/core/database/database_service.dart` for the open '
+    'contract.',
+  );
+});

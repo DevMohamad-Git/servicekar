@@ -4,6 +4,7 @@
 library;
 
 export 'constants/general_constants.dart';
+export 'database/database_service.dart';
 export 'environment/env.dart';
 export 'environment/env_dev.dart';
 export 'errors/failure.dart';
