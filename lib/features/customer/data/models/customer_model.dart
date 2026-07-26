@@ -4,12 +4,13 @@
 /// Lives at the data-layer boundary — never import this from domain or
 /// presentation code.
 ///
-/// TODO: add `CustomerIsar` (Isar `@collection`) plus `toIsar()` /
-///       `fromIsar()` converters in this folder once Isar is wired up.
-///
 /// Like the entity, this class avoids `@freezed` for now so the
 /// scaffold compiles without codegen. See `customer_entity.dart` for
 /// the migration recipe.
+///
+/// The Isar collection lives in `customer_isar.dart` and its
+/// `Model ↔ Isar` converters live in
+/// `lib/features/customer/data/mappers/customer_isar_mapper.dart`.
 class CustomerModel {
   const CustomerModel({
     required this.id,
