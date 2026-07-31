@@ -32,6 +32,12 @@ import '../models/customer_model.dart';
 ///   * Isar → Model: `CustomerIsar.uuid` becomes
 ///     [CustomerModel.id]. The internal `CustomerIsar.id` is
 ///     *deliberately discarded* — domain code never sees it.
+// `// ignore: deprecated_member_use` on the `balance` line is the
+// same tradeoff documented in `customer_mapper.dart`: the cached
+// field is deprecated at the domain layer but must still flow
+// through the Isar round-trip to keep pre-migration DB files
+// readable. The day the cached field is dropped, these ignores
+// come out with it.
 CustomerIsar _modelToIsar(CustomerModel m) => CustomerIsar()
       // `id` left at its `Isar.autoIncrement` initializer on purpose
       // — see the ID round-trip rules above.
@@ -41,6 +47,11 @@ CustomerIsar _modelToIsar(CustomerModel m) => CustomerIsar()
       ..email = m.email
       ..address = m.address
       ..notes = m.notes
+      ..profileImagePath = m.profileImagePath
+      ..nationalId = m.nationalId
+      ..birthday = m.birthday
+      ..gender = m.gender
+      // ignore: deprecated_member_use
       ..balance = m.balance
       // Defensive copy so the consumer cannot mutate the underlying
       // Isar list through the Model once we hand it back.
@@ -56,6 +67,11 @@ CustomerModel _isarToModel(CustomerIsar i) => CustomerModel(
       email: i.email,
       address: i.address,
       notes: i.notes,
+      profileImagePath: i.profileImagePath,
+      nationalId: i.nationalId,
+      birthday: i.birthday,
+      gender: i.gender,
+      // ignore: deprecated_member_use
       balance: i.balance,
       // Defensive copy: Isar's list properties are live "views"
       // backed by the underlying storage. Hand a fresh `List<String>`

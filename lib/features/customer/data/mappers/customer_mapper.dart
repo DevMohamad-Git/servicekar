@@ -8,6 +8,12 @@ import '../models/customer_model.dart';
 // drift: add a field to either side, regenerate the Freezed factory,
 // and the analyzer points you straight here.
 //
+// The `// ignore: deprecated_member_use` lines are intentional: the
+// `balance` field is now `@deprecated` on both sides (see
+// `customer_entity.dart`), but the cached column MUST keep flowing
+// through the mapper so existing rows on disk stay readable. The day
+// the cached field is removed, the ignores come out with it.
+//
 CustomerEntity _modelToEntity(CustomerModel m) => CustomerEntity(
       id: m.id,
       fullName: m.fullName,
@@ -15,6 +21,11 @@ CustomerEntity _modelToEntity(CustomerModel m) => CustomerEntity(
       email: m.email,
       address: m.address,
       notes: m.notes,
+      profileImagePath: m.profileImagePath,
+      nationalId: m.nationalId,
+      birthday: m.birthday,
+      gender: m.gender,
+      // ignore: deprecated_member_use
       balance: m.balance,
       tags: List<String>.unmodifiable(m.tags),
       createdAt: m.createdAt,
@@ -28,6 +39,11 @@ CustomerModel _entityToModel(CustomerEntity e) => CustomerModel(
       email: e.email,
       address: e.address,
       notes: e.notes,
+      profileImagePath: e.profileImagePath,
+      nationalId: e.nationalId,
+      birthday: e.birthday,
+      gender: e.gender,
+      // ignore: deprecated_member_use
       balance: e.balance,
       tags: List<String>.of(e.tags),
       createdAt: e.createdAt,

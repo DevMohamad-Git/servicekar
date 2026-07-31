@@ -11,6 +11,13 @@
 /// The Isar collection lives in `customer_isar.dart` and its
 /// `Model ↔ Isar` converters live in
 /// `lib/features/customer/data/mappers/customer_isar_mapper.dart`.
+///
+/// ─── Profile surface (mirrors [CustomerEntity]) ─────────────────
+/// `profileImagePath`, `nationalId`, `birthday`, `gender` mirror the
+/// entity's profile fields so the data layer swallows them as-is.
+/// `balance` is preserved-with-deprecation for the same reason
+/// documented on [CustomerEntity] — see that file for the migration
+/// plan.
 class CustomerModel {
   const CustomerModel({
     required this.id,
@@ -19,6 +26,14 @@ class CustomerModel {
     this.email,
     this.address,
     this.notes,
+    this.profileImagePath,
+    this.nationalId,
+    this.birthday,
+    this.gender,
+    @Deprecated(
+      'Derived from invoices/payments; this cached summary is '
+      'stale-prone. Use the future GetCustomerDebtUseCase instead.',
+    )
     this.balance = 0.0,
     this.tags = const <String>[],
     this.createdAt,
@@ -31,7 +46,18 @@ class CustomerModel {
   final String? email;
   final String? address;
   final String? notes;
+  final String? profileImagePath;
+  final String? nationalId;
+  final DateTime? birthday;
+  final String? gender;
+
+  /// @deprecated — see class header for the migration plan.
+  @Deprecated(
+    'Derived from invoices/payments; this cached summary is '
+    'stale-prone. Use the future GetCustomerDebtUseCase instead.',
+  )
   final double balance;
+
   final List<String> tags;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -46,6 +72,10 @@ class CustomerModel {
         other.email == email &&
         other.address == address &&
         other.notes == notes &&
+        other.profileImagePath == profileImagePath &&
+        other.nationalId == nationalId &&
+        other.birthday == birthday &&
+        other.gender == gender &&
         other.balance == balance &&
         _listEq(other.tags, tags) &&
         other.createdAt == createdAt &&
@@ -60,6 +90,10 @@ class CustomerModel {
         email,
         address,
         notes,
+        profileImagePath,
+        nationalId,
+        birthday,
+        gender,
         balance,
         Object.hashAll(tags),
         createdAt,

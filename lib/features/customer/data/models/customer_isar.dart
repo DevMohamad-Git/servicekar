@@ -18,19 +18,50 @@ part 'customer_isar.g.dart';
 /// This file stays a flat Isar schema with no Flutter, no freezed, and
 /// no domain dependency beyond the entity it shadows.
 ///
+/// ─── Profile surface ───────────────────────────────────────────────
+/// The Customer entity now carries a richer "profile" surface
+/// (`profileImagePath`, `nationalId`, `birthday`, `gender`) so the
+/// profile screen can hydrate without a schema migration. All four
+/// fields are nullable / optional — older records in the on-disk DB
+/// keep their pre-migration shape; Isar fills absent values with
+/// `null`.
+///
+/// ─── `balance` field ───────────────────────────────────────────────
+/// `balance` is preserved as-is (NOT removed). The customer's
+/// outstanding debt will eventually be derived from
+/// `sum(Invoice.totalAmount) - sum(Payment.amount)` grouped by
+/// `customerUuid`; until that wiring ships, the cached column is the
+/// last-known summary. It carries no annotation here because:
+///
+///   * Removing the column would orphan every older DB on disk.
+///   * The deprecation contract lives on the domain entity / model,
+///     where the analyzer can flag call sites.
+///
 /// ─── Future-schema gotcha: `replace: true` + `Isar.autoIncrement` ──
 ///   Today the only `replace: true` index lives on [uuid]. When a
 ///   record with a duplicate uuid is `put`, Isar resolves the
 ///   conflict by **deleting the old row and inserting a new one**
 ///   under the same uuid but a freshly-allocated internal [Id].
-///   This is safe for the customer table in isolation, but if a
-///   future feature (Service / Invoice / Payment) ever wires an
-///   `IsarLink<CustomerIsar>` against the internal `Id`, those
-///   links will silently detach on every re-import. When that
-///   day comes, switch to a manual upsert: query the existing row,
-///   preserve its `Id`, mutate the in-memory copy, and `put` it
-///   again — DO NOT rely on `replace: true` with a freshly-built
-///   `CustomerIsar()`.
+///   This is safe for the customer table in isolation. The linked
+///   Service / Invoice / Payment collections deliberately avoid
+///   `IsarLink` *and* propagate this rule to their tables:
+///
+///   * **No `IsarLink`** — every linked collection uses a plain
+///     `String` FK (`customerUuid`, `invoiceUuid`). Otherwise
+///     re-importing a customer would silently detach every link
+///     keyed on the reallocated int Id.
+///   * **No auto-cascade** — Isar does NOT automatically delete
+///     child rows when a parent is removed. The **repository layer**
+///     is responsible for:
+///       * refusing to persist a child row whose FK has no live
+///         parent, AND
+///       * deleting every child whose FK matches a deleted parent.
+///
+///   When the deprecation on [CustomerEntity.balance] is enforced
+///   (i.e. column dropped), switch to a manual upsert: query the
+///   existing row, preserve its `Id`, mutate the in-memory copy,
+///   and `put` it again — DO NOT rely on `replace: true` with a
+///   freshly-built `CustomerIsar()`.
 ///
 /// ─── ID strategy (forced by the existing domain contract + Isar's
 ///     rules; documented here so the next engineer does not "simplify"
@@ -107,8 +138,38 @@ class CustomerIsar {
   String? address;
   String? notes;
 
+  /// ─── Profile surface (see class header) ────────────────────
+  /// Relative file path to the customer's avatar image. Nullable
+  /// because the field is optional. We keep the value as a string so
+  /// swapping between local file system and remote storage (e.g.
+  /// CDN) only touches the path resolver at read time.
+  String? profileImagePath;
+
+  /// Government-issued national ID. Plain string for cross-region
+  /// support; the validator lives in the use-case layer when the
+  /// profile form is built.
+  String? nationalId;
+
+  /// Birthday, used for greetings / age filters. Nullable.
+  DateTime? birthday;
+
+  /// Gender label, kept as a small string ("male" / "female" /
+  /// "other") until i18n lands. Indexed so future "filter by
+  /// gender" queries hit the index instead of scanning.
+  /// NOTE: low-cardinality (3–4 distinct values) means the index
+  /// pays off only when the customer collection is large. The
+  /// index is kept because the schema is forward-looking; drop
+  /// here if profiling shows it harms the small-N write path.
+  @Index()
+  String? gender;
+
   /// Outstanding balance in local currency. Positive = customer
   /// owes the business.
+  ///
+  /// **Deprecated at the domain layer** — see [CustomerEntity]. Kept
+  /// on the Isar row to preserve backward-compat with pre-migration
+  /// DBs; the column will be dropped in a future migration once the
+  /// debt-derivation use case ships.
   late double balance;
 
   /// Operator-defined tags for grouping / filtering. Stored as a

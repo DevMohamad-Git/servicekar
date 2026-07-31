@@ -82,6 +82,23 @@ export 'global_providers.dart';
 /// same `Isar.open([...])` invocation without touching the open
 /// contract — just append to the `schemas:` list and the rebuild
 /// regenerates their `*.g.dart` part files.
+///
+/// ─── NEXT TASK (linked-data foundation) ────────────────────────────
+/// The Customer-Profile foundation task shipped the
+/// `ServiceIsarSchema`, `InvoiceIsarSchema`, and `PaymentIsarSchema`
+/// files under `lib/features/customer/data/models/*_isar.g.dart`
+/// but did NOT wire them here — that work explicitly out of scope
+/// per the task brief "Do not implement DI wiring". Whoever wires
+/// the first Service / Invoice / Payment feature module must:
+///   1. Add `ServiceIsarSchema`, `InvoiceIsarSchema`,
+///      `PaymentIsarSchema` (and any future schema) to the
+///      `schemas:` list below.
+///   2. Update `lib/injection/global_providers.dart`'s
+///      `isarInstanceProvider` if its contract changes.
+///   3. Hand each IsarCollection<…> to the feature's
+///      `LocalDataSource` via feature-scoped providers under
+///      `lib/injection/feature_injection/`, same convention used
+///      by `customerLocalDataSourceProvider`.
 Future<ProviderContainer> configureDependencies() async {
   final db = await DatabaseService.open(
     schemas: [CustomerIsarSchema],
