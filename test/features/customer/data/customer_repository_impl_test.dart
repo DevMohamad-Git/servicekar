@@ -16,7 +16,7 @@ import 'package:servicar/features/customer/domain/failures/customer_failure.dart
 /// contract without depending on the platform channel.
 class InMemoryCustomerLocalDataSource implements CustomerLocalDataSource {
   InMemoryCustomerLocalDataSource([Map<String, CustomerModel>? seed])
-      : _store = {...?seed};
+    : _store = {...?seed};
 
   final Map<String, CustomerModel> _store;
 
@@ -81,7 +81,6 @@ void main() {
       final entity = (read as Right<CustomerFailure, CustomerEntity>).value;
       expect(entity.fullName, 'Alice');
       expect(entity.phoneNumber, '+98 912 000 0000');
-      expect(entity.balance, 0.0);
     });
 
     test('getCustomerById returns CustomerNotFoundFailure on miss', () async {
@@ -112,24 +111,25 @@ void main() {
     });
 
     test('searchCustomers proxies through to the datasource', () async {
-      await fake.save(CustomerModel(id: 'a', fullName: 'Alice', phoneNumber: '1'));
-      await fake.save(CustomerModel(id: 'b', fullName: 'Bob', phoneNumber: '2'));
+      await fake.save(
+        CustomerModel(id: 'a', fullName: 'Alice', phoneNumber: '1'),
+      );
+      await fake.save(
+        CustomerModel(id: 'b', fullName: 'Bob', phoneNumber: '2'),
+      );
       final hits = await repo.searchCustomers('ali');
       expect(hits.isRight, isTrue);
-      final list =
-          (hits as Right<CustomerFailure, List<CustomerEntity>>).value;
+      final list = (hits as Right<CustomerFailure, List<CustomerEntity>>).value;
       expect(list, hasLength(1));
       expect(list.first.fullName, 'Alice');
     });
-
-    test('mapper is stable: tags, balance, nullable fields preserved', () async {
+    test('mapper is stable: tags, nullable fields preserved', () async {
       const model = CustomerModel(
         id: 'c1',
         fullName: 'Alice',
         phoneNumber: '+98 912 000 0000',
         email: 'a@example.com',
         address: 'Tehran',
-        balance: 12.5,
         tags: ['vip', 'cash'],
       );
       await fake.save(model);
@@ -139,33 +139,26 @@ void main() {
       final e = (fetched as Right<CustomerFailure, CustomerEntity>).value;
       expect(e.email, 'a@example.com');
       expect(e.address, 'Tehran');
-      expect(e.balance, 12.5);
       expect(e.tags, ['vip', 'cash']);
     });
 
-    test('source-layer exception is wrapped as CustomerStorageFailure',
-        () async {
-      // Forge a faulty datasource: save throws. The repository must
-      // contain the throw inside Left(CustomerStorageFailure) so
-      // callers never see raw exceptions.
-      final broken = _BrokenCustomerLocalDataSource();
-      final r = CustomerRepositoryImpl(localDataSource: broken);
+    test(
+      'source-layer exception is wrapped as CustomerStorageFailure',
+      () async {
+        // Forge a faulty datasource: save throws. The repository must
+        // contain the throw inside Left(CustomerStorageFailure) so
+        // callers never see raw exceptions.
+        final broken = _BrokenCustomerLocalDataSource();
+        final r = CustomerRepositoryImpl(localDataSource: broken);
 
-      const input = CustomerEntity(
-        id: 'c1',
-        fullName: 'A',
-        phoneNumber: '1',
-      );
-      final result = await r.createCustomer(input);
-      expect(result.isLeft, isTrue);
-      final failure =
-          (result as Left<CustomerFailure, CustomerEntity>).value;
-      expect(failure, isA<CustomerStorageFailure>());
-      expect(
-        (failure as CustomerStorageFailure).operation,
-        'createCustomer',
-      );
-    });
+        const input = CustomerEntity(id: 'c1', fullName: 'A', phoneNumber: '1');
+        final result = await r.createCustomer(input);
+        expect(result.isLeft, isTrue);
+        final failure = (result as Left<CustomerFailure, CustomerEntity>).value;
+        expect(failure, isA<CustomerStorageFailure>());
+        expect((failure as CustomerStorageFailure).operation, 'createCustomer');
+      },
+    );
   });
 }
 

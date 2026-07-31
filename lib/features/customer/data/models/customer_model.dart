@@ -4,12 +4,21 @@
 /// Lives at the data-layer boundary — never import this from domain or
 /// presentation code.
 ///
-/// TODO: add `CustomerIsar` (Isar `@collection`) plus `toIsar()` /
-///       `fromIsar()` converters in this folder once Isar is wired up.
-///
 /// Like the entity, this class avoids `@freezed` for now so the
 /// scaffold compiles without codegen. See `customer_entity.dart` for
 /// the migration recipe.
+///
+/// The Isar collection lives in `customer_isar.dart` and its
+/// `Model ↔ Isar` converters live in
+/// `lib/features/customer/data/mappers/customer_isar_mapper.dart`.
+///
+/// ─── Profile surface (mirrors [CustomerEntity]) ─────────────────
+/// `profileImagePath`, `nationalId`, `birthday`, `gender` mirror the
+/// entity's profile fields so the data layer swallows them as-is.
+/// `balance` is intentionally NOT present on the Model either — same
+/// reason as on the Entity. The deprecated `CustomerIsar.balance`
+/// column is preserved (read-write *ignore*) for backwards
+/// compatibility with pre-migration DBs.
 class CustomerModel {
   const CustomerModel({
     required this.id,
@@ -18,7 +27,10 @@ class CustomerModel {
     this.email,
     this.address,
     this.notes,
-    this.balance = 0.0,
+    this.profileImagePath,
+    this.nationalId,
+    this.birthday,
+    this.gender,
     this.tags = const <String>[],
     this.createdAt,
     this.updatedAt,
@@ -30,7 +42,11 @@ class CustomerModel {
   final String? email;
   final String? address;
   final String? notes;
-  final double balance;
+  final String? profileImagePath;
+  final String? nationalId;
+  final DateTime? birthday;
+  final String? gender;
+
   final List<String> tags;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -45,7 +61,10 @@ class CustomerModel {
         other.email == email &&
         other.address == address &&
         other.notes == notes &&
-        other.balance == balance &&
+        other.profileImagePath == profileImagePath &&
+        other.nationalId == nationalId &&
+        other.birthday == birthday &&
+        other.gender == gender &&
         _listEq(other.tags, tags) &&
         other.createdAt == createdAt &&
         other.updatedAt == updatedAt;
@@ -53,17 +72,20 @@ class CustomerModel {
 
   @override
   int get hashCode => Object.hash(
-        id,
-        fullName,
-        phoneNumber,
-        email,
-        address,
-        notes,
-        balance,
-        Object.hashAll(tags),
-        createdAt,
-        updatedAt,
-      );
+    id,
+    fullName,
+    phoneNumber,
+    email,
+    address,
+    notes,
+    profileImagePath,
+    nationalId,
+    birthday,
+    gender,
+    Object.hashAll(tags),
+    createdAt,
+    updatedAt,
+  );
 }
 
 bool _listEq<T>(List<T> a, List<T> b) {

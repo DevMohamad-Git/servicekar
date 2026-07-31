@@ -35,6 +35,11 @@ library;
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../core/database/database_service.dart';
+import '../features/customer/data/models/customer_isar.dart';
+import '../features/customer/data/models/invoice_isar.dart';
+import '../features/customer/data/models/payment_isar.dart';
+import '../features/customer/data/models/service_isar.dart';
 import 'global_providers.dart';
 
 export 'global_providers.dart';
@@ -45,11 +50,10 @@ export 'global_providers.dart';
 /// `UncontrolledProviderScope`, so the DI graph is built exactly
 /// once and never re-created between route pushes.
 ///
-/// Why it is async — keeps a future `await Isar.open(...)`,
-/// preferences warm-up, or locale load fenced inside this
-/// helper instead of leaking into `main.dart`. Today the body is
-/// effectively sync; the `async`/`await` shape is forward-looking
-/// so the public signature never has to change.
+/// Why it is async — keeps the `await DatabaseService.open(...)`,
+/// `await Isar.open(...)`, future preferences warm-up, or locale
+/// load fenced inside this helper instead of leaking into
+/// `main.dart`.
 ///
 /// Why there is NO `overrides` parameter — Riverpod's own
 /// `ProviderScope(overrides: [...])` accepts overrides only on
@@ -70,37 +74,39 @@ export 'global_providers.dart';
 ///   * It would couple this helper to every new feature — every
 ///     feature would create a merge conflict on this file.
 ///   * It would fight Riverpod's own family / auto-dispose model.
+///
+/// ─── Isar bootstrap ───────────────────────────────────────────────
+/// `await DatabaseService.open(schemas: [...])` runs once here.
+/// The returned [Isar] lives for the entire process and is handed
+/// to every Isar-aware provider via
+/// `isarInstanceProvider.overrideWithValue(db.isar)`.
+///
+/// **Phase 2 — Linked-data foundation:** the four MVP collections
+/// (Customer, Service, Invoice, Payment) are now opened
+/// together. Across collections the link is a *plain `String`
+/// foreign key* (`customerUuid`, `invoiceUuid`) on the child row:
+/// the alternative `IsarLink<…>` would silently detach every link
+/// whenever a customer is re-imported (the `replace: true` +
+/// `Isar.autoIncrement` reallocates the internal int Id).
+/// Cross-collection writes, reads, and cascade-delete policies
+/// are owned by the *repository layer* — that work ships in Phase 3.
+///
+/// Future schemas (any new domain collection) compose into the
+/// same `Isar.open([...])` invocation without touching this
+/// contract — just append to the `schemas:` list and the rebuild
+/// regenerates their `*.g.dart` part files.
 Future<ProviderContainer> configureDependencies() async {
-  // ─── Isar bootstrap (deliberately no-op today) ─────────────────
-  //
-  //   final db = await DatabaseService.open(
-  //     schemas: [/* first @collection schema will be listed here */],
-  //   );
-  //   // …then build the container with the override below.
-  //
-  // Why this stays commented out: Isar v3 throws
-  // `IsarError: At least one schema needs to be provided` when
-  // `Isar.open` is invoked with an empty schemas list, and the
-  // task that introduces this file is ordered ahead of any
-  // `@collection` class. The first feature to ship such a class
-  // (Customer Collection / Service Collection / …) is responsible
-  // for:
-  //   (a) running `dart run build_runner build` to generate its
-  //       collection schema,
-  //   (b) importing the generated schema above,
-  //   (c) uncommenting the two open() lines below,
-  //   (d) listing itself in the `schemas:` array.
-  // That preserves the README § SSoT "open once in bootstrap"
-  // guarantee without forcing a writeTxn-friendly persistence
-  // layer on day 0 (when no collection has shipped yet).
-  //
-  // The override list below is intentionally `const []` so the
-  // container can be built today; once (a)–(d) land, the call
-  // site grows to:
-  //   final container = ProviderContainer(
-  //     overrides: [isarInstanceProvider.overrideWithValue(db.isar)],
-  //   );
-  final container = ProviderContainer(overrides: const []);
+  final db = await DatabaseService.open(
+    schemas: [
+      CustomerIsarSchema,
+      ServiceIsarSchema,
+      InvoiceIsarSchema,
+      PaymentIsarSchema,
+    ],
+  );
+  final container = ProviderContainer(
+    overrides: [isarInstanceProvider.overrideWithValue(db.isar)],
+  );
 
   // Eager globals whose construction has setup work (or whose
   // future construction will — AppHelper is reserved for the

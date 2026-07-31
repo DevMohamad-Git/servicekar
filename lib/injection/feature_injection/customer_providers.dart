@@ -6,7 +6,6 @@ import '../../../features/customer/domain/entities/customer_entity.dart';
 import '../../../features/customer/domain/repositories/customer_repository.dart';
 import '../../../features/customer/domain/usecases/create_customer_usecase.dart';
 import '../../../features/customer/domain/usecases/delete_customer_usecase.dart';
-import '../../../features/customer/domain/usecases/get_customer_balance_usecase.dart';
 import '../../../features/customer/domain/usecases/get_customer_by_id_usecase.dart';
 import '../../../features/customer/domain/usecases/get_customers_usecase.dart';
 import '../../../features/customer/domain/usecases/search_customers_usecase.dart';
@@ -66,10 +65,6 @@ final searchCustomersUseCaseProvider = Provider<SearchCustomersUseCase>(
   (ref) => SearchCustomersUseCase(ref.watch(customerRepositoryProvider)),
 );
 
-final getCustomerBalanceUseCaseProvider = Provider<GetCustomerBalanceUseCase>(
-  (ref) => GetCustomerBalanceUseCase(ref.watch(customerRepositoryProvider)),
-);
-
 // ─── Controllers (Live Persistence: invalidations on mutation) ────────────
 
 /// Async state for the customer list page. UI watches
@@ -82,10 +77,7 @@ class CustomerListController extends AsyncNotifier<List<CustomerEntity>> {
     // Throwing the [CustomerFailure] lets the page render an
     // [AsyncError] carrying the original failure; the presentation
     // layer translates it to a localized message.
-    return result.fold(
-      (failure) => throw failure,
-      (customers) => customers,
-    );
+    return result.fold((failure) => throw failure, (customers) => customers);
   }
 
   /// Pull-to-refresh / retry hook. Pure refetch — no mutation.
@@ -98,8 +90,8 @@ class CustomerListController extends AsyncNotifier<List<CustomerEntity>> {
 
 final customerListControllerProvider =
     AsyncNotifierProvider<CustomerListController, List<CustomerEntity>>(
-  CustomerListController.new,
-);
+      CustomerListController.new,
+    );
 
 /// Family-keyed state for a single [CustomerEntity]. UI reads
 /// `customerDetailsControllerProvider(id)`.
@@ -112,18 +104,16 @@ class CustomerDetailsController extends AsyncNotifier<CustomerEntity> {
   Future<CustomerEntity> build() async {
     final useCase = ref.watch(getCustomerByIdUseCaseProvider);
     final result = await useCase(customerId);
-    return result.fold(
-      (failure) => throw failure,
-      (customer) => customer,
-    );
+    return result.fold((failure) => throw failure, (customer) => customer);
   }
 }
 
 final customerDetailsControllerProvider =
-    AsyncNotifierProvider.family<CustomerDetailsController, CustomerEntity,
-        String>(
-  CustomerDetailsController.new,
-);
+    AsyncNotifierProvider.family<
+      CustomerDetailsController,
+      CustomerEntity,
+      String
+    >(CustomerDetailsController.new);
 
 /// Controller exposing the create-customer intent. Returns `null` on
 /// success or a failure message string on failure.
@@ -161,8 +151,8 @@ class CreateCustomerController extends Notifier<void> {
 
 final createCustomerControllerProvider =
     NotifierProvider<CreateCustomerController, void>(
-  CreateCustomerController.new,
-);
+      CreateCustomerController.new,
+    );
 
 /// Controller exposing the update-customer intent.
 class UpdateCustomerController extends Notifier<void> {
@@ -182,8 +172,8 @@ class UpdateCustomerController extends Notifier<void> {
 
 final updateCustomerControllerProvider =
     NotifierProvider<UpdateCustomerController, void>(
-  UpdateCustomerController.new,
-);
+      UpdateCustomerController.new,
+    );
 
 /// Controller exposing the delete-customer intent. Returns `null`
 /// on success or a failure message string on failure.
@@ -203,5 +193,5 @@ class DeleteCustomerController extends Notifier<void> {
 
 final deleteCustomerControllerProvider =
     NotifierProvider<DeleteCustomerController, void>(
-  DeleteCustomerController.new,
-);
+      DeleteCustomerController.new,
+    );

@@ -6,6 +6,7 @@ import '../../../config/l10n/l10n.dart';
 import '../../../config/routes/app_router.dart';
 import '../../../features/customer/domain/failures/customer_failure.dart';
 import '../../../injection/global_providers.dart';
+import '../../../injection/feature_injection/balance_providers.dart';
 import '../../../injection/feature_injection/customer_providers.dart';
 import '../widgets/customer_balance_widget.dart';
 
@@ -15,6 +16,16 @@ import '../widgets/customer_balance_widget.dart';
 /// and re-syncs whenever the app comes back to the foreground. Edit/Delete
 /// actions go through Riverpod controllers so Live Persistence updates the
 /// list too.
+///
+/// ─── Balance (live derivation) ─────────────────────────────────────
+/// The balance chip is sourced from `customerBalanceControllerProvider`
+/// (Balance feature), which derives `paymentsTotal - invoicesTotal`
+/// from the Invoice and Payment collections. The displayed widget
+/// intentionally does NOT fall back to `0.00` while the lookup is
+/// loading or after an error — see the brief's "never display 0.00
+/// as a fake balance while the live calculation is loading or
+/// failing" rule. Loading renders a placeholder dash; error renders
+/// a localized error chip.
 @RoutePage()
 class CustomerDetailsPage extends ConsumerStatefulWidget {
   const CustomerDetailsPage({super.key, required this.customerId});
@@ -45,6 +56,7 @@ class _CustomerDetailsPageState extends ConsumerState<CustomerDetailsPage>
     if (state == AppLifecycleState.resumed) {
       // Live Persistence: pull latest record from data layer on resume.
       ref.invalidate(customerDetailsControllerProvider(widget.customerId));
+      ref.invalidate(customerBalanceControllerProvider(widget.customerId));
     }
   }
 
@@ -88,6 +100,27 @@ class _CustomerDetailsPageState extends ConsumerState<CustomerDetailsPage>
     final state = ref.watch(
       customerDetailsControllerProvider(widget.customerId),
     );
+    // Live balance — driven by the Balance feature's
+    // CalculateCustomerBalanceUseCase. The AsyncValue is rendered
+    // explicitly so we never substitute `0.00` for an unresolved
+    // or failing lookup.
+    final balanceState = ref.watch(
+      customerBalanceControllerProvider(widget.customerId),
+    );
+    final balanceWidget = switch (balanceState) {
+      AsyncData(:final value) => CustomerBalanceWidget(balance: value.balance),
+      AsyncError() => Text(
+        context.l10n.error,
+        // TODO: replace with a balance-specific localized message
+        // when the Balance feature ships l10n keys.
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+      _ => Text(
+        // TODO: AppLocalizations.of(context).balanceLoading
+        '—',
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+    };
 
     return Scaffold(
       appBar: AppBar(
@@ -95,43 +128,47 @@ class _CustomerDetailsPageState extends ConsumerState<CustomerDetailsPage>
         actions: [
           switch (state) {
             AsyncData() => Row(
-                children: [
-                  IconButton(
-                    tooltip: context.l10n.edit,
-                    onPressed: () => context.router.push(
-                      EditCustomerRoute(customerId: widget.customerId),
-                    ),
-                    icon: const Icon(Icons.edit),
+              children: [
+                IconButton(
+                  tooltip: context.l10n.edit,
+                  onPressed: () => context.router.push(
+                    EditCustomerRoute(customerId: widget.customerId),
                   ),
-                  IconButton(
-                    tooltip: context.l10n.delete,
-                    onPressed: () => _confirmDelete(context, ref),
-                    icon: const Icon(Icons.delete_outline),
-                  ),
-                ],
-              ),
+                  icon: const Icon(Icons.edit),
+                ),
+                IconButton(
+                  tooltip: context.l10n.delete,
+                  onPressed: () => _confirmDelete(context, ref),
+                  icon: const Icon(Icons.delete_outline),
+                ),
+              ],
+            ),
             _ => const SizedBox.shrink(),
           },
         ],
       ),
       body: switch (state) {
         AsyncData(:final value) => Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(value.fullName,
-                    style: Theme.of(context).textTheme.headlineSmall),
-                const SizedBox(height: 8),
-                Text(value.phoneNumber,
-                    style: Theme.of(context).textTheme.bodyLarge),
-                if (value.email != null) Text(value.email!),
-                if (value.address != null) Text(value.address!),
-                const SizedBox(height: 16),
-                CustomerBalanceWidget(balance: value.balance),
-              ],
-            ),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                value.fullName,
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                value.phoneNumber,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              if (value.email != null) Text(value.email!),
+              if (value.address != null) Text(value.address!),
+              const SizedBox(height: 16),
+              balanceWidget,
+            ],
           ),
+        ),
         AsyncError(:final error) => Center(
           child: Text(
             error is CustomerFailure ? error.message : error.toString(),
