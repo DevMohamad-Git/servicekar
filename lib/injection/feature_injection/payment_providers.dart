@@ -15,6 +15,7 @@ import '../../../features/payment/domain/usecases/params/update_payment_params.d
 import '../../../features/payment/domain/usecases/register_payment_usecase.dart';
 import '../../../features/payment/domain/usecases/update_payment_usecase.dart';
 import '../global_providers.dart';
+import 'balance_providers.dart';
 import 'customer_providers.dart';
 import 'invoice_providers.dart';
 
@@ -145,6 +146,9 @@ class RegisterPaymentController extends Notifier<void> {
       if (params.invoiceUuid != null) {
         ref.invalidate(invoicePaymentsControllerProvider(params.invoiceUuid!));
       }
+      // Balance is derived live from this customer's invoice/payment
+      // totals; the mutation just changed the payment side.
+      ref.invalidate(customerBalanceControllerProvider(params.customerUuid));
     }
     return result.fold((failure) => failure.message, (_) => null);
   }
@@ -167,6 +171,7 @@ class UpdatePaymentController extends Notifier<void> {
       if (params.invoiceUuid != null) {
         ref.invalidate(invoicePaymentsControllerProvider(params.invoiceUuid!));
       }
+      ref.invalidate(customerBalanceControllerProvider(params.customerUuid));
     }
     return result.fold((failure) => failure.message, (_) => null);
   }
@@ -196,6 +201,7 @@ class DeletePaymentController extends Notifier<void> {
       if (invoiceUuid != null) {
         ref.invalidate(invoicePaymentsControllerProvider(invoiceUuid));
       }
+      ref.invalidate(customerBalanceControllerProvider(customerUuid));
     }
     return result.fold((failure) => failure.message, (_) => null);
   }

@@ -16,6 +16,9 @@ import 'package:servicar/features/payment/domain/repositories/payment_repository
 
 // ─── Test fakes (in-memory) ─────────────────────────────────────────
 
+/// In-memory [CustomerRepository] fake. Only `getCustomerById` is
+/// exercised by these balance tests; the rest intentionally throws
+/// [UnimplementedError] so any unintended delegation fails loudly.
 class FakeCustomerRepository implements CustomerRepository {
   final Map<String, CustomerEntity> _store;
   FakeCustomerRepository([Map<String, CustomerEntity>? seed])
@@ -56,10 +59,6 @@ class FakeCustomerRepository implements CustomerRepository {
   Future<Either<CustomerFailure, List<CustomerEntity>>> searchCustomers(
     String q,
   ) async => throw UnimplementedError();
-
-  @override
-  Future<Either<CustomerFailure, double>> getCustomerBalance(String id) async =>
-      throw UnimplementedError();
 }
 
 class FakeInvoiceRepository implements InvoiceRepository {

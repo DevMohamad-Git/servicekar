@@ -78,10 +78,6 @@ class StubCustomerRepository implements CustomerRepository {
   Future<Either<CustomerFailure, List<CustomerEntity>>> searchCustomers(
     String q,
   ) async => throw UnimplementedError();
-
-  @override
-  Future<Either<CustomerFailure, double>> getCustomerBalance(String id) async =>
-      throw UnimplementedError();
 }
 
 class StubInvoiceRepository implements InvoiceRepository {

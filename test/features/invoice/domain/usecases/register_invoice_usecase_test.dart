@@ -16,8 +16,7 @@ import 'package:servicar/features/invoice/domain/value_models/invoice_operation_
 /// [UnimplementedError] so any unintended delegation fails loudly.
 class RecordingInvoiceRepository implements InvoiceRepository {
   final List<InvoiceEntity> created = [];
-  final Either<InvoiceFailure, InvoiceEntity> Function(InvoiceEntity)
-  onCreate;
+  final Either<InvoiceFailure, InvoiceEntity> Function(InvoiceEntity) onCreate;
 
   RecordingInvoiceRepository({required this.onCreate});
 
@@ -39,9 +38,8 @@ class RecordingInvoiceRepository implements InvoiceRepository {
       throw UnimplementedError();
 
   @override
-  Future<Either<InvoiceFailure, InvoiceEntity>> getById(
-    String id,
-  ) async => throw UnimplementedError();
+  Future<Either<InvoiceFailure, InvoiceEntity>> getById(String id) async =>
+      throw UnimplementedError();
 
   @override
   Future<Either<InvoiceFailure, List<InvoiceEntity>>> getByCustomer(
@@ -96,11 +94,6 @@ class RecordingCustomerRepository implements CustomerRepository {
   Future<Either<CustomerFailure, List<CustomerEntity>>> searchCustomers(
     String q,
   ) async => throw UnimplementedError();
-
-  @override
-  Future<Either<CustomerFailure, double>> getCustomerBalance(
-    String id,
-  ) async => throw UnimplementedError();
 }
 
 void main() {
@@ -109,8 +102,7 @@ void main() {
     fullName: 'Alice',
     phoneNumber: '+98 912 000 0000',
   );
-  final okCustomerRepo =
-      RecordingCustomerRepository.withExisting([okCustomer]);
+  final okCustomerRepo = RecordingCustomerRepository.withExisting([okCustomer]);
 
   RegisterInvoiceParams baseParams({
     String invoiceNumber = 'INV-001',
@@ -139,8 +131,7 @@ void main() {
         final result = await useCase(baseParams(invoiceNumber: '   '));
         expect(result.isLeft, isTrue);
         final failure =
-            (result as Left<InvoiceFailure, InvoiceOperationOutcome>)
-                .value;
+            (result as Left<InvoiceFailure, InvoiceOperationOutcome>).value;
         expect(failure, isA<InvoiceValidationFailure>());
         expect((failure as InvoiceValidationFailure).field, 'invoiceNumber');
         expect(repo.created, isEmpty);
@@ -161,38 +152,14 @@ void main() {
         final result = await useCase(baseParams(totalAmount: -1.0));
         expect(result.isLeft, isTrue);
         final failure =
-            (result as Left<InvoiceFailure, InvoiceOperationOutcome>)
-                .value;
+            (result as Left<InvoiceFailure, InvoiceOperationOutcome>).value;
         expect(failure, isA<InvoiceValidationFailure>());
         expect((failure as InvoiceValidationFailure).field, 'totalAmount');
         expect(repo.created, isEmpty);
       },
     );
 
-    test(
-      'zero totalAmount is accepted (zero-invoice per the brief)',
-      () async {
-        final repo = RecordingInvoiceRepository(
-          onCreate: (i) => Right<InvoiceFailure, InvoiceEntity>(i),
-        );
-        final useCase = RegisterInvoiceUseCase(
-          invoiceRepository: repo,
-          customerRepository: okCustomerRepo,
-        );
-
-        final result = await useCase(baseParams(totalAmount: 0.0));
-        expect(result.isRight, isTrue);
-        final outcome =
-            (result as Right<InvoiceFailure, InvoiceOperationOutcome>)
-                .value;
-        expect(outcome.invoice.totalAmount, 0.0);
-        expect(outcome.warnings, isEmpty);
-        expect(repo.created.single.totalAmount, 0.0);
-      },
-    );
-
-    test('NaN totalAmount → InvoiceValidationFailure(field=totalAmount)',
-        () async {
+    test('zero totalAmount is accepted (zero-invoice per the brief)', () async {
       final repo = RecordingInvoiceRepository(
         onCreate: (i) => Right<InvoiceFailure, InvoiceEntity>(i),
       );
@@ -201,99 +168,105 @@ void main() {
         customerRepository: okCustomerRepo,
       );
 
-      final result = await useCase(
-        RegisterInvoiceParams(
-          id: 'inv-1',
-          customerUuid: okCustomer.id,
-          invoiceNumber: 'INV-001',
-          issueDate: DateTime.utc(2026, 1, 1),
-          // double.nan is the only way to inject NaN here; the use
-          // case rejects before delegating to the repository.
-          totalAmount: double.nan,
-        ),
-      );
-      expect(result.isLeft, isTrue);
-      final failure =
-          (result as Left<InvoiceFailure, InvoiceOperationOutcome>).value;
-      expect(failure, isA<InvoiceValidationFailure>());
-      expect((failure as InvoiceValidationFailure).field, 'totalAmount');
-      expect(repo.created, isEmpty);
+      final result = await useCase(baseParams(totalAmount: 0.0));
+      expect(result.isRight, isTrue);
+      final outcome =
+          (result as Right<InvoiceFailure, InvoiceOperationOutcome>).value;
+      expect(outcome.invoice.totalAmount, 0.0);
+      expect(outcome.warnings, isEmpty);
+      expect(repo.created.single.totalAmount, 0.0);
     });
 
     test(
-      'CustomerMissingFailure when FK does not resolve',
+      'NaN totalAmount → InvoiceValidationFailure(field=totalAmount)',
       () async {
         final repo = RecordingInvoiceRepository(
           onCreate: (i) => Right<InvoiceFailure, InvoiceEntity>(i),
         );
-        final emptyCustomerRepo = RecordingCustomerRepository();
         final useCase = RegisterInvoiceUseCase(
           invoiceRepository: repo,
-          customerRepository: emptyCustomerRepo,
+          customerRepository: okCustomerRepo,
         );
 
-        final result = await useCase(baseParams());
+        final result = await useCase(
+          RegisterInvoiceParams(
+            id: 'inv-1',
+            customerUuid: okCustomer.id,
+            invoiceNumber: 'INV-001',
+            issueDate: DateTime.utc(2026, 1, 1),
+            // double.nan is the only way to inject NaN here; the use
+            // case rejects before delegating to the repository.
+            totalAmount: double.nan,
+          ),
+        );
         expect(result.isLeft, isTrue);
         final failure =
-            (result as Left<InvoiceFailure, InvoiceOperationOutcome>)
-                .value;
-        expect(failure, isA<InvoiceCustomerMissingFailure>());
-        expect(
-          (failure as InvoiceCustomerMissingFailure).reason,
-          'notFound',
-        );
+            (result as Left<InvoiceFailure, InvoiceOperationOutcome>).value;
+        expect(failure, isA<InvoiceValidationFailure>());
+        expect((failure as InvoiceValidationFailure).field, 'totalAmount');
         expect(repo.created, isEmpty);
       },
     );
 
-    test(
-      'valid input → delegates to the repository unchanged',
-      () async {
-        final repo = RecordingInvoiceRepository(
-          onCreate: (i) => Right<InvoiceFailure, InvoiceEntity>(i),
-        );
-        final useCase = RegisterInvoiceUseCase(
-          invoiceRepository: repo,
-          customerRepository: okCustomerRepo,
-        );
+    test('CustomerMissingFailure when FK does not resolve', () async {
+      final repo = RecordingInvoiceRepository(
+        onCreate: (i) => Right<InvoiceFailure, InvoiceEntity>(i),
+      );
+      final emptyCustomerRepo = RecordingCustomerRepository();
+      final useCase = RegisterInvoiceUseCase(
+        invoiceRepository: repo,
+        customerRepository: emptyCustomerRepo,
+      );
 
-        final result = await useCase(baseParams());
-        expect(result.isRight, isTrue);
-        final outcome =
-            (result as Right<InvoiceFailure, InvoiceOperationOutcome>)
-                .value;
-        expect(outcome.invoice.invoiceNumber, 'INV-001');
-        expect(outcome.invoice.customerUuid, okCustomer.id);
-        expect(outcome.invoice.totalAmount, 1_000_000.0);
-        expect(repo.created, hasLength(1));
-        expect(repo.created.single.id, 'inv-1');
-        expect(outcome.warnings, isEmpty);
-      },
-    );
+      final result = await useCase(baseParams());
+      expect(result.isLeft, isTrue);
+      final failure =
+          (result as Left<InvoiceFailure, InvoiceOperationOutcome>).value;
+      expect(failure, isA<InvoiceCustomerMissingFailure>());
+      expect((failure as InvoiceCustomerMissingFailure).reason, 'notFound');
+      expect(repo.created, isEmpty);
+    });
 
-    test(
-      'future-dated issueDate → emits a warning (not a failure)',
-      () async {
-        final repo = RecordingInvoiceRepository(
-          onCreate: (i) => Right<InvoiceFailure, InvoiceEntity>(i),
-        );
-        final useCase = RegisterInvoiceUseCase(
-          invoiceRepository: repo,
-          customerRepository: okCustomerRepo,
-        );
+    test('valid input → delegates to the repository unchanged', () async {
+      final repo = RecordingInvoiceRepository(
+        onCreate: (i) => Right<InvoiceFailure, InvoiceEntity>(i),
+      );
+      final useCase = RegisterInvoiceUseCase(
+        invoiceRepository: repo,
+        customerRepository: okCustomerRepo,
+      );
 
-        final future = DateTime.now().add(const Duration(days: 30));
-        final result = await useCase(baseParams(issueDate: future));
-        expect(result.isRight, isTrue);
-        final outcome =
-            (result as Right<InvoiceFailure, InvoiceOperationOutcome>)
-                .value;
-        expect(outcome.invoice.issueDate, future);
-        expect(outcome.warnings, hasLength(1));
-        expect(outcome.warnings.single.field, 'issueDate');
-        expect(outcome.warnings.single.message, contains('future'));
-      },
-    );
+      final result = await useCase(baseParams());
+      expect(result.isRight, isTrue);
+      final outcome =
+          (result as Right<InvoiceFailure, InvoiceOperationOutcome>).value;
+      expect(outcome.invoice.invoiceNumber, 'INV-001');
+      expect(outcome.invoice.customerUuid, okCustomer.id);
+      expect(outcome.invoice.totalAmount, 1_000_000.0);
+      expect(repo.created, hasLength(1));
+      expect(repo.created.single.id, 'inv-1');
+      expect(outcome.warnings, isEmpty);
+    });
+
+    test('future-dated issueDate → emits a warning (not a failure)', () async {
+      final repo = RecordingInvoiceRepository(
+        onCreate: (i) => Right<InvoiceFailure, InvoiceEntity>(i),
+      );
+      final useCase = RegisterInvoiceUseCase(
+        invoiceRepository: repo,
+        customerRepository: okCustomerRepo,
+      );
+
+      final future = DateTime.now().add(const Duration(days: 30));
+      final result = await useCase(baseParams(issueDate: future));
+      expect(result.isRight, isTrue);
+      final outcome =
+          (result as Right<InvoiceFailure, InvoiceOperationOutcome>).value;
+      expect(outcome.invoice.issueDate, future);
+      expect(outcome.warnings, hasLength(1));
+      expect(outcome.warnings.single.field, 'issueDate');
+      expect(outcome.warnings.single.message, contains('future'));
+    });
 
     test('past-dated issueDate → no warning', () async {
       final repo = RecordingInvoiceRepository(

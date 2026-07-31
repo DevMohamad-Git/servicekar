@@ -17,6 +17,7 @@ import 'package:servicar/features/invoice/domain/usecases/update_invoice_usecase
 import 'package:servicar/features/invoice/domain/value_models/invoice_operation_outcome.dart';
 
 import '../global_providers.dart';
+import 'balance_providers.dart';
 import 'customer_providers.dart';
 
 /// Invoice feature — Riverpod bindings
@@ -67,8 +68,7 @@ final getInvoiceByIdUseCaseProvider = Provider<GetInvoiceByIdUseCase>(
 );
 
 final getCustomerInvoicesUseCaseProvider = Provider<GetCustomerInvoicesUseCase>(
-  (ref) =>
-      GetCustomerInvoicesUseCase(ref.watch(invoiceRepositoryProvider)),
+  (ref) => GetCustomerInvoicesUseCase(ref.watch(invoiceRepositoryProvider)),
 );
 
 // ─── Controllers ────────────────────────────────────────────────────
@@ -79,8 +79,7 @@ final getCustomerInvoicesUseCaseProvider = Provider<GetCustomerInvoicesUseCase>(
 /// Always returns a (possibly empty) list on success; an
 /// [InvoiceFailure] is thrown so the page can render an
 /// [AsyncError] carrying the original failure.
-class CustomerInvoicesController
-    extends AsyncNotifier<List<InvoiceEntity>> {
+class CustomerInvoicesController extends AsyncNotifier<List<InvoiceEntity>> {
   CustomerInvoicesController(this.customerUuid);
 
   final String customerUuid;
@@ -89,10 +88,7 @@ class CustomerInvoicesController
   Future<List<InvoiceEntity>> build() async {
     final useCase = ref.watch(getCustomerInvoicesUseCaseProvider);
     final result = await useCase(customerUuid);
-    return result.fold(
-      (failure) => throw failure,
-      (invoices) => invoices,
-    );
+    return result.fold((failure) => throw failure, (invoices) => invoices);
   }
 
   /// Pull-to-refresh / retry hook. Pure refetch — no mutation.
@@ -148,11 +144,11 @@ class CreateInvoiceController extends Notifier<void> {
       // Also refresh any per-id detail view, if the consumer is
       // already pointing at this id.
       ref.invalidate(invoiceControllerProvider(outcome.invoice.id));
+      // Balance is derived from this customer's invoice/payment
+      // totals; the mutation just changed the invoice side.
+      ref.invalidate(customerBalanceControllerProvider(params.customerUuid));
     }
-    return result.fold(
-      (failure) => failure.message,
-      (_) => null,
-    );
+    return result.fold((failure) => failure.message, (_) => null);
   }
 }
 
@@ -173,11 +169,9 @@ class UpdateInvoiceController extends Notifier<void> {
     if (outcome != null) {
       ref.invalidate(customerInvoicesControllerProvider(params.customerUuid));
       ref.invalidate(invoiceControllerProvider(outcome.invoice.id));
+      ref.invalidate(customerBalanceControllerProvider(params.customerUuid));
     }
-    return result.fold(
-      (failure) => failure.message,
-      (_) => null,
-    );
+    return result.fold((failure) => failure.message, (_) => null);
   }
 }
 
@@ -203,11 +197,9 @@ class DeleteInvoiceController extends Notifier<void> {
     if (result.isRight) {
       ref.invalidate(customerInvoicesControllerProvider(customerUuid));
       ref.invalidate(invoiceControllerProvider(id));
+      ref.invalidate(customerBalanceControllerProvider(customerUuid));
     }
-    return result.fold(
-      (failure) => failure.message,
-      (_) => null,
-    );
+    return result.fold((failure) => failure.message, (_) => null);
   }
 }
 

@@ -83,10 +83,10 @@ class InMemoryInvoiceLocalDataSource implements InvoiceLocalDataSource {
   Future<InvoiceModel?> getById(String id) async => _store[id];
 
   @override
-  Future<List<InvoiceModel>> getByCustomer(String customerUuid) async =>
-      _store.values
-          .where((m) => m.customerUuid == customerUuid)
-          .toList(growable: false);
+  Future<List<InvoiceModel>> getByCustomer(String customerUuid) async => _store
+      .values
+      .where((m) => m.customerUuid == customerUuid)
+      .toList(growable: false);
 
   @override
   Future<double> getTotalByCustomer(String customerUuid) async {
@@ -114,8 +114,7 @@ class InMemoryInvoiceLocalDataSource implements InvoiceLocalDataSource {
 // any unintended call fails loudly.
 
 class InMemoryPaymentRepo implements PaymentRepository {
-  InMemoryPaymentRepo([Map<String, PaymentModel>? seed])
-    : _store = {...?seed};
+  InMemoryPaymentRepo([Map<String, PaymentModel>? seed]) : _store = {...?seed};
 
   final Map<String, PaymentModel> _store;
 
@@ -184,9 +183,7 @@ class InMemoryCustomerRepo implements CustomerRepository {
     String id,
   ) async {
     final c = _store[id];
-    return c == null
-        ? Left(CustomerNotFoundFailure(id: id))
-        : Right(c);
+    return c == null ? Left(CustomerNotFoundFailure(id: id)) : Right(c);
   }
 
   @override
@@ -211,11 +208,6 @@ class InMemoryCustomerRepo implements CustomerRepository {
   Future<Either<CustomerFailure, List<CustomerEntity>>> searchCustomers(
     String q,
   ) async => throw UnimplementedError();
-
-  @override
-  Future<Either<CustomerFailure, double>> getCustomerBalance(
-    String id,
-  ) async => throw UnimplementedError();
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────
@@ -229,9 +221,7 @@ CalculateCustomerBalanceUseCase _uc({
 }) {
   return CalculateCustomerBalanceUseCase(
     customerRepository: customerRepo,
-    invoiceRepository: InvoiceRepositoryImpl(
-      localDataSource: invoiceDs,
-    ),
+    invoiceRepository: InvoiceRepositoryImpl(localDataSource: invoiceDs),
     paymentRepository: paymentRepo,
   );
 }
@@ -256,8 +246,7 @@ Future<CustomerBalanceResult> _expectRight(
   expect(
     r.isRight,
     isTrue,
-    reason:
-        'Expected success; got ${r.leftOrNull?.message ?? 'unknown'}',
+    reason: 'Expected success; got ${r.leftOrNull?.message ?? 'unknown'}',
   );
   return (r as Right<BalanceFailure, CustomerBalanceResult>).value;
 }
@@ -268,11 +257,11 @@ void main() {
       'Scenario 1: invoice 1,000,000 + payment 0 → -1,000,000 debtor',
       () async {
         final invoiceDs = InMemoryInvoiceLocalDataSource();
-        final customerRepo =
-            InMemoryCustomerRepo({'cust-1': _customer('cust-1')});
+        final customerRepo = InMemoryCustomerRepo({
+          'cust-1': _customer('cust-1'),
+        });
         final paymentRepo = InMemoryPaymentRepo();
-        final invoiceRepo =
-            InvoiceRepositoryImpl(localDataSource: invoiceDs);
+        final invoiceRepo = InvoiceRepositoryImpl(localDataSource: invoiceDs);
 
         // Baseline: no invoices, no payments → 0 settled.
         final before = await _expectRight(
@@ -287,11 +276,7 @@ void main() {
 
         // Create invoice 1,000,000 → balance -1,000,000.
         await invoiceRepo.createInvoice(
-          _seed(
-            id: 'inv-1',
-            customerUuid: 'cust-1',
-            totalAmount: 1_000_000.0,
-          ),
+          _seed(id: 'inv-1', customerUuid: 'cust-1', totalAmount: 1_000_000.0),
         );
         final after = await _expectRight(
           _uc(
@@ -311,8 +296,9 @@ void main() {
       'Scenario 2: invoice 1,000,000 + payment 1,000,000 → 0 settled',
       () async {
         final invoiceDs = InMemoryInvoiceLocalDataSource();
-        final customerRepo =
-            InMemoryCustomerRepo({'cust-1': _customer('cust-1')});
+        final customerRepo = InMemoryCustomerRepo({
+          'cust-1': _customer('cust-1'),
+        });
         final paymentRepo = InMemoryPaymentRepo({
           'pay-1': PaymentModel(
             id: 'pay-1',
@@ -323,15 +309,10 @@ void main() {
             method: 'cash',
           ),
         });
-        final invoiceRepo =
-            InvoiceRepositoryImpl(localDataSource: invoiceDs);
+        final invoiceRepo = InvoiceRepositoryImpl(localDataSource: invoiceDs);
 
         await invoiceRepo.createInvoice(
-          _seed(
-            id: 'inv-1',
-            customerUuid: 'cust-1',
-            totalAmount: 1_000_000.0,
-          ),
+          _seed(id: 'inv-1', customerUuid: 'cust-1', totalAmount: 1_000_000.0),
         );
 
         final result = await _expectRight(
@@ -348,102 +329,95 @@ void main() {
       },
     );
 
-    test(
-      'Scenario 3: invoice 1,000,000 + payment 1,500,000 → '
-      '+500,000 creditor',
-      () async {
-        final invoiceDs = InMemoryInvoiceLocalDataSource();
-        final customerRepo =
-            InMemoryCustomerRepo({'cust-1': _customer('cust-1')});
-        final paymentRepo = InMemoryPaymentRepo({
-          'pay-1': PaymentModel(
-            id: 'pay-1',
-            customerUuid: 'cust-1',
-            invoiceUuid: 'inv-1',
-            amount: 1_500_000.0,
-            paidAt: DateTime.utc(2026, 1, 2),
-            method: 'transfer',
-          ),
-        });
-        final invoiceRepo =
-            InvoiceRepositoryImpl(localDataSource: invoiceDs);
+    test('Scenario 3: invoice 1,000,000 + payment 1,500,000 → '
+        '+500,000 creditor', () async {
+      final invoiceDs = InMemoryInvoiceLocalDataSource();
+      final customerRepo = InMemoryCustomerRepo({
+        'cust-1': _customer('cust-1'),
+      });
+      final paymentRepo = InMemoryPaymentRepo({
+        'pay-1': PaymentModel(
+          id: 'pay-1',
+          customerUuid: 'cust-1',
+          invoiceUuid: 'inv-1',
+          amount: 1_500_000.0,
+          paidAt: DateTime.utc(2026, 1, 2),
+          method: 'transfer',
+        ),
+      });
+      final invoiceRepo = InvoiceRepositoryImpl(localDataSource: invoiceDs);
 
-        await invoiceRepo.createInvoice(
-          _pastDatedSeed(
-            id: 'inv-1',
-            customerUuid: 'cust-1',
-            totalAmount: 1_000_000.0,
-          ),
-        );
+      await invoiceRepo.createInvoice(
+        _pastDatedSeed(
+          id: 'inv-1',
+          customerUuid: 'cust-1',
+          totalAmount: 1_000_000.0,
+        ),
+      );
 
-        final result = await _expectRight(
-          _uc(
-            invoiceDs: invoiceDs,
-            customerRepo: customerRepo,
-            paymentRepo: paymentRepo,
-          )('cust-1'),
-        );
-        expect(result.balance, 500_000.0);
-        expect(result.status, BalanceStatus.creditor);
-      },
-    );
+      final result = await _expectRight(
+        _uc(
+          invoiceDs: invoiceDs,
+          customerRepo: customerRepo,
+          paymentRepo: paymentRepo,
+        )('cust-1'),
+      );
+      expect(result.balance, 500_000.0);
+      expect(result.status, BalanceStatus.creditor);
+    });
   });
 
   group('Invoice ⨯ Balance integration — mutation flows', () {
-    test(
-      'Updating invoice total (1,000,000 → 2,000,000) re-derives '
-      'balance correctly',
-      () async {
-        final invoiceDs = InMemoryInvoiceLocalDataSource();
-        final customerRepo =
-            InMemoryCustomerRepo({'cust-1': _customer('cust-1')});
-        final paymentRepo = InMemoryPaymentRepo();
-        final invoiceRepo =
-            InvoiceRepositoryImpl(localDataSource: invoiceDs);
-
-        await invoiceRepo.createInvoice(
-          _pastDatedSeed(
-            id: 'inv-1',
-            customerUuid: 'cust-1',
-            totalAmount: 1_000_000.0,
-          ),
-        );
-        final before = await _expectRight(
-          _uc(
-            invoiceDs: invoiceDs,
-            customerRepo: customerRepo,
-            paymentRepo: paymentRepo,
-          )('cust-1'),
-        );
-        expect(before.balance, -1_000_000.0);
-
-        await invoiceRepo.updateInvoice(
-          _pastDatedSeed(
-            id: 'inv-1',
-            customerUuid: 'cust-1',
-            totalAmount: 2_000_000.0,
-          ),
-        );
-        final after = await _expectRight(
-          _uc(
-            invoiceDs: invoiceDs,
-            customerRepo: customerRepo,
-            paymentRepo: paymentRepo,
-          )('cust-1'),
-        );
-        expect(after.balance, -2_000_000.0);
-        expect(after.status, BalanceStatus.debtor);
-      },
-    );
-
-    test('Deleting an invoice removes it from balance derivation',
-        () async {
+    test('Updating invoice total (1,000,000 → 2,000,000) re-derives '
+        'balance correctly', () async {
       final invoiceDs = InMemoryInvoiceLocalDataSource();
-      final customerRepo =
-          InMemoryCustomerRepo({'cust-1': _customer('cust-1')});
+      final customerRepo = InMemoryCustomerRepo({
+        'cust-1': _customer('cust-1'),
+      });
       final paymentRepo = InMemoryPaymentRepo();
-      final invoiceRepo =
-          InvoiceRepositoryImpl(localDataSource: invoiceDs);
+      final invoiceRepo = InvoiceRepositoryImpl(localDataSource: invoiceDs);
+
+      await invoiceRepo.createInvoice(
+        _pastDatedSeed(
+          id: 'inv-1',
+          customerUuid: 'cust-1',
+          totalAmount: 1_000_000.0,
+        ),
+      );
+      final before = await _expectRight(
+        _uc(
+          invoiceDs: invoiceDs,
+          customerRepo: customerRepo,
+          paymentRepo: paymentRepo,
+        )('cust-1'),
+      );
+      expect(before.balance, -1_000_000.0);
+
+      await invoiceRepo.updateInvoice(
+        _pastDatedSeed(
+          id: 'inv-1',
+          customerUuid: 'cust-1',
+          totalAmount: 2_000_000.0,
+        ),
+      );
+      final after = await _expectRight(
+        _uc(
+          invoiceDs: invoiceDs,
+          customerRepo: customerRepo,
+          paymentRepo: paymentRepo,
+        )('cust-1'),
+      );
+      expect(after.balance, -2_000_000.0);
+      expect(after.status, BalanceStatus.debtor);
+    });
+
+    test('Deleting an invoice removes it from balance derivation', () async {
+      final invoiceDs = InMemoryInvoiceLocalDataSource();
+      final customerRepo = InMemoryCustomerRepo({
+        'cust-1': _customer('cust-1'),
+      });
+      final paymentRepo = InMemoryPaymentRepo();
+      final invoiceRepo = InvoiceRepositoryImpl(localDataSource: invoiceDs);
 
       await invoiceRepo.createInvoice(
         _pastDatedSeed(
@@ -484,151 +458,119 @@ void main() {
 
     test('Number of invoices flow through getByCustomer()', () async {
       final invoiceDs = InMemoryInvoiceLocalDataSource();
-      final customerRepo =
-          InMemoryCustomerRepo({'cust-1': _customer('cust-1')});
-      final invoiceRepo =
-          InvoiceRepositoryImpl(localDataSource: invoiceDs);
+      final customerRepo = InMemoryCustomerRepo({
+        'cust-1': _customer('cust-1'),
+      });
+      final invoiceRepo = InvoiceRepositoryImpl(localDataSource: invoiceDs);
 
       await invoiceRepo.createInvoice(
-        _pastDatedSeed(
-          id: 'a',
-          customerUuid: 'cust-1',
-          totalAmount: 100.0,
-        ),
+        _pastDatedSeed(id: 'a', customerUuid: 'cust-1', totalAmount: 100.0),
       );
       await invoiceRepo.createInvoice(
-        _pastDatedSeed(
-          id: 'b',
-          customerUuid: 'cust-1',
-          totalAmount: 200.0,
-        ),
+        _pastDatedSeed(id: 'b', customerUuid: 'cust-1', totalAmount: 200.0),
       );
       await invoiceRepo.createInvoice(
-        _pastDatedSeed(
-          id: 'c',
-          customerUuid: 'cust-2',
-          totalAmount: 999.0,
-        ),
+        _pastDatedSeed(id: 'c', customerUuid: 'cust-2', totalAmount: 999.0),
       );
 
       final result = await invoiceRepo.getByCustomer('cust-1');
       expect(result.isRight, isTrue);
-      final list =
-          (result as Right<InvoiceFailure, List<InvoiceEntity>>).value;
+      final list = (result as Right<InvoiceFailure, List<InvoiceEntity>>).value;
       expect(list, hasLength(2));
       expect(list.map((i) => i.id).toSet(), {'a', 'b'});
     });
   });
 
-  group(
-    'Invoice ⨯ Balance integration — use-case gate short-circuits',
-    () {
-      test(
-        'Invalid invoice (negative totalAmount) → use case rejects → '
-        'balance unchanged',
-        () async {
-          final invoiceDs = InMemoryInvoiceLocalDataSource();
-          final customerRepo =
-              InMemoryCustomerRepo({'cust-1': _customer('cust-1')});
-          final paymentRepo = InMemoryPaymentRepo();
-          final invoiceRepo =
-              InvoiceRepositoryImpl(localDataSource: invoiceDs);
+  group('Invoice ⨯ Balance integration — use-case gate short-circuits', () {
+    test('Invalid invoice (negative totalAmount) → use case rejects → '
+        'balance unchanged', () async {
+      final invoiceDs = InMemoryInvoiceLocalDataSource();
+      final customerRepo = InMemoryCustomerRepo({
+        'cust-1': _customer('cust-1'),
+      });
+      final paymentRepo = InMemoryPaymentRepo();
+      final invoiceRepo = InvoiceRepositoryImpl(localDataSource: invoiceDs);
 
-          final useCase = _register(
-            invoiceRepo: invoiceRepo,
-            customerRepo: customerRepo,
-          );
-
-          // Baseline: no invoices → 0 settled.
-          final before = await _expectRight(
-            _uc(
-              invoiceDs: invoiceDs,
-              customerRepo: customerRepo,
-              paymentRepo: paymentRepo,
-            )('cust-1'),
-          );
-          expect(before.balance, 0.0);
-          expect(before.invoiceCount, 0);
-
-          // Attempt to register a negative-total invoice.
-          final invalidResult = await useCase(
-            RegisterInvoiceParams(
-              id: 'inv-bad',
-              customerUuid: 'cust-1',
-              invoiceNumber: 'INV-BAD',
-              issueDate: DateTime.utc(2026, 1, 1),
-              totalAmount: -1.0,
-            ),
-          );
-          expect(
-            invalidResult.isLeft,
-            isTrue,
-            reason:
-                'Use case MUST reject negative totalAmount before '
-                'the repository is called — that gate is the rule '
-                'from the brief.',
-          );
-          final failure = invalidResult
-              .leftOrNull as InvoiceFailure;
-          expect(failure, isA<InvoiceValidationFailure>());
-          expect(
-            (failure as InvoiceValidationFailure).field,
-            'totalAmount',
-          );
-
-          // The repository was NEVER called → the in-memory store
-          // is empty → balance is unchanged.
-          final after = await _expectRight(
-            _uc(
-              invoiceDs: invoiceDs,
-              customerRepo: customerRepo,
-              paymentRepo: paymentRepo,
-            )('cust-1'),
-          );
-          expect(after.balance, 0.0);
-          expect(after.invoiceCount, 0);
-        },
+      final useCase = _register(
+        invoiceRepo: invoiceRepo,
+        customerRepo: customerRepo,
       );
 
-      test(
-        'Customer-missing failure → use case rejects → '
-        'balance unchanged and in-memory store still empty',
-        () async {
-          final invoiceDs = InMemoryInvoiceLocalDataSource();
-          final customerRepo =
-              InMemoryCustomerRepo(); // no rows
-          final paymentRepo = InMemoryPaymentRepo();
-          final invoiceRepo =
-              InvoiceRepositoryImpl(localDataSource: invoiceDs);
-
-          final useCase = _register(
-            invoiceRepo: invoiceRepo,
-            customerRepo: customerRepo,
-          );
-
-          final result = await useCase(
-            RegisterInvoiceParams(
-              id: 'inv-orphan',
-              customerUuid: 'cust-does-not-exist',
-              invoiceNumber: 'INV-ORPHAN',
-              issueDate: DateTime.utc(2026, 1, 1),
-              totalAmount: 1_000_000.0,
-            ),
-          );
-          expect(result.isLeft, isTrue);
-          final failure = result.leftOrNull as InvoiceFailure;
-          expect(failure, isA<InvoiceCustomerMissingFailure>());
-
-          // The repository was NEVER called → the in-memory store
-          // is empty for the orphan customerUuid.
-          final list = await invoiceDs.getByCustomer(
-            'cust-does-not-exist',
-          );
-          expect(list, isEmpty);
-        },
+      // Baseline: no invoices → 0 settled.
+      final before = await _expectRight(
+        _uc(
+          invoiceDs: invoiceDs,
+          customerRepo: customerRepo,
+          paymentRepo: paymentRepo,
+        )('cust-1'),
       );
-    },
-  );
+      expect(before.balance, 0.0);
+      expect(before.invoiceCount, 0);
+
+      // Attempt to register a negative-total invoice.
+      final invalidResult = await useCase(
+        RegisterInvoiceParams(
+          id: 'inv-bad',
+          customerUuid: 'cust-1',
+          invoiceNumber: 'INV-BAD',
+          issueDate: DateTime.utc(2026, 1, 1),
+          totalAmount: -1.0,
+        ),
+      );
+      expect(
+        invalidResult.isLeft,
+        isTrue,
+        reason:
+            'Use case MUST reject negative totalAmount before '
+            'the repository is called — that gate is the rule '
+            'from the brief.',
+      );
+      final failure = invalidResult.leftOrNull as InvoiceFailure;
+      expect(failure, isA<InvoiceValidationFailure>());
+      expect((failure as InvoiceValidationFailure).field, 'totalAmount');
+
+      // The repository was NEVER called → the in-memory store
+      // is empty → balance is unchanged.
+      final after = await _expectRight(
+        _uc(
+          invoiceDs: invoiceDs,
+          customerRepo: customerRepo,
+          paymentRepo: paymentRepo,
+        )('cust-1'),
+      );
+      expect(after.balance, 0.0);
+      expect(after.invoiceCount, 0);
+    });
+
+    test('Customer-missing failure → use case rejects → '
+        'balance unchanged and in-memory store still empty', () async {
+      final invoiceDs = InMemoryInvoiceLocalDataSource();
+      final customerRepo = InMemoryCustomerRepo(); // no rows
+      final paymentRepo = InMemoryPaymentRepo();
+      final invoiceRepo = InvoiceRepositoryImpl(localDataSource: invoiceDs);
+
+      final useCase = _register(
+        invoiceRepo: invoiceRepo,
+        customerRepo: customerRepo,
+      );
+
+      final result = await useCase(
+        RegisterInvoiceParams(
+          id: 'inv-orphan',
+          customerUuid: 'cust-does-not-exist',
+          invoiceNumber: 'INV-ORPHAN',
+          issueDate: DateTime.utc(2026, 1, 1),
+          totalAmount: 1_000_000.0,
+        ),
+      );
+      expect(result.isLeft, isTrue);
+      final failure = result.leftOrNull as InvoiceFailure;
+      expect(failure, isA<InvoiceCustomerMissingFailure>());
+
+      // The repository was NEVER called → the in-memory store
+      // is empty for the orphan customerUuid.
+      final list = await invoiceDs.getByCustomer('cust-does-not-exist');
+      expect(list, isEmpty);
+    });
+  });
 }
-
-

@@ -49,9 +49,7 @@ void main() {
       late Isar isar;
 
       setUp(() async {
-        dir = await Directory.systemTemp.createTemp(
-          'servicar_isar_test_',
-        );
+        dir = await Directory.systemTemp.createTemp('servicar_isar_test_');
         isar = await Isar.open(
           [CustomerIsarSchema],
           directory: dir.path,
@@ -75,14 +73,13 @@ void main() {
       // line long. Closing the underlying Isar inside one test will
       // cause subsequent touches through this `source()` to throw,
       // which is what the StorageFailure test below relies on.
-      CustomerLocalDataSource newSource() =>
-          CustomerLocalDataSourceImpl(isar);
+      CustomerLocalDataSource newSource() => CustomerLocalDataSourceImpl(isar);
 
       // ════════════════════════════════════════════════════════════════
       //  Happy path
       // ════════════════════════════════════════════════════════════════
 
-      test('Create & Read round-trip preserves all 11 fields', () async {
+      test('Create & Read round-trip preserves all profile fields', () async {
         final source = newSource();
         const input = CustomerModel(
           id: 'c1',
@@ -91,7 +88,6 @@ void main() {
           email: 'alice@example.com',
           address: 'Tehran',
           notes: 'VIP customer',
-          balance: 12.5,
           tags: ['vip', 'cash'],
         );
         await source.save(input);
@@ -104,18 +100,20 @@ void main() {
         expect(read.email, 'alice@example.com');
         expect(read.address, 'Tehran');
         expect(read.notes, 'VIP customer');
-        expect(read.balance, 12.5);
         expect(read.tags, ['vip', 'cash']);
       });
 
       test('Get All returns every persisted customer', () async {
         final source = newSource();
-        await source.save(const CustomerModel(
-            id: 'a', fullName: 'Alice', phoneNumber: '1'));
-        await source.save(const CustomerModel(
-            id: 'b', fullName: 'Bob', phoneNumber: '2'));
-        await source.save(const CustomerModel(
-            id: 'c', fullName: 'Charlie', phoneNumber: '3'));
+        await source.save(
+          const CustomerModel(id: 'a', fullName: 'Alice', phoneNumber: '1'),
+        );
+        await source.save(
+          const CustomerModel(id: 'b', fullName: 'Bob', phoneNumber: '2'),
+        );
+        await source.save(
+          const CustomerModel(id: 'c', fullName: 'Charlie', phoneNumber: '3'),
+        );
 
         final all = await source.getAll();
         expect(all.length, 3);
@@ -124,12 +122,15 @@ void main() {
 
       test('Search by name (case-insensitive contains)', () async {
         final source = newSource();
-        await source.save(const CustomerModel(
-            id: 'a', fullName: 'Alice', phoneNumber: '1'));
-        await source.save(const CustomerModel(
-            id: 'b', fullName: 'Bob', phoneNumber: '2'));
-        await source.save(const CustomerModel(
-            id: 'c', fullName: 'Alina', phoneNumber: '3'));
+        await source.save(
+          const CustomerModel(id: 'a', fullName: 'Alice', phoneNumber: '1'),
+        );
+        await source.save(
+          const CustomerModel(id: 'b', fullName: 'Bob', phoneNumber: '2'),
+        );
+        await source.save(
+          const CustomerModel(id: 'c', fullName: 'Alina', phoneNumber: '3'),
+        );
 
         final hits = await source.search('ali');
         expect(hits.length, 2);
@@ -138,12 +139,27 @@ void main() {
 
       test('Search by phone number (digits)', () async {
         final source = newSource();
-        await source.save(const CustomerModel(
-            id: 'a', fullName: 'Alice', phoneNumber: '+98 912 111'));
-        await source.save(const CustomerModel(
-            id: 'b', fullName: 'Bob', phoneNumber: '+98 912 222'));
-        await source.save(const CustomerModel(
-            id: 'c', fullName: 'Charlie', phoneNumber: '+98 933 333'));
+        await source.save(
+          const CustomerModel(
+            id: 'a',
+            fullName: 'Alice',
+            phoneNumber: '+98 912 111',
+          ),
+        );
+        await source.save(
+          const CustomerModel(
+            id: 'b',
+            fullName: 'Bob',
+            phoneNumber: '+98 912 222',
+          ),
+        );
+        await source.save(
+          const CustomerModel(
+            id: 'c',
+            fullName: 'Charlie',
+            phoneNumber: '+98 933 333',
+          ),
+        );
 
         final hits = await source.search('912');
         expect(hits.length, 2);
@@ -152,14 +168,17 @@ void main() {
 
       test('Update via upsert (no duplicate row)', () async {
         final source = newSource();
-        await source.save(const CustomerModel(
-            id: 'u1', fullName: 'Alice', phoneNumber: '111'));
-        await source.save(const CustomerModel(
-          id: 'u1',
-          fullName: 'Alice Updated',
-          phoneNumber: '111',
-          email: 'alice@new.com',
-        ));
+        await source.save(
+          const CustomerModel(id: 'u1', fullName: 'Alice', phoneNumber: '111'),
+        );
+        await source.save(
+          const CustomerModel(
+            id: 'u1',
+            fullName: 'Alice Updated',
+            phoneNumber: '111',
+            email: 'alice@new.com',
+          ),
+        );
 
         final read = await source.getById('u1');
         expect(read, isNotNull);
@@ -174,8 +193,9 @@ void main() {
 
       test('Delete removes the record', () async {
         final source = newSource();
-        await source.save(const CustomerModel(
-            id: 'd1', fullName: 'Doomed', phoneNumber: '1'));
+        await source.save(
+          const CustomerModel(id: 'd1', fullName: 'Doomed', phoneNumber: '1'),
+        );
         expect(await source.getById('d1'), isNotNull);
 
         await source.delete('d1');
@@ -187,12 +207,15 @@ void main() {
         () async {
           // Write through the freshly opened Isar.
           final sWrite = newSource();
+          // The CustomerIsar schema preserves the deprecated
+          // `balance` column on-disk for backwards compatibility
+          // with pre-migration DBs. We do NOT touch the column here
+          // — the mapper ignores it on both read and write paths.
           const input = CustomerModel(
             id: 'persist-1',
             fullName: 'Persisted',
             phoneNumber: '+1 000 000',
             tags: ['critical', 'persist-test'],
-            balance: 99.99,
           );
           await sWrite.save(input);
 
@@ -215,7 +238,6 @@ void main() {
           expect(read!.id, 'persist-1');
           expect(read.fullName, 'Persisted');
           expect(read.phoneNumber, '+1 000 000');
-          expect(read.balance, 99.99);
           expect(read.tags, ['critical', 'persist-test']);
         },
       );
@@ -234,21 +256,23 @@ void main() {
         expect(await source.getAll(), isEmpty);
       });
 
-      test('search returns empty list when there are no matches',
-          () async {
+      test('search returns empty list when there are no matches', () async {
         final source = newSource();
-        await source.save(const CustomerModel(
-            id: 'a', fullName: 'Alice', phoneNumber: '1'));
+        await source.save(
+          const CustomerModel(id: 'a', fullName: 'Alice', phoneNumber: '1'),
+        );
         final hits = await source.search('zzz_no_match_xyz');
         expect(hits, isEmpty);
       });
 
       test('empty / whitespace search falls back to getAll', () async {
         final source = newSource();
-        await source.save(const CustomerModel(
-            id: 'a', fullName: 'Alice', phoneNumber: '1'));
-        await source.save(const CustomerModel(
-            id: 'b', fullName: 'Bob', phoneNumber: '2'));
+        await source.save(
+          const CustomerModel(id: 'a', fullName: 'Alice', phoneNumber: '1'),
+        );
+        await source.save(
+          const CustomerModel(id: 'b', fullName: 'Bob', phoneNumber: '2'),
+        );
 
         expect((await source.search('')).length, 2);
         expect((await source.search('   ')).length, 2);
@@ -258,28 +282,21 @@ void main() {
       //  Repository → domain Failure mapping (over real Isar)
       // ════════════════════════════════════════════════════════════════
 
-      test(
-        'getCustomerById for absent id → CustomerNotFoundFailure',
-        () async {
-          final repo = CustomerRepositoryImpl(
-            localDataSource: newSource(),
-          );
-          final fetched = await repo.getCustomerById('missing');
-          expect(fetched.isLeft, isTrue);
-          expect(
-            (fetched as Left<CustomerFailure, CustomerEntity>).value,
-            isA<CustomerNotFoundFailure>(),
-          );
-        },
-      );
+      test('getCustomerById for absent id → CustomerNotFoundFailure', () async {
+        final repo = CustomerRepositoryImpl(localDataSource: newSource());
+        final fetched = await repo.getCustomerById('missing');
+        expect(fetched.isLeft, isTrue);
+        expect(
+          (fetched as Left<CustomerFailure, CustomerEntity>).value,
+          isA<CustomerNotFoundFailure>(),
+        );
+      });
 
       test(
         'createCustomer with empty fullName → CustomerValidationFailure',
         () async {
           final usecase = CreateCustomerUseCase(
-            CustomerRepositoryImpl(
-              localDataSource: newSource(),
-            ),
+            CustomerRepositoryImpl(localDataSource: newSource()),
           );
           final result = await usecase(
             const CustomerEntity(
@@ -303,9 +320,7 @@ void main() {
       test(
         'createCustomer on a closed Isar → CustomerStorageFailure',
         () async {
-          final repo = CustomerRepositoryImpl(
-            localDataSource: newSource(),
-          );
+          final repo = CustomerRepositoryImpl(localDataSource: newSource());
           // Force the underlying Isar handle to throw on the next
           // write — the repository must absorb the thrown error
           // into `Left(CustomerStorageFailure(...))` rather than
@@ -313,11 +328,7 @@ void main() {
           await isar.close();
 
           final result = await repo.createCustomer(
-            const CustomerEntity(
-              id: 'x',
-              fullName: 'Alice',
-              phoneNumber: '1',
-            ),
+            const CustomerEntity(id: 'x', fullName: 'Alice', phoneNumber: '1'),
           );
           expect(result.isLeft, isTrue);
           final failure =

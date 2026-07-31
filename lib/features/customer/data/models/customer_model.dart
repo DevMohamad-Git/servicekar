@@ -15,9 +15,10 @@
 /// ─── Profile surface (mirrors [CustomerEntity]) ─────────────────
 /// `profileImagePath`, `nationalId`, `birthday`, `gender` mirror the
 /// entity's profile fields so the data layer swallows them as-is.
-/// `balance` is preserved-with-deprecation for the same reason
-/// documented on [CustomerEntity] — see that file for the migration
-/// plan.
+/// `balance` is intentionally NOT present on the Model either — same
+/// reason as on the Entity. The deprecated `CustomerIsar.balance`
+/// column is preserved (read-write *ignore*) for backwards
+/// compatibility with pre-migration DBs.
 class CustomerModel {
   const CustomerModel({
     required this.id,
@@ -30,11 +31,6 @@ class CustomerModel {
     this.nationalId,
     this.birthday,
     this.gender,
-    @Deprecated(
-      'Derived from invoices/payments; this cached summary is '
-      'stale-prone. Use the future GetCustomerDebtUseCase instead.',
-    )
-    this.balance = 0.0,
     this.tags = const <String>[],
     this.createdAt,
     this.updatedAt,
@@ -50,13 +46,6 @@ class CustomerModel {
   final String? nationalId;
   final DateTime? birthday;
   final String? gender;
-
-  /// @deprecated — see class header for the migration plan.
-  @Deprecated(
-    'Derived from invoices/payments; this cached summary is '
-    'stale-prone. Use the future GetCustomerDebtUseCase instead.',
-  )
-  final double balance;
 
   final List<String> tags;
   final DateTime? createdAt;
@@ -76,7 +65,6 @@ class CustomerModel {
         other.nationalId == nationalId &&
         other.birthday == birthday &&
         other.gender == gender &&
-        other.balance == balance &&
         _listEq(other.tags, tags) &&
         other.createdAt == createdAt &&
         other.updatedAt == updatedAt;
@@ -84,21 +72,20 @@ class CustomerModel {
 
   @override
   int get hashCode => Object.hash(
-        id,
-        fullName,
-        phoneNumber,
-        email,
-        address,
-        notes,
-        profileImagePath,
-        nationalId,
-        birthday,
-        gender,
-        balance,
-        Object.hashAll(tags),
-        createdAt,
-        updatedAt,
-      );
+    id,
+    fullName,
+    phoneNumber,
+    email,
+    address,
+    notes,
+    profileImagePath,
+    nationalId,
+    birthday,
+    gender,
+    Object.hashAll(tags),
+    createdAt,
+    updatedAt,
+  );
 }
 
 bool _listEq<T>(List<T> a, List<T> b) {

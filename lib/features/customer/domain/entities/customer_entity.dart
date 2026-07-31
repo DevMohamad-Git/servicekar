@@ -35,23 +35,14 @@
 ///   * Operator-defined chips — [tags].
 ///   * Timestamps — [createdAt], [updatedAt].
 ///
-/// ─── [balance] field ────────────────────────────────────────────────
-/// `balance` was the project's first cached debt summary. The new DB
-/// foundation derives the *real* debt as `sum(invoice.totalAmount) -
-/// sum(payment.amount)` grouped by `customerUuid`; the cached field
-/// is therefore stale-prone and is marked `@deprecated` so call sites
-/// see the warning before they migrate. We intentionally do NOT delete
-/// the field here because:
-///   1. The repository, use cases, tests, and presentation widgets
-///      (e.g. `customer_balance_widget.dart`) currently consume it.
-///   2. The task scope is "design the DB foundation" — removing the
-///      field would force touching the repo, the use cases, and at
-///      least the dashboard widget, all of which are explicitly out
-///      of scope per the task brief.
-///
-/// Future refactor (off-scope here): compute the derived debt in a
-/// dedicated use case (`GetCustomerDebtUseCase`), delete this field,
-/// and migrate every `customer.balance` callsite.
+/// ─── Balance field ──────────────────────────────────────────────────
+/// Customer.balance is intentionally NOT exposed on this entity. The
+/// canonical balance is derived live from
+/// `sum(payment.amount) - sum(invoice.totalAmount)` grouped by
+/// `customerUuid` via `CalculateCustomerBalanceUseCase` (see the
+/// Balance feature). The deprecated persisted column lives only on
+/// the Isar schema for backwards compatibility with pre-migration
+/// DBs; no mapper reads or writes it anymore.
 class CustomerEntity {
   const CustomerEntity({
     required this.id,
@@ -64,11 +55,6 @@ class CustomerEntity {
     this.nationalId,
     this.birthday,
     this.gender,
-    @Deprecated(
-      'Derived from invoices/payments; this cached summary is '
-      'stale-prone. Use the future GetCustomerDebtUseCase instead.',
-    )
-    this.balance = 0.0,
     this.tags = const <String>[],
     this.createdAt,
     this.updatedAt,
@@ -117,16 +103,6 @@ class CustomerEntity {
   /// graduate it to a typed enum with localized labels.
   final String? gender;
 
-  /// Outstanding balance owed by (or to) the customer, in the local
-  /// currency. Positive = customer owes the business.
-  ///
-  /// @deprecated — see the class-level header for the migration plan.
-  @Deprecated(
-    'Derived from invoices/payments; this cached summary is '
-    'stale-prone. Use the future GetCustomerDebtUseCase instead.',
-  )
-  final double balance;
-
   /// Operator-defined tags for grouping/filtering (e.g. `vip`, `cash`).
   /// Defensive-copied in [copyWith] so the entity stays immutable.
   final List<String> tags;
@@ -148,7 +124,6 @@ class CustomerEntity {
     Object? nationalId = _sentinel,
     Object? birthday = _sentinel,
     Object? gender = _sentinel,
-    Object? balance = _sentinel,
     List<String>? tags,
     Object? createdAt = _sentinel,
     Object? updatedAt = _sentinel,
@@ -158,8 +133,9 @@ class CustomerEntity {
       fullName: fullName ?? this.fullName,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       email: identical(email, _sentinel) ? this.email : email as String?,
-      address:
-          identical(address, _sentinel) ? this.address : address as String?,
+      address: identical(address, _sentinel)
+          ? this.address
+          : address as String?,
       notes: identical(notes, _sentinel) ? this.notes : notes as String?,
       profileImagePath: identical(profileImagePath, _sentinel)
           ? this.profileImagePath
@@ -170,16 +146,14 @@ class CustomerEntity {
       birthday: identical(birthday, _sentinel)
           ? this.birthday
           : birthday as DateTime?,
-      gender:
-          identical(gender, _sentinel) ? this.gender : gender as String?,
-      balance: identical(balance, _sentinel)
-          ? this.balance
-          : balance as double,
+      gender: identical(gender, _sentinel) ? this.gender : gender as String?,
       tags: tags ?? this.tags,
-      createdAt:
-          identical(createdAt, _sentinel) ? this.createdAt : createdAt as DateTime?,
-      updatedAt:
-          identical(updatedAt, _sentinel) ? this.updatedAt : updatedAt as DateTime?,
+      createdAt: identical(createdAt, _sentinel)
+          ? this.createdAt
+          : createdAt as DateTime?,
+      updatedAt: identical(updatedAt, _sentinel)
+          ? this.updatedAt
+          : updatedAt as DateTime?,
     );
   }
 
@@ -197,7 +171,6 @@ class CustomerEntity {
         other.nationalId == nationalId &&
         other.birthday == birthday &&
         other.gender == gender &&
-        other.balance == balance &&
         _listEq(other.tags, tags) &&
         other.createdAt == createdAt &&
         other.updatedAt == updatedAt;
@@ -205,26 +178,25 @@ class CustomerEntity {
 
   @override
   int get hashCode => Object.hash(
-        id,
-        fullName,
-        phoneNumber,
-        email,
-        address,
-        notes,
-        profileImagePath,
-        nationalId,
-        birthday,
-        gender,
-        balance,
-        Object.hashAll(tags),
-        createdAt,
-        updatedAt,
-      );
+    id,
+    fullName,
+    phoneNumber,
+    email,
+    address,
+    notes,
+    profileImagePath,
+    nationalId,
+    birthday,
+    gender,
+    Object.hashAll(tags),
+    createdAt,
+    updatedAt,
+  );
 
   @override
   String toString() =>
       'CustomerEntity(id: $id, fullName: $fullName, phoneNumber: $phoneNumber, '
-      'balance: $balance, tags: $tags, profileImagePath: $profileImagePath)';
+      'tags: $tags, profileImagePath: $profileImagePath)';
 }
 
 const Object _sentinel = Object();

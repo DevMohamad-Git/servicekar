@@ -13,6 +13,16 @@ import '../failures/customer_failure.dart';
 /// Methods return [Future] of [Either] so callers handle failure without
 /// `try/catch`. A success of "nothing meaningful" is modelled with
 /// [Unit] rather than `void`.
+///
+/// ─── Balance ────────────────────────────────────────────────────────
+/// The previous `getCustomerBalance(id): Either<CustomerFailure, double>`
+/// was removed alongside the deprecated persisted `balance` field on
+/// `CustomerEntity` / `CustomerModel`. The canonical balance is now
+/// derived live from `Invoice + Payment` via the Balance feature's
+/// `CalculateCustomerBalanceUseCase`; nothing on this contract or
+/// its implementation should re-introduce a cached read of
+/// `customer.balance` because there is no write path that keeps it
+/// fresh.
 abstract class CustomerRepository {
   /// Persist a brand-new customer. Throws / returns [CustomerValidationFailure]
   /// when the supplied entity is invalid; [CustomerStorageFailure] on I/O.
@@ -42,8 +52,4 @@ abstract class CustomerRepository {
   Future<Either<CustomerFailure, List<CustomerEntity>>> searchCustomers(
     String query,
   );
-
-  /// Read-only access to the customer's current balance. Convenient for the
-  /// dashboard / details screen without hauling the entire record.
-  Future<Either<CustomerFailure, double>> getCustomerBalance(String id);
 }

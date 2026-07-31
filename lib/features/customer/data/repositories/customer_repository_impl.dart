@@ -125,24 +125,6 @@ class CustomerRepositoryImpl implements CustomerRepository {
     }
   }
 
-  @override
-  Future<Either<CustomerFailure, double>> getCustomerBalance(String id) async {
-    try {
-      final model = await _localDataSource.getById(id);
-      if (model == null) {
-        return Left(CustomerNotFoundFailure(id: id));
-      }
-      return Right(model.balance);
-    } catch (e) {
-      return Left(
-        CustomerStorageFailure(
-          operation: 'getCustomerBalance',
-          message: e.toString(),
-        ),
-      );
-    }
-  }
-
   Future<CustomerEntity?> _readBack(String id) async {
     final model = await _localDataSource.getById(id);
     return model?.toEntity();

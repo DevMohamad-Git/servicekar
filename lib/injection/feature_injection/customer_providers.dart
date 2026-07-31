@@ -6,7 +6,6 @@ import '../../../features/customer/domain/entities/customer_entity.dart';
 import '../../../features/customer/domain/repositories/customer_repository.dart';
 import '../../../features/customer/domain/usecases/create_customer_usecase.dart';
 import '../../../features/customer/domain/usecases/delete_customer_usecase.dart';
-import '../../../features/customer/domain/usecases/get_customer_balance_usecase.dart';
 import '../../../features/customer/domain/usecases/get_customer_by_id_usecase.dart';
 import '../../../features/customer/domain/usecases/get_customers_usecase.dart';
 import '../../../features/customer/domain/usecases/search_customers_usecase.dart';
@@ -64,10 +63,6 @@ final getCustomersUseCaseProvider = Provider<GetCustomersUseCase>(
 
 final searchCustomersUseCaseProvider = Provider<SearchCustomersUseCase>(
   (ref) => SearchCustomersUseCase(ref.watch(customerRepositoryProvider)),
-);
-
-final getCustomerBalanceUseCaseProvider = Provider<GetCustomerBalanceUseCase>(
-  (ref) => GetCustomerBalanceUseCase(ref.watch(customerRepositoryProvider)),
 );
 
 // ─── Controllers (Live Persistence: invalidations on mutation) ────────────
