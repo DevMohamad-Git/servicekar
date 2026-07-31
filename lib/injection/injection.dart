@@ -37,6 +37,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../core/database/database_service.dart';
 import '../features/customer/data/models/customer_isar.dart';
+import '../features/customer/data/models/invoice_isar.dart';
+import '../features/customer/data/models/payment_isar.dart';
+import '../features/customer/data/models/service_isar.dart';
 import 'global_providers.dart';
 
 export 'global_providers.dart';
@@ -73,40 +76,36 @@ export 'global_providers.dart';
 ///   * It would fight Riverpod's own family / auto-dispose model.
 ///
 /// ─── Isar bootstrap ───────────────────────────────────────────────
-/// `await DatabaseService.open(schemas: [CustomerIsarSchema])` runs
-/// once here. The returned [Isar] lives for the entire process and
-/// is handed to every Isar-aware provider via
+/// `await DatabaseService.open(schemas: [...])` runs once here.
+/// The returned [Isar] lives for the entire process and is handed
+/// to every Isar-aware provider via
 /// `isarInstanceProvider.overrideWithValue(db.isar)`.
 ///
-/// Future schemas (Service, Invoice, Payment, …) compose into the
-/// same `Isar.open([...])` invocation without touching the open
+/// **Phase 2 — Linked-data foundation:** the four MVP collections
+/// (Customer, Service, Invoice, Payment) are now opened
+/// together. Across collections the link is a *plain `String`
+/// foreign key* (`customerUuid`, `invoiceUuid`) on the child row:
+/// the alternative `IsarLink<…>` would silently detach every link
+/// whenever a customer is re-imported (the `replace: true` +
+/// `Isar.autoIncrement` reallocates the internal int Id).
+/// Cross-collection writes, reads, and cascade-delete policies
+/// are owned by the *repository layer* — that work ships in Phase 3.
+///
+/// Future schemas (any new domain collection) compose into the
+/// same `Isar.open([...])` invocation without touching this
 /// contract — just append to the `schemas:` list and the rebuild
 /// regenerates their `*.g.dart` part files.
-///
-/// ─── NEXT TASK (linked-data foundation) ────────────────────────────
-/// The Customer-Profile foundation task shipped the
-/// `ServiceIsarSchema`, `InvoiceIsarSchema`, and `PaymentIsarSchema`
-/// files under `lib/features/customer/data/models/*_isar.g.dart`
-/// but did NOT wire them here — that work explicitly out of scope
-/// per the task brief "Do not implement DI wiring". Whoever wires
-/// the first Service / Invoice / Payment feature module must:
-///   1. Add `ServiceIsarSchema`, `InvoiceIsarSchema`,
-///      `PaymentIsarSchema` (and any future schema) to the
-///      `schemas:` list below.
-///   2. Update `lib/injection/global_providers.dart`'s
-///      `isarInstanceProvider` if its contract changes.
-///   3. Hand each IsarCollection<…> to the feature's
-///      `LocalDataSource` via feature-scoped providers under
-///      `lib/injection/feature_injection/`, same convention used
-///      by `customerLocalDataSourceProvider`.
 Future<ProviderContainer> configureDependencies() async {
   final db = await DatabaseService.open(
-    schemas: [CustomerIsarSchema],
+    schemas: [
+      CustomerIsarSchema,
+      ServiceIsarSchema,
+      InvoiceIsarSchema,
+      PaymentIsarSchema,
+    ],
   );
   final container = ProviderContainer(
-    overrides: [
-      isarInstanceProvider.overrideWithValue(db.isar),
-    ],
+    overrides: [isarInstanceProvider.overrideWithValue(db.isar)],
   );
 
   // Eager globals whose construction has setup work (or whose
