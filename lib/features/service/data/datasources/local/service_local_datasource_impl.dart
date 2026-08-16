@@ -66,6 +66,9 @@ class ServiceLocalDataSourceImpl implements ServiceLocalDataSource {
   }
 
   @override
+  Future<int> countAll() => _services.count();
+
+  @override
   Future<void> save(ServiceModel model) async {
     await _isar.writeTxn(() async {
       // `putByUuid` honours the `@Index(unique: true, replace: true)`

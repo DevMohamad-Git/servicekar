@@ -116,6 +116,20 @@ class ServiceRepositoryImpl implements ServiceRepository {
     }
   }
 
+  @override
+  Future<Either<ServiceFailure, int>> getServiceCount() async {
+    try {
+      return Right(await _localDataSource.countAll());
+    } catch (e) {
+      return Left(
+        ServiceStorageFailure(
+          operation: 'getServiceCount',
+          message: e.toString(),
+        ),
+      );
+    }
+  }
+
   /// Re-hydrates the persisted entity. Used so the success path can
   /// return the most current row (timestamps adjusted by the storage
   /// layer, internal Id resolved) rather than the pre-save snapshot.

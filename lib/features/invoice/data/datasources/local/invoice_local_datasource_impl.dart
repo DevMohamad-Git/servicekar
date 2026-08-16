@@ -68,6 +68,9 @@ class InvoiceLocalDataSourceImpl implements InvoiceLocalDataSource {
   }
 
   @override
+  Future<int> countAll() => _invoices.count();
+
+  @override
   Future<void> save(InvoiceModel model) async {
     await _isar.writeTxn(() async {
       // `putByUuid` honours the

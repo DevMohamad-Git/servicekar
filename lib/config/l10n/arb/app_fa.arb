@@ -4,6 +4,10 @@
   "@appName": {
     "description": "Application name (AppBar title, splash, install metadata)."
   },
+  "businessManagement": "مدیریت کسب‌وکار",
+  "@businessManagement": {
+    "description": "Subtitle under the app name in the dashboard header."
+  },
   "save": "ذخیره",
   "@save": {
     "description": "Submit button label for forms (Save in Edit pages)."
@@ -39,6 +43,10 @@
   "invoices": "فاکتورها",
   "@invoices": {
     "description": "Invoice-list page title and navigation tab."
+  },
+  "payments": "پرداخت‌ها",
+  "@payments": {
+    "description": "Payments list / navigation tab label."
   },
   "settings": "تنظیمات",
   "@settings": {
@@ -135,5 +143,77 @@
   "searchCustomers": "جستجوی مشتری‌ها",
   "@searchCustomers": {
     "description": "Customer-search bar hint text."
+  },
+  "greeting": "سلام،",
+  "@greeting": {
+    "description": "Dashboard greeting prefix, followed by the local user name."
+  },
+  "welcome": "خوش آمدید",
+  "@welcome": {
+    "description": "Dashboard welcome subtitle under the greeting."
+  },
+  "totalDebtors": "مجموع بدهکاران",
+  "@totalDebtors": {
+    "description": "Title of the dashboard debtors summary card."
+  },
+  "toman": "تومان",
+  "@toman": {
+    "description": "Persian currency unit label shown next to amounts."
+  },
+  "viewDebtors": "مشاهده‌ی بدهکاران",
+  "@viewDebtors": {
+    "description": "Button label on the debtors summary card."
+  },
+  "recentActivities": "آخرین فعالیت‌ها",
+  "@recentActivities": {
+    "description": "Section header for the dashboard recent activities list."
+  },
+  "viewAllActivities": "مشاهده‌ی همه فعالیت‌ها",
+  "@viewAllActivities": {
+    "description": "Footer link of the recent activities card."
+  },
+  "byYou": "توسط شما",
+  "@byYou": {
+    "description": "Subtitle on recent activity rows meaning the action was done by the local user."
+  },
+  "comingSoon": "به‌زودی",
+  "@comingSoon": {
+    "description": "Toast shown for features that are not implemented yet."
+  },
+  "businessOverview": "نمای کلی کسب‌وکار",
+  "@businessOverview": {
+    "description": "Section header for the dashboard business-overview KPI cards."
+  },
+  "registeredInvoices": "فاکتورهای ثبت‌شده",
+  "@registeredInvoices": {
+    "description": "KPI card label for the total number of registered invoices."
+  },
+  "registeredCustomers": "مشتری‌ها",
+  "@registeredCustomers": {
+    "description": "KPI card label for the total number of customers."
+  },
+  "registeredServices": "سرویس‌های ثبت‌شده",
+  "@registeredServices": {
+    "description": "KPI card label for the total number of registered services."
+  },
+  "registerCustomer": "ثبت مشتری",
+  "@registerCustomer": {
+    "description": "Bottom-nav / quick-action label for registering a customer."
+  },
+  "registerPayment": "ثبت پرداخت",
+  "@registerPayment": {
+    "description": "Bottom-nav label for registering a payment."
+  },
+  "registerInvoice": "ثبت فاکتور",
+  "@registerInvoice": {
+    "description": "Quick-action label for registering an invoice."
+  },
+  "moreItems": "موارد بیشتر",
+  "@moreItems": {
+    "description": "Bottom-nav label for the more-items entry point."
+  },
+  "quickActions": "اقدام سریع",
+  "@quickActions": {
+    "description": "Title of the quick-action bottom sheet opened from the dashboard FAB."
   }
 }

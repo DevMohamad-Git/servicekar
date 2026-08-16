@@ -10,6 +10,7 @@ import 'package:servicar/features/invoice/domain/repositories/invoice_repository
 import 'package:servicar/features/invoice/domain/usecases/delete_invoice_usecase.dart';
 import 'package:servicar/features/invoice/domain/usecases/get_customer_invoices_usecase.dart';
 import 'package:servicar/features/invoice/domain/usecases/get_invoice_by_id_usecase.dart';
+import 'package:servicar/features/invoice/domain/usecases/get_invoice_count_usecase.dart';
 import 'package:servicar/features/invoice/domain/usecases/params/register_invoice_params.dart';
 import 'package:servicar/features/invoice/domain/usecases/params/update_invoice_params.dart';
 import 'package:servicar/features/invoice/domain/usecases/register_invoice_usecase.dart';
@@ -69,6 +70,10 @@ final getInvoiceByIdUseCaseProvider = Provider<GetInvoiceByIdUseCase>(
 
 final getCustomerInvoicesUseCaseProvider = Provider<GetCustomerInvoicesUseCase>(
   (ref) => GetCustomerInvoicesUseCase(ref.watch(invoiceRepositoryProvider)),
+);
+
+final getInvoiceCountUseCaseProvider = Provider<GetInvoiceCountUseCase>(
+  (ref) => GetInvoiceCountUseCase(ref.watch(invoiceRepositoryProvider)),
 );
 
 // ─── Controllers ────────────────────────────────────────────────────

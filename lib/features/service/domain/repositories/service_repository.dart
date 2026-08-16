@@ -45,4 +45,10 @@ abstract class ServiceRepository {
   Future<Either<ServiceFailure, List<ServiceEntity>>> getServicesByCustomer(
     String customerUuid,
   );
+
+  /// Total number of persisted services across all customers.
+  /// Zero rows is a successful `0` — never a failure. Feeds the
+  /// dashboard's "registered services" KPI via a single
+  /// constant-time count rather than hydrating every entity.
+  Future<Either<ServiceFailure, int>> getServiceCount();
 }

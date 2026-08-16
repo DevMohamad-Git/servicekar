@@ -12,6 +12,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get appName => 'سرویس‌کار';
 
   @override
+  String get businessManagement => 'مدیریت کسب‌وکار';
+
+  @override
   String get save => 'ذخیره';
 
   @override
@@ -37,6 +40,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get invoices => 'فاکتورها';
+
+  @override
+  String get payments => 'پرداخت‌ها';
 
   @override
   String get settings => 'تنظیمات';
@@ -110,4 +116,58 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get searchCustomers => 'جستجوی مشتری‌ها';
+
+  @override
+  String get greeting => 'سلام،';
+
+  @override
+  String get welcome => 'خوش آمدید';
+
+  @override
+  String get totalDebtors => 'مجموع بدهکاران';
+
+  @override
+  String get toman => 'تومان';
+
+  @override
+  String get viewDebtors => 'مشاهده‌ی بدهکاران';
+
+  @override
+  String get recentActivities => 'آخرین فعالیت‌ها';
+
+  @override
+  String get viewAllActivities => 'مشاهده‌ی همه فعالیت‌ها';
+
+  @override
+  String get byYou => 'توسط شما';
+
+  @override
+  String get comingSoon => 'به‌زودی';
+
+  @override
+  String get businessOverview => 'نمای کلی کسب‌وکار';
+
+  @override
+  String get registeredInvoices => 'فاکتورهای ثبت‌شده';
+
+  @override
+  String get registeredCustomers => 'مشتری‌ها';
+
+  @override
+  String get registeredServices => 'سرویس‌های ثبت‌شده';
+
+  @override
+  String get registerCustomer => 'ثبت مشتری';
+
+  @override
+  String get registerPayment => 'ثبت پرداخت';
+
+  @override
+  String get registerInvoice => 'ثبت فاکتور';
+
+  @override
+  String get moreItems => 'موارد بیشتر';
+
+  @override
+  String get quickActions => 'اقدام سریع';
 }

@@ -42,6 +42,10 @@ class RecordingServiceRepository implements ServiceRepository {
     String customerUuid,
   ) async =>
       throw UnimplementedError();
+
+  @override
+  Future<Either<ServiceFailure, int>> getServiceCount() async =>
+      throw UnimplementedError();
 }
 
 void main() {

@@ -208,6 +208,29 @@ void main() {
         expect(await source.getByCustomer('nobody'), isEmpty);
       });
 
+      test('countAll counts every persisted row', () async {
+        final source = newSource();
+        expect(await source.countAll(), 0);
+
+        await seedCustomer('cust-1');
+        await seedCustomer('cust-2');
+        await source.save(
+          const ServiceEntity(
+            id: 'a',
+            customerUuid: 'cust-1',
+            title: 'A',
+          ).toModel(),
+        );
+        await source.save(
+          const ServiceEntity(
+            id: 'b',
+            customerUuid: 'cust-2',
+            title: 'B',
+          ).toModel(),
+        );
+        expect(await source.countAll(), 2);
+      });
+
       // ════════════════════════════════════════════════════════════════
       //  Persistence: write → close → reopen → read
       // ════════════════════════════════════════════════════════════════

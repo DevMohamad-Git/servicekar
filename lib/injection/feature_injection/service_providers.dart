@@ -9,6 +9,7 @@ import '../../../features/service/domain/repositories/service_repository.dart';
 import '../../../features/service/domain/usecases/delete_service_usecase.dart';
 import '../../../features/service/domain/usecases/get_customer_services_usecase.dart';
 import '../../../features/service/domain/usecases/get_service_by_id_usecase.dart';
+import '../../../features/service/domain/usecases/get_service_count_usecase.dart';
 import '../../../features/service/domain/usecases/params/register_service_params.dart';
 import '../../../features/service/domain/usecases/params/update_service_params.dart';
 import '../../../features/service/domain/usecases/register_service_usecase.dart';
@@ -130,6 +131,10 @@ final getServiceByIdUseCaseProvider = Provider<GetServiceByIdUseCase>(
 
 final getCustomerServicesUseCaseProvider = Provider<GetCustomerServicesUseCase>(
   (ref) => GetCustomerServicesUseCase(ref.watch(serviceRepositoryProvider)),
+);
+
+final getServiceCountUseCaseProvider = Provider<GetServiceCountUseCase>(
+  (ref) => GetServiceCountUseCase(ref.watch(serviceRepositoryProvider)),
 );
 
 // ─── Controllers ──────────────────────────────────────────────────────

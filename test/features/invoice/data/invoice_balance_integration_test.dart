@@ -98,6 +98,9 @@ class InMemoryInvoiceLocalDataSource implements InvoiceLocalDataSource {
   }
 
   @override
+  Future<int> countAll() async => _store.length;
+
+  @override
   Future<void> save(InvoiceModel model) async {
     _store[model.id] = model;
   }

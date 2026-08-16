@@ -47,6 +47,10 @@ class RecordingServiceRepository implements ServiceRepository {
   Future<Either<ServiceFailure, List<ServiceEntity>>> getServicesByCustomer(
     String c,
   ) async => throw UnimplementedError();
+
+  @override
+  Future<Either<ServiceFailure, int>> getServiceCount() async =>
+      throw UnimplementedError();
 }
 
 /// Recording fake of [CustomerRepository] — only `getCustomerById` is

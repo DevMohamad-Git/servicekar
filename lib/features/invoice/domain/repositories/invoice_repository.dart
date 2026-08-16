@@ -77,4 +77,10 @@ abstract class InvoiceRepository {
   Future<Either<InvoiceFailure, double>> getTotalByCustomer(
     String customerUuid,
   );
+
+  /// Total number of persisted invoices across all customers.
+  /// Zero rows is a successful `0` — never a failure. Feeds the
+  /// dashboard's "registered invoices" KPI via a single
+  /// constant-time count rather than hydrating every entity.
+  Future<Either<InvoiceFailure, int>> getInvoiceCount();
 }

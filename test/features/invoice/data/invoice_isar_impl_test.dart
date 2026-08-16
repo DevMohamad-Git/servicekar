@@ -171,6 +171,21 @@ void main() {
         expect(await source.getTotalByCustomer('cust-1'), 800_000.0);
       });
 
+      test('countAll counts every persisted row', () async {
+        final source = newSource();
+        expect(await source.countAll(), 0);
+
+        await seedCustomer('cust-1');
+        await seedCustomer('cust-2');
+        await source.save(
+          seedInvoice(id: 'a', customerUuid: 'cust-1').toModel(),
+        );
+        await source.save(
+          seedInvoice(id: 'b', customerUuid: 'cust-2').toModel(),
+        );
+        expect(await source.countAll(), 2);
+      });
+
       test(
         'Persistence: write → close → reopen → read survives restart',
         () async {

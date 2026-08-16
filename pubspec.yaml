@@ -81,6 +81,7 @@ dev_dependencies:
 
 flutter:
   generate: true
+  uses-material-design: true
 
   # ─── Vazirmatn (Persian + Latin) ─────────────────────────────────
   # Why bundled, not the Flutter default: Roboto / SF Arabic
@@ -108,5 +109,3 @@ flutter_gen:
 
 dependency_overrides:
   dart_style: 3.1.3
-
-
