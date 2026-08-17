@@ -29,6 +29,9 @@ class InMemoryServiceLocalDataSource implements ServiceLocalDataSource {
       .toList(growable: false);
 
   @override
+  Future<int> countAll() async => _store.length;
+
+  @override
   Future<void> save(ServiceModel model) async {
     _store[model.id] = model;
   }
@@ -206,6 +209,49 @@ void main() {
         expect((failure as ServiceStorageFailure).operation, 'createService');
       },
     );
+
+    test('getServiceCount counts every persisted service', () async {
+      await fake.save(
+        const ServiceModel(
+          id: 'a',
+          customerUuid: 'cust-1',
+          title: 'A',
+          price: 1.0,
+        ),
+      );
+      await fake.save(
+        const ServiceModel(
+          id: 'b',
+          customerUuid: 'cust-2',
+          title: 'B',
+          price: 1.0,
+        ),
+      );
+
+      final count = await repo.getServiceCount();
+      expect(count, const Right<ServiceFailure, int>(2));
+
+      final emptyRepo = ServiceRepositoryImpl(
+        localDataSource: InMemoryServiceLocalDataSource(),
+      );
+      final empty = await emptyRepo.getServiceCount();
+      expect(empty, const Right<ServiceFailure, int>(0));
+    });
+
+    test(
+      'count failure is wrapped as ServiceStorageFailure',
+      () async {
+        final r = ServiceRepositoryImpl(
+          localDataSource: _BrokenServiceLocalDataSource(),
+        );
+
+        final result = await r.getServiceCount();
+        expect(result.isLeft, isTrue);
+        final failure = (result as Left<ServiceFailure, int>).value;
+        expect(failure, isA<ServiceStorageFailure>());
+        expect((failure as ServiceStorageFailure).operation, 'getServiceCount');
+      },
+    );
   });
 }
 
@@ -223,6 +269,9 @@ class _BrokenServiceLocalDataSource implements ServiceLocalDataSource {
   @override
   Future<List<ServiceModel>> getByCustomer(String uuid) async =>
       const <ServiceModel>[];
+
+  @override
+  Future<int> countAll() async => throw StateError('boom');
 
   @override
   Future<void> delete(String id) async {}

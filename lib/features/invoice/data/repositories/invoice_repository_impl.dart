@@ -138,6 +138,20 @@ class InvoiceRepositoryImpl implements InvoiceRepository {
     }
   }
 
+  @override
+  Future<Either<InvoiceFailure, int>> getInvoiceCount() async {
+    try {
+      return Right(await _localDataSource.countAll());
+    } catch (e) {
+      return Left(
+        InvoiceStorageFailure(
+          operation: 'getInvoiceCount',
+          message: e.toString(),
+        ),
+      );
+    }
+  }
+
   /// Re-hydrate the persisted entity so the success path returns
   /// the most current row (timestamps adjusted by the storage
   /// layer, internal `Id` resolved) rather than the pre-save

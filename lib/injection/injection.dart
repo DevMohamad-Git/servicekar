@@ -34,6 +34,7 @@
 library;
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hooks_riverpod/misc.dart' show Override;
 
 import '../core/database/database_service.dart';
 import '../features/customer/data/models/customer_isar.dart';
@@ -104,9 +105,10 @@ Future<ProviderContainer> configureDependencies() async {
       PaymentIsarSchema,
     ],
   );
-  final container = ProviderContainer(
-    overrides: [isarInstanceProvider.overrideWithValue(db.isar)],
-  );
+  final overrides = <Override>[
+    isarInstanceProvider.overrideWithValue(db.isar),
+  ];
+  final container = ProviderContainer(overrides: overrides);
 
   // Eager globals whose construction has setup work (or whose
   // future construction will — AppHelper is reserved for the

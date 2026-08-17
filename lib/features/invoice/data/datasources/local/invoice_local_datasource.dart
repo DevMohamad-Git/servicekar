@@ -28,6 +28,12 @@ abstract class InvoiceLocalDataSource {
   /// collection.
   Future<double> getTotalByCustomer(String customerUuid);
 
+  /// Return the total number of persisted invoices across all
+  /// customers. A single constant-time `count()` query — the
+  /// dashboard "registered invoices" KPI path must not hydrate
+  /// entities just to count rows.
+  Future<int> countAll();
+
   /// Insert or update [model]. The Isar
   /// `@Index(unique: true, replace: true)` on `InvoiceIsar.uuid`
   /// collapses re-saves into in-place updates.

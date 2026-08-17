@@ -18,6 +18,10 @@ class RecordingServiceRepository implements ServiceRepository {
       onList(customerUuid);
 
   @override
+  Future<Either<ServiceFailure, int>> getServiceCount() async =>
+      throw UnimplementedError();
+
+  @override
   Future<Either<ServiceFailure, ServiceEntity>> getServiceById(String id) async =>
       throw UnimplementedError();
 

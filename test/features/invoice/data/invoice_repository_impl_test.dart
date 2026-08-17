@@ -38,6 +38,9 @@ class InMemoryInvoiceLocalDataSource implements InvoiceLocalDataSource {
   }
 
   @override
+  Future<int> countAll() async => _store.length;
+
+  @override
   Future<void> save(InvoiceModel model) async {
     _store[model.id] = model;
   }
@@ -285,6 +288,51 @@ void main() {
       final empty = await repo.getTotalByCustomer('cust-3');
       expect(empty, const Right<InvoiceFailure, double>(0.0));
     });
+
+    test('getInvoiceCount counts every persisted invoice', () async {
+      await fake.save(
+        InvoiceModel(
+          id: 'a',
+          customerUuid: 'cust-1',
+          invoiceNumber: 'A',
+          issueDate: DateTime.utc(2026, 1, 1),
+          totalAmount: 1.0,
+        ),
+      );
+      await fake.save(
+        InvoiceModel(
+          id: 'b',
+          customerUuid: 'cust-2',
+          invoiceNumber: 'B',
+          issueDate: DateTime.utc(2026, 1, 1),
+          totalAmount: 1.0,
+        ),
+      );
+
+      final count = await repo.getInvoiceCount();
+      expect(count, const Right<InvoiceFailure, int>(2));
+
+      final emptyRepo = InvoiceRepositoryImpl(
+        localDataSource: InMemoryInvoiceLocalDataSource(),
+      );
+      final empty = await emptyRepo.getInvoiceCount();
+      expect(empty, const Right<InvoiceFailure, int>(0));
+    });
+
+    test(
+      'count failure is wrapped as InvoiceStorageFailure',
+      () async {
+        final r = InvoiceRepositoryImpl(
+          localDataSource: _BrokenInvoiceLocalDataSource(),
+        );
+
+        final result = await r.getInvoiceCount();
+        expect(result.isLeft, isTrue);
+        final failure = (result as Left<InvoiceFailure, int>).value;
+        expect(failure, isA<InvoiceStorageFailure>());
+        expect((failure as InvoiceStorageFailure).operation, 'getInvoiceCount');
+      },
+    );
   });
 }
 
@@ -308,4 +356,7 @@ class _BrokenInvoiceLocalDataSource implements InvoiceLocalDataSource {
 
   @override
   Future<double> getTotalByCustomer(String uuid) async => 0.0;
+
+  @override
+  Future<int> countAll() async => throw StateError('boom');
 }

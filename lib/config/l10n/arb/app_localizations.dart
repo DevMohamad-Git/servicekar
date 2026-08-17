@@ -104,6 +104,12 @@ abstract class AppLocalizations {
   /// **'سرویس‌کار'**
   String get appName;
 
+  /// Subtitle under the app name in the dashboard header.
+  ///
+  /// In fa, this message translates to:
+  /// **'مدیریت کسب‌وکار'**
+  String get businessManagement;
+
   /// Submit button label for forms (Save in Edit pages).
   ///
   /// In fa, this message translates to:
@@ -157,6 +163,12 @@ abstract class AppLocalizations {
   /// In fa, this message translates to:
   /// **'فاکتورها'**
   String get invoices;
+
+  /// Payments list / navigation tab label.
+  ///
+  /// In fa, this message translates to:
+  /// **'پرداخت‌ها'**
+  String get payments;
 
   /// Settings page title (reserved — not yet implemented in MVP).
   ///
@@ -301,6 +313,114 @@ abstract class AppLocalizations {
   /// In fa, this message translates to:
   /// **'جستجوی مشتری‌ها'**
   String get searchCustomers;
+
+  /// Dashboard greeting prefix, followed by the local user name.
+  ///
+  /// In fa, this message translates to:
+  /// **'سلام،'**
+  String get greeting;
+
+  /// Dashboard welcome subtitle under the greeting.
+  ///
+  /// In fa, this message translates to:
+  /// **'خوش آمدید'**
+  String get welcome;
+
+  /// Title of the dashboard debtors summary card.
+  ///
+  /// In fa, this message translates to:
+  /// **'مجموع بدهکاران'**
+  String get totalDebtors;
+
+  /// Persian currency unit label shown next to amounts.
+  ///
+  /// In fa, this message translates to:
+  /// **'تومان'**
+  String get toman;
+
+  /// Button label on the debtors summary card.
+  ///
+  /// In fa, this message translates to:
+  /// **'مشاهده‌ی بدهکاران'**
+  String get viewDebtors;
+
+  /// Section header for the dashboard recent activities list.
+  ///
+  /// In fa, this message translates to:
+  /// **'آخرین فعالیت‌ها'**
+  String get recentActivities;
+
+  /// Footer link of the recent activities card.
+  ///
+  /// In fa, this message translates to:
+  /// **'مشاهده‌ی همه فعالیت‌ها'**
+  String get viewAllActivities;
+
+  /// Subtitle on recent activity rows meaning the action was done by the local user.
+  ///
+  /// In fa, this message translates to:
+  /// **'توسط شما'**
+  String get byYou;
+
+  /// Toast shown for features that are not implemented yet.
+  ///
+  /// In fa, this message translates to:
+  /// **'به‌زودی'**
+  String get comingSoon;
+
+  /// Section header for the dashboard business-overview KPI cards.
+  ///
+  /// In fa, this message translates to:
+  /// **'نمای کلی کسب‌وکار'**
+  String get businessOverview;
+
+  /// KPI card label for the total number of registered invoices.
+  ///
+  /// In fa, this message translates to:
+  /// **'فاکتورهای ثبت‌شده'**
+  String get registeredInvoices;
+
+  /// KPI card label for the total number of customers.
+  ///
+  /// In fa, this message translates to:
+  /// **'مشتری‌ها'**
+  String get registeredCustomers;
+
+  /// KPI card label for the total number of registered services.
+  ///
+  /// In fa, this message translates to:
+  /// **'سرویس‌های ثبت‌شده'**
+  String get registeredServices;
+
+  /// Bottom-nav / quick-action label for registering a customer.
+  ///
+  /// In fa, this message translates to:
+  /// **'ثبت مشتری'**
+  String get registerCustomer;
+
+  /// Bottom-nav label for registering a payment.
+  ///
+  /// In fa, this message translates to:
+  /// **'ثبت پرداخت'**
+  String get registerPayment;
+
+  /// Quick-action label for registering an invoice.
+  ///
+  /// In fa, this message translates to:
+  /// **'ثبت فاکتور'**
+  String get registerInvoice;
+
+  /// Bottom-nav label for the more-items entry point.
+  ///
+  /// In fa, this message translates to:
+  /// **'موارد بیشتر'**
+  String get moreItems;
+
+  /// Title of the quick-action bottom sheet opened from the dashboard FAB.
+  ///
+  /// In fa, this message translates to:
+  /// **'اقدام سریع'**
+  String get quickActions;
 }
 
 class _AppLocalizationsDelegate

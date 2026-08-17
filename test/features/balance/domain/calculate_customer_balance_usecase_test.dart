@@ -99,6 +99,10 @@ class FakeInvoiceRepository implements InvoiceRepository {
   }
 
   @override
+  Future<Either<InvoiceFailure, int>> getInvoiceCount() async =>
+      Right(_byId.length);
+
+  @override
   Future<Either<InvoiceFailure, InvoiceEntity>> createInvoice(
     InvoiceEntity invoice,
   ) async => throw UnimplementedError();
@@ -398,6 +402,10 @@ class _ThrowingInvoiceRepo implements InvoiceRepository {
   Future<Either<InvoiceFailure, double>> getTotalByCustomer(
     String uuid,
   ) async => throw UnimplementedError();
+
+  @override
+  Future<Either<InvoiceFailure, int>> getInvoiceCount() async =>
+      throw UnimplementedError();
 
   @override
   Future<Either<InvoiceFailure, InvoiceEntity>> createInvoice(

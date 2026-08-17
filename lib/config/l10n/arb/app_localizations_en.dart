@@ -12,6 +12,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appName => 'Servicar';
 
   @override
+  String get businessManagement => 'Business management';
+
+  @override
   String get save => 'Save';
 
   @override
@@ -37,6 +40,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invoices => 'Invoices';
+
+  @override
+  String get payments => 'Payments';
 
   @override
   String get settings => 'Settings';
@@ -110,4 +116,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchCustomers => 'Search customers';
+
+  @override
+  String get greeting => 'Hello,';
+
+  @override
+  String get welcome => 'Welcome';
+
+  @override
+  String get totalDebtors => 'Total debtors';
+
+  @override
+  String get toman => 'Toman';
+
+  @override
+  String get viewDebtors => 'View debtors';
+
+  @override
+  String get recentActivities => 'Recent activities';
+
+  @override
+  String get viewAllActivities => 'View all activities';
+
+  @override
+  String get byYou => 'By you';
+
+  @override
+  String get comingSoon => 'Coming soon';
+
+  @override
+  String get businessOverview => 'Business overview';
+
+  @override
+  String get registeredInvoices => 'Registered invoices';
+
+  @override
+  String get registeredCustomers => 'Customers';
+
+  @override
+  String get registeredServices => 'Registered services';
+
+  @override
+  String get registerCustomer => 'Register customer';
+
+  @override
+  String get registerPayment => 'Register payment';
+
+  @override
+  String get registerInvoice => 'Register invoice';
+
+  @override
+  String get moreItems => 'More';
+
+  @override
+  String get quickActions => 'Quick actions';
 }

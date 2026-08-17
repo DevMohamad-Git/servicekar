@@ -124,6 +124,10 @@ class RecordingInvoiceRepository implements InvoiceRepository {
   ) async => throw UnimplementedError();
 
   @override
+  Future<Either<InvoiceFailure, int>> getInvoiceCount() async =>
+      throw UnimplementedError();
+
+  @override
   Future<Either<InvoiceFailure, InvoiceEntity>> createInvoice(
     InvoiceEntity invoice,
   ) async => throw UnimplementedError();
@@ -395,6 +399,10 @@ class _AlwaysInvoiceUnknown implements InvoiceRepository {
   Future<Either<InvoiceFailure, double>> getTotalByCustomer(
     String customerUuid,
   ) async => throw UnimplementedError();
+
+  @override
+  Future<Either<InvoiceFailure, int>> getInvoiceCount() async =>
+      throw UnimplementedError();
 
   @override
   Future<Either<InvoiceFailure, InvoiceEntity>> createInvoice(

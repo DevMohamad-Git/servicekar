@@ -50,6 +50,10 @@ class RecordingInvoiceRepository implements InvoiceRepository {
   Future<Either<InvoiceFailure, double>> getTotalByCustomer(
     String uuid,
   ) async => throw UnimplementedError();
+
+  @override
+  Future<Either<InvoiceFailure, int>> getInvoiceCount() async =>
+      throw UnimplementedError();
 }
 
 /// Recording fake of [CustomerRepository] — only `getCustomerById` is

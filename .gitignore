@@ -14,6 +14,8 @@
 *.iml
 .vscode/
 .freebuff/
+.agents/
+
 
 # Flutter / Dart
 .dart_tool/
