@@ -24,6 +24,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete => 'Delete';
 
   @override
+  String get deleteCustomer => 'Delete customer';
+
+  @override
   String get edit => 'Edit';
 
   @override
@@ -76,6 +79,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get required => 'Required';
+
+  @override
+  String get optional => 'Optional';
+
+  @override
+  String get customerMainInfo => 'Main information';
+
+  @override
+  String get customerRequiredInfo => 'Required information';
+
+  @override
+  String get customerAdditionalInfo => 'Additional information';
+
+  @override
+  String get profilePhoto => 'Profile photo';
+
+  @override
+  String get profilePhotoUnavailable =>
+      'Profile photo selection is not available yet';
+
+  @override
+  String get profilePhotoError => 'Could not select a profile photo';
+
+  @override
+  String get addProfilePhoto => 'Add photo';
+
+  @override
+  String get changeProfilePhoto => 'Change photo';
+
+  @override
+  String get removeProfilePhoto => 'Remove photo';
+
+  @override
+  String get camera => 'Camera';
+
+  @override
+  String get gallery => 'Gallery';
+
+  @override
+  String get notes => 'Notes / description';
 
   @override
   String get newCustomer => 'New customer';
@@ -170,4 +213,64 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get quickActions => 'Quick actions';
+
+  @override
+  String get customerProfile => 'Customer profile';
+
+  @override
+  String get serviceHistory => 'Service history';
+
+  @override
+  String get invoiceHistory => 'Invoice history';
+
+  @override
+  String get paymentHistory => 'Payment history';
+
+  @override
+  String get viewAll => 'View all';
+
+  @override
+  String get emptyServices => 'No services registered for this customer.';
+
+  @override
+  String get emptyInvoices => 'No invoices registered for this customer.';
+
+  @override
+  String get emptyPayments => 'No payments registered for this customer.';
+
+  @override
+  String get registerService => 'Register service';
+
+  @override
+  String get mobileNumber => 'Mobile number';
+
+  @override
+  String get fullNameHint => 'e.g. John Smith';
+
+  @override
+  String get mobileNumberHint => '0912 123 4567';
+
+  @override
+  String get emailHint => 'name@example.com';
+
+  @override
+  String get addressHint => 'e.g. 123 Main St';
+
+  @override
+  String get notesHint => 'Add a note about this customer…';
+
+  @override
+  String get requiredField => 'This field is required';
+
+  @override
+  String get invalidMobileNumber => 'Enter a valid mobile number';
+
+  @override
+  String get invalidEmail => 'Enter a valid email';
+
+  @override
+  String get createCustomer => 'Create customer';
+
+  @override
+  String get fillSample => 'Fill sample';
 }
