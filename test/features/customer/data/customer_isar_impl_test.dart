@@ -88,6 +88,7 @@ void main() {
           email: 'alice@example.com',
           address: 'Tehran',
           notes: 'VIP customer',
+          profileImagePath: 'customers/c1/avatar.webp',
           tags: ['vip', 'cash'],
         );
         await source.save(input);
@@ -100,6 +101,7 @@ void main() {
         expect(read.email, 'alice@example.com');
         expect(read.address, 'Tehran');
         expect(read.notes, 'VIP customer');
+        expect(read.profileImagePath, 'customers/c1/avatar.webp');
         expect(read.tags, ['vip', 'cash']);
       });
 
@@ -215,6 +217,7 @@ void main() {
             id: 'persist-1',
             fullName: 'Persisted',
             phoneNumber: '+1 000 000',
+            profileImagePath: 'customers/persist-1/avatar.jpg',
             tags: ['critical', 'persist-test'],
           );
           await sWrite.save(input);
@@ -238,6 +241,7 @@ void main() {
           expect(read!.id, 'persist-1');
           expect(read.fullName, 'Persisted');
           expect(read.phoneNumber, '+1 000 000');
+          expect(read.profileImagePath, 'customers/persist-1/avatar.jpg');
           expect(read.tags, ['critical', 'persist-test']);
         },
       );

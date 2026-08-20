@@ -13,4 +13,9 @@ class GeneralConstants {
   /// Key used by `MaterialApp.router` for restoration scope.
   /// Mirrors Lalafen's literal but made discoverable.
   static const String kRestorationScopeId = 'servicar-root';
+
+  /// Hero tag shared by the dashboard's centre "+" FAB and the customer
+  /// list's corner "+" FAB so the two morph into one another (flying in an
+  /// arc) while navigating between those pages.
+  static const String kAddFabHeroTag = 'add-fab';
 }
