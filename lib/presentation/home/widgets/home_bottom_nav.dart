@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../config/l10n/l10n.dart';
 import '../../../config/routes/app_router.dart';
 import '../../../config/themes/app_themes.dart';
+import '../../../core/constants/general_constants.dart';
 
 /// Custom dashboard bottom navigation from the approved design.
 ///
@@ -12,8 +13,9 @@ import '../../../config/themes/app_themes.dart';
 /// without competing with the page content.
 /// Only "ثبت مشتری" is wired to a real screen today; the other tabs show a
 /// "coming soon" toast until their features land. The centre FAB opens a
-/// quick-action sheet with three actions: ثبت مشتری routes to the customer
-/// form, while ثبت پرداختی and ثبت فاکتور show a "coming soon" toast.
+/// quick-action sheet with four actions: ثبت مشتری routes to the customer
+/// form, while ثبت سرویس، ثبت پرداختی and ثبت فاکتور show a "coming soon"
+/// toast.
 ///
 /// Order (start → end, i.e. right → left in RTL): موارد بیشتر، فاکتورها،
 /// FAB، ثبت پرداخت، ثبت مشتری.
@@ -34,6 +36,10 @@ class HomeBottomNav extends StatelessWidget {
           onRegisterCustomer: () {
             Navigator.of(sheetContext).pop();
             router.push(const CreateCustomerRoute());
+          },
+          onRegisterService: () {
+            Navigator.of(sheetContext).pop();
+            onComingSoon();
           },
           onRegisterPayment: () {
             Navigator.of(sheetContext).pop();
@@ -99,10 +105,10 @@ class HomeBottomNav extends StatelessWidget {
                       onTap: onComingSoon,
                     ),
                     _NavItem(
-                      icon: Icons.people_outline,
+                      icon: Icons.groups_rounded,
                       label: context.l10n.customers,
                       onTap: () =>
-                          context.router.push(const CreateCustomerRoute()),
+                          context.router.push(const CustomerListRoute()),
                     ),
                   ],
                 ),
@@ -110,7 +116,7 @@ class HomeBottomNav extends StatelessWidget {
               Positioned(
                 top: -26,
                 child: FloatingActionButton(
-                  heroTag: 'dashboard_quick_action_fab',
+                  heroTag: GeneralConstants.kAddFabHeroTag,
                   elevation: 4,
                   backgroundColor: kDebtorsGradientStart,
                   // White ring separates the blue FAB from the blue dock.
@@ -167,18 +173,20 @@ class _NavItem extends StatelessWidget {
 
 /// Content of the dashboard "+" quick-action sheet.
 ///
-/// Pure presentation: it renders three large tappable rows and delegates
+/// Pure presentation: it renders four large tappable rows and delegates
 /// navigation / toast behavior to the callbacks passed from
 /// [HomeBottomNav]. The soft grey gradient sits a touch darker than the
 /// page background so the white rows read as distinct surfaces.
 class _QuickActionSheet extends StatelessWidget {
   const _QuickActionSheet({
     required this.onRegisterCustomer,
+    required this.onRegisterService,
     required this.onRegisterPayment,
     required this.onRegisterInvoice,
   });
 
   final VoidCallback onRegisterCustomer;
+  final VoidCallback onRegisterService;
   final VoidCallback onRegisterPayment;
   final VoidCallback onRegisterInvoice;
 
@@ -221,10 +229,20 @@ class _QuickActionSheet extends StatelessWidget {
                 children: [
                   _QuickActionTile(
                     icon: Icons.person_add_alt_1_rounded,
-                    accent: kActivityCustomer,
-                    accentBackground: kActivityCustomerBackground,
+                    // Same dashboard income green as the customer KPI card
+                    // and the payment tile, so the app reads colour-consistent.
+                    accent: kActivityIncome,
+                    accentBackground: kActivityIncomeBackground,
                     label: context.l10n.registerCustomer,
                     onTap: onRegisterCustomer,
+                  ),
+                  const SizedBox(height: 10),
+                  _QuickActionTile(
+                    icon: Icons.build_rounded,
+                    accent: kKpiService,
+                    accentBackground: kKpiServiceBackground,
+                    label: context.l10n.registerService,
+                    onTap: onRegisterService,
                   ),
                   const SizedBox(height: 10),
                   _QuickActionTile(
@@ -254,11 +272,11 @@ class _QuickActionSheet extends StatelessWidget {
 
 /// One large, fully-tappable row in the quick-action sheet.
 ///
-/// All three actions share this single visual pattern: a tinted icon chip
+/// All four actions share this single visual pattern: a tinted icon chip
 /// whose accent colour follows the dashboard's activity semantics
-/// (customer = purple, payment = green, invoice = blue), a bold readable
-/// label, and a faint trailing chevron. No shadow — the sheet gradient
-/// supplies the depth.
+/// (customer = green, service = purple, payment = green, invoice = blue),
+/// a bold readable label, and a faint trailing chevron. No shadow — the
+/// sheet gradient supplies the depth.
 class _QuickActionTile extends StatelessWidget {
   const _QuickActionTile({
     required this.icon,

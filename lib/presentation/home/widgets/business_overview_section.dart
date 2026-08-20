@@ -20,6 +20,8 @@ import '../../../core/utils/money_formatter.dart';
 /// Layout: a single row of three equal-width, equal-height cards (each
 /// [Expanded], stretched via [IntrinsicHeight]) so the three KPI boxes
 /// sit on one line and stay the same size regardless of label length.
+/// Each card reserves a fixed two-line slot for its label, so the count
+/// slots (the numbers) share the same vertical offset in every card.
 ///
 /// States per card:
 ///   * loading  → the label stays visible, a small spinner fills the
@@ -84,9 +86,12 @@ class BusinessOverviewSection extends StatelessWidget {
               Expanded(
                 child: _KpiCard(
                   title: context.l10n.registeredCustomers,
-                  icon: Icons.people_outline_rounded,
-                  accent: kKpiCustomer,
-                  accentBackground: kKpiCustomerBackground,
+                  icon: Icons.groups_rounded,
+                  // Icon colour follows the dashboard's income green
+                  // (same green as the payment quick-action tile and the
+                  // "payment received" activity rows).
+                  accent: kActivityIncome,
+                  accentBackground: kActivityIncomeBackground,
                   value: customers,
                 ),
               ),
@@ -128,6 +133,13 @@ class _KpiCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Captured so the reserved label slot below tracks theme changes
+    // (font size × line height) instead of hardcoding a pixel height.
+    final labelStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: kGrey3Color,
+          fontWeight: FontWeight.w600,
+        );
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -135,7 +147,9 @@ class _KpiCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        // Icon, label and count are all horizontally centred so the three
+        // cards read as balanced, symmetrical tiles.
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             width: 40,
@@ -148,14 +162,24 @@ class _KpiCard extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           // Persian labels are wide; allow wrapping (up to two lines)
-          // so the cards never overflow on narrow Android screens.
-          Text(
-            title,
-            maxLines: 2,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: kGrey3Color,
-                  fontWeight: FontWeight.w600,
-                ),
+          // so the cards never overflow on narrow Android screens. The
+          // slot is a fixed two lines tall (scaled with the device text
+          // scale) so the count below starts at the same offset in every
+          // card — a label that wraps to a second line (e.g.
+          // «فاکتورهای ثبت‌شده») no longer pushes its number below the
+          // counts of single-line labels, keeping all three numbers on
+          // one line.
+          SizedBox(
+            height: MediaQuery.textScalerOf(context).scale(
+              (labelStyle?.fontSize ?? 15) * (labelStyle?.height ?? 1.4) * 2,
+            ),
+            child: Text(
+              title,
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style: labelStyle,
+            ),
           ),
           const SizedBox(height: 4),
           _CountSlot(value: value, accent: accent),
@@ -181,7 +205,7 @@ class _CountSlot extends StatelessWidget {
       data: (count) => FittedBox(
         // Scale large counts down instead of overflowing the card.
         fit: BoxFit.scaleDown,
-        alignment: AlignmentDirectional.centerStart,
+        alignment: AlignmentDirectional.center,
         child: Text(
           formatPersianNumber(count),
           // `titleLarge` (24) instead of `headlineSmall` (28) so large
