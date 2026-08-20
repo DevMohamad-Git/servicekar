@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'app.dart';
@@ -27,6 +28,31 @@ Future<void> main() async {
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+
+      // ─── Edge-to-edge system UI ─────────────────────────────────
+      // The customer-page header draws a single white surface from
+      // the physical top edge of the window down through the
+      // toolbar, so the OS status bar strip must be transparent
+      // (no disconnected grey / white rectangle above the app).
+      // Icons stay dark (Brightness.dark on Android,
+      // Brightness.light on iOS — Apple flips the polarity on the
+      // legacy status-bar API, so `light` = dark glyphs on a
+      // light background). The navigation bar keeps the same
+      // dark-icon treatment against the bottom-of-window chrome
+      // so the whole frame reads as one immersive sheet.
+      await SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.edgeToEdge,
+      );
+      SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
+          systemNavigationBarColor: Colors.white,
+          systemNavigationBarIconBrightness: Brightness.dark,
+          systemNavigationBarDividerColor: Colors.transparent,
+        ),
+      );
 
       FlutterError.onError = (details) {
         log(
