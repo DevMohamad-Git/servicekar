@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../config/l10n/l10n.dart';
 import '../../../injection/global_providers.dart';
 import '../../../injection/feature_injection/customer_providers.dart';
+import '../widgets/customer_page_header.dart';
 
 /// Edit customer page (Live Persistence form).
 ///
@@ -94,7 +95,10 @@ class _EditCustomerPageState extends ConsumerState<EditCustomerPage> {
           'address': customer.address,
         });
         return Scaffold(
-          appBar: AppBar(title: Text(context.l10n.editCustomer)),
+          appBar: CustomerPageHeader(
+            title: context.l10n.editCustomer,
+            onBack: () => context.router.maybePop(),
+          ),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Form(

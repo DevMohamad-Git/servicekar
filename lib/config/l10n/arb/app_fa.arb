@@ -20,6 +20,10 @@
   "@delete": {
     "description": "Delete action label / dialog button."
   },
+  "deleteCustomer": "حذف مشتری",
+  "@deleteCustomer": {
+    "description": "Delete customer action label in the profile overflow menu."
+  },
   "edit": "ویرایش",
   "@edit": {
     "description": "Edit action label / AppBar tooltip."
@@ -32,7 +36,7 @@
   "@search": {
     "description": "Generic search verb (hint placeholder)."
   },
-  "customers": "مشتری‌ها",
+  "customers": "مشتریان",
   "@customers": {
     "description": "Customer-list page title and navigation tab."
   },
@@ -92,6 +96,40 @@
   "@required": {
     "description": "Form validator error message for empty mandatory fields."
   },
+  "optional": "اختیاری",
+  "@optional": {
+    "description": "Marker shown beside optional customer form fields."
+  },
+  "customerMainInfo": "اطلاعات اصلی",
+  "@customerMainInfo": {
+    "description": "Section heading for the customer's primary identity fields."
+  },
+  "customerRequiredInfo": "اطلاعات ضروری",
+  "@customerRequiredInfo": {
+    "description": "Section heading for required customer fields."
+  },
+  "customerAdditionalInfo": "اطلاعات تکمیلی",
+  "@customerAdditionalInfo": {
+    "description": "Section heading for optional customer fields."
+  },
+  "profilePhoto": "تصویر پروفایل",
+  "@profilePhoto": {
+    "description": "Label for the customer profile photo placeholder."
+  },
+  "profilePhotoUnavailable": "افزودن تصویر پروفایل در این نسخه در دسترس نیست",
+  "@profilePhotoUnavailable": {
+    "description": "Explains that profile photo selection has no current storage flow."
+  },
+  "profilePhotoError": "انتخاب تصویر پروفایل با خطا مواجه شد",
+  "addProfilePhoto": "افزودن تصویر",
+  "changeProfilePhoto": "تغییر تصویر",
+  "removeProfilePhoto": "حذف تصویر",
+  "camera": "دوربین",
+  "gallery": "گالری",
+  "notes": "یادداشت / توضیحات",
+  "@notes": {
+    "description": "Optional customer notes or description field label."
+  },
   "newCustomer": "مشتری جدید",
   "@newCustomer": {
     "description": "AppBar title of the new-customer page."
@@ -124,7 +162,7 @@
   "@customerDeleted": {
     "description": "Snackbar message after a successful customer deletion."
   },
-  "openingCustomers": "در حال باز کردن مشتری‌ها…",
+  "openingCustomers": "در حال باز کردن مشتریان…",
   "@openingCustomers": {
     "description": "Snackbar message on the home page before navigating to the customer list."
   },
@@ -140,7 +178,7 @@
   "@emptyCustomersBody": {
     "description": "Body of the empty customer-list state — explains how to start."
   },
-  "searchCustomers": "جستجوی مشتری‌ها",
+  "searchCustomers": "جستجوی مشتریان",
   "@searchCustomers": {
     "description": "Customer-search bar hint text."
   },
@@ -188,7 +226,7 @@
   "@registeredInvoices": {
     "description": "KPI card label for the total number of registered invoices."
   },
-  "registeredCustomers": "مشتری‌ها",
+  "registeredCustomers": "مشتریان",
   "@registeredCustomers": {
     "description": "KPI card label for the total number of customers."
   },
@@ -215,5 +253,85 @@
   "quickActions": "اقدام سریع",
   "@quickActions": {
     "description": "Title of the quick-action bottom sheet opened from the dashboard FAB."
+  },
+  "customerProfile": "پروفایل مشتری",
+  "@customerProfile": {
+    "description": "AppBar title of the customer profile (details) page."
+  },
+  "serviceHistory": "تاریخچه خدمات",
+  "@serviceHistory": {
+    "description": "Section header for the customer's service history tab."
+  },
+  "invoiceHistory": "تاریخچه فاکتورها",
+  "@invoiceHistory": {
+    "description": "Section header for the customer's invoice history tab."
+  },
+  "paymentHistory": "تاریخچه پرداخت‌ها",
+  "@paymentHistory": {
+    "description": "Section header for the customer's payment history tab."
+  },
+  "viewAll": "مشاهده همه",
+  "@viewAll": {
+    "description": "Link label to open the full history list."
+  },
+  "emptyServices": "سرویسی برای این مشتری ثبت نشده است.",
+  "@emptyServices": {
+    "description": "Empty state for the customer's service history tab."
+  },
+  "emptyInvoices": "فاکتوری برای این مشتری ثبت نشده است.",
+  "@emptyInvoices": {
+    "description": "Empty state for the customer's invoice history tab."
+  },
+  "emptyPayments": "پرداختی برای این مشتری ثبت نشده است.",
+  "@emptyPayments": {
+    "description": "Empty state for the customer's payment history tab."
+  },
+  "registerService": "ثبت سرویس",
+  "@registerService": {
+    "description": "Quick-action label for registering a service."
+  },
+  "mobileNumber": "شماره موبایل",
+  "@mobileNumber": {
+    "description": "Label for the customer mobile-number field on the create form."
+  },
+  "fullNameHint": "مثال: محمد رضایی",
+  "@fullNameHint": {
+    "description": "Placeholder example for the customer full-name field."
+  },
+  "mobileNumberHint": "0912 123 4567",
+  "@mobileNumberHint": {
+    "description": "Placeholder example for the mobile-number field; Latin digits per app policy."
+  },
+  "emailHint": "name@example.com",
+  "@emailHint": {
+    "description": "Placeholder example for the customer email field."
+  },
+  "addressHint": "مثال: تهران، خیابان …",
+  "@addressHint": {
+    "description": "Placeholder example for the customer address field."
+  },
+  "notesHint": "توضیحاتی درباره این مشتری بنویسید…",
+  "@notesHint": {
+    "description": "Placeholder hint for the customer notes field."
+  },
+  "requiredField": "این فیلد الزامی است",
+  "@requiredField": {
+    "description": "Validation error for an empty required form field."
+  },
+  "invalidMobileNumber": "شماره موبایل معتبر نیست",
+  "@invalidMobileNumber": {
+    "description": "Validation error for a malformed mobile number."
+  },
+  "invalidEmail": "ایمیل معتبر نیست",
+  "@invalidEmail": {
+    "description": "Validation error for a malformed email address."
+  },
+  "createCustomer": "ایجاد مشتری",
+  "@createCustomer": {
+    "description": "Primary submit button label on the create-customer form."
+  },
+  "fillSample": "پر کردن نمونه",
+  "@fillSample": {
+    "description": "Tooltip for the action that fills the create form with sample values."
   }
 }

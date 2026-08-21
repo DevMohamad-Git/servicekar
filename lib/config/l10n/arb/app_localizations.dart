@@ -128,6 +128,12 @@ abstract class AppLocalizations {
   /// **'حذف'**
   String get delete;
 
+  /// Delete customer action label in the profile overflow menu.
+  ///
+  /// In fa, this message translates to:
+  /// **'حذف مشتری'**
+  String get deleteCustomer;
+
   /// Edit action label / AppBar tooltip.
   ///
   /// In fa, this message translates to:
@@ -149,7 +155,7 @@ abstract class AppLocalizations {
   /// Customer-list page title and navigation tab.
   ///
   /// In fa, this message translates to:
-  /// **'مشتری‌ها'**
+  /// **'مشتریان'**
   String get customers;
 
   /// Service-list page title and navigation tab.
@@ -236,6 +242,84 @@ abstract class AppLocalizations {
   /// **'الزامی'**
   String get required;
 
+  /// Marker shown beside optional customer form fields.
+  ///
+  /// In fa, this message translates to:
+  /// **'اختیاری'**
+  String get optional;
+
+  /// Section heading for the customer's primary identity fields.
+  ///
+  /// In fa, this message translates to:
+  /// **'اطلاعات اصلی'**
+  String get customerMainInfo;
+
+  /// Section heading for required customer fields.
+  ///
+  /// In fa, this message translates to:
+  /// **'اطلاعات ضروری'**
+  String get customerRequiredInfo;
+
+  /// Section heading for optional customer fields.
+  ///
+  /// In fa, this message translates to:
+  /// **'اطلاعات تکمیلی'**
+  String get customerAdditionalInfo;
+
+  /// Label for the customer profile photo placeholder.
+  ///
+  /// In fa, this message translates to:
+  /// **'تصویر پروفایل'**
+  String get profilePhoto;
+
+  /// Explains that profile photo selection has no current storage flow.
+  ///
+  /// In fa, this message translates to:
+  /// **'افزودن تصویر پروفایل در این نسخه در دسترس نیست'**
+  String get profilePhotoUnavailable;
+
+  /// No description provided for @profilePhotoError.
+  ///
+  /// In fa, this message translates to:
+  /// **'انتخاب تصویر پروفایل با خطا مواجه شد'**
+  String get profilePhotoError;
+
+  /// No description provided for @addProfilePhoto.
+  ///
+  /// In fa, this message translates to:
+  /// **'افزودن تصویر'**
+  String get addProfilePhoto;
+
+  /// No description provided for @changeProfilePhoto.
+  ///
+  /// In fa, this message translates to:
+  /// **'تغییر تصویر'**
+  String get changeProfilePhoto;
+
+  /// No description provided for @removeProfilePhoto.
+  ///
+  /// In fa, this message translates to:
+  /// **'حذف تصویر'**
+  String get removeProfilePhoto;
+
+  /// No description provided for @camera.
+  ///
+  /// In fa, this message translates to:
+  /// **'دوربین'**
+  String get camera;
+
+  /// No description provided for @gallery.
+  ///
+  /// In fa, this message translates to:
+  /// **'گالری'**
+  String get gallery;
+
+  /// Optional customer notes or description field label.
+  ///
+  /// In fa, this message translates to:
+  /// **'یادداشت / توضیحات'**
+  String get notes;
+
   /// AppBar title of the new-customer page.
   ///
   /// In fa, this message translates to:
@@ -287,7 +371,7 @@ abstract class AppLocalizations {
   /// Snackbar message on the home page before navigating to the customer list.
   ///
   /// In fa, this message translates to:
-  /// **'در حال باز کردن مشتری‌ها…'**
+  /// **'در حال باز کردن مشتریان…'**
   String get openingCustomers;
 
   /// Create button label (new-customer form submit).
@@ -311,7 +395,7 @@ abstract class AppLocalizations {
   /// Customer-search bar hint text.
   ///
   /// In fa, this message translates to:
-  /// **'جستجوی مشتری‌ها'**
+  /// **'جستجوی مشتریان'**
   String get searchCustomers;
 
   /// Dashboard greeting prefix, followed by the local user name.
@@ -383,7 +467,7 @@ abstract class AppLocalizations {
   /// KPI card label for the total number of customers.
   ///
   /// In fa, this message translates to:
-  /// **'مشتری‌ها'**
+  /// **'مشتریان'**
   String get registeredCustomers;
 
   /// KPI card label for the total number of registered services.
@@ -421,6 +505,126 @@ abstract class AppLocalizations {
   /// In fa, this message translates to:
   /// **'اقدام سریع'**
   String get quickActions;
+
+  /// AppBar title of the customer profile (details) page.
+  ///
+  /// In fa, this message translates to:
+  /// **'پروفایل مشتری'**
+  String get customerProfile;
+
+  /// Section header for the customer's service history tab.
+  ///
+  /// In fa, this message translates to:
+  /// **'تاریخچه خدمات'**
+  String get serviceHistory;
+
+  /// Section header for the customer's invoice history tab.
+  ///
+  /// In fa, this message translates to:
+  /// **'تاریخچه فاکتورها'**
+  String get invoiceHistory;
+
+  /// Section header for the customer's payment history tab.
+  ///
+  /// In fa, this message translates to:
+  /// **'تاریخچه پرداخت‌ها'**
+  String get paymentHistory;
+
+  /// Link label to open the full history list.
+  ///
+  /// In fa, this message translates to:
+  /// **'مشاهده همه'**
+  String get viewAll;
+
+  /// Empty state for the customer's service history tab.
+  ///
+  /// In fa, this message translates to:
+  /// **'سرویسی برای این مشتری ثبت نشده است.'**
+  String get emptyServices;
+
+  /// Empty state for the customer's invoice history tab.
+  ///
+  /// In fa, this message translates to:
+  /// **'فاکتوری برای این مشتری ثبت نشده است.'**
+  String get emptyInvoices;
+
+  /// Empty state for the customer's payment history tab.
+  ///
+  /// In fa, this message translates to:
+  /// **'پرداختی برای این مشتری ثبت نشده است.'**
+  String get emptyPayments;
+
+  /// Quick-action label for registering a service.
+  ///
+  /// In fa, this message translates to:
+  /// **'ثبت سرویس'**
+  String get registerService;
+
+  /// Label for the customer mobile-number field on the create form.
+  ///
+  /// In fa, this message translates to:
+  /// **'شماره موبایل'**
+  String get mobileNumber;
+
+  /// Placeholder example for the customer full-name field.
+  ///
+  /// In fa, this message translates to:
+  /// **'مثال: محمد رضایی'**
+  String get fullNameHint;
+
+  /// Placeholder example for the mobile-number field; Latin digits per app policy.
+  ///
+  /// In fa, this message translates to:
+  /// **'0912 123 4567'**
+  String get mobileNumberHint;
+
+  /// Placeholder example for the customer email field.
+  ///
+  /// In fa, this message translates to:
+  /// **'name@example.com'**
+  String get emailHint;
+
+  /// Placeholder example for the customer address field.
+  ///
+  /// In fa, this message translates to:
+  /// **'مثال: تهران، خیابان …'**
+  String get addressHint;
+
+  /// Placeholder hint for the customer notes field.
+  ///
+  /// In fa, this message translates to:
+  /// **'توضیحاتی درباره این مشتری بنویسید…'**
+  String get notesHint;
+
+  /// Validation error for an empty required form field.
+  ///
+  /// In fa, this message translates to:
+  /// **'این فیلد الزامی است'**
+  String get requiredField;
+
+  /// Validation error for a malformed mobile number.
+  ///
+  /// In fa, this message translates to:
+  /// **'شماره موبایل معتبر نیست'**
+  String get invalidMobileNumber;
+
+  /// Validation error for a malformed email address.
+  ///
+  /// In fa, this message translates to:
+  /// **'ایمیل معتبر نیست'**
+  String get invalidEmail;
+
+  /// Primary submit button label on the create-customer form.
+  ///
+  /// In fa, this message translates to:
+  /// **'ایجاد مشتری'**
+  String get createCustomer;
+
+  /// Tooltip for the action that fills the create form with sample values.
+  ///
+  /// In fa, this message translates to:
+  /// **'پر کردن نمونه'**
+  String get fillSample;
 }
 
 class _AppLocalizationsDelegate

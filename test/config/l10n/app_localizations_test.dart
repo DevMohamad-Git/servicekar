@@ -28,7 +28,7 @@ void main() {
 
     test('core navigation labels render in Persian', () {
       expect(l10n.appName, 'سرویس‌کار');
-      expect(l10n.customers, 'مشتری‌ها');
+      expect(l10n.customers, 'مشتریان');
       expect(l10n.services, 'سرویس‌ها');
       expect(l10n.invoices, 'فاکتورها');
     });

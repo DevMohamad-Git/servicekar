@@ -24,6 +24,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get delete => 'حذف';
 
   @override
+  String get deleteCustomer => 'حذف مشتری';
+
+  @override
   String get edit => 'ویرایش';
 
   @override
@@ -33,7 +36,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get search => 'جستجو';
 
   @override
-  String get customers => 'مشتری‌ها';
+  String get customers => 'مشتریان';
 
   @override
   String get services => 'سرویس‌ها';
@@ -78,6 +81,46 @@ class AppLocalizationsFa extends AppLocalizations {
   String get required => 'الزامی';
 
   @override
+  String get optional => 'اختیاری';
+
+  @override
+  String get customerMainInfo => 'اطلاعات اصلی';
+
+  @override
+  String get customerRequiredInfo => 'اطلاعات ضروری';
+
+  @override
+  String get customerAdditionalInfo => 'اطلاعات تکمیلی';
+
+  @override
+  String get profilePhoto => 'تصویر پروفایل';
+
+  @override
+  String get profilePhotoUnavailable =>
+      'افزودن تصویر پروفایل در این نسخه در دسترس نیست';
+
+  @override
+  String get profilePhotoError => 'انتخاب تصویر پروفایل با خطا مواجه شد';
+
+  @override
+  String get addProfilePhoto => 'افزودن تصویر';
+
+  @override
+  String get changeProfilePhoto => 'تغییر تصویر';
+
+  @override
+  String get removeProfilePhoto => 'حذف تصویر';
+
+  @override
+  String get camera => 'دوربین';
+
+  @override
+  String get gallery => 'گالری';
+
+  @override
+  String get notes => 'یادداشت / توضیحات';
+
+  @override
   String get newCustomer => 'مشتری جدید';
 
   @override
@@ -102,7 +145,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get customerDeleted => 'مشتری حذف شد';
 
   @override
-  String get openingCustomers => 'در حال باز کردن مشتری‌ها…';
+  String get openingCustomers => 'در حال باز کردن مشتریان…';
 
   @override
   String get create => 'ایجاد';
@@ -115,7 +158,7 @@ class AppLocalizationsFa extends AppLocalizations {
       'برای شروع ردگیری تاریخچه‌ی سرویس، اولین مشتری خود را ایجاد کنید.';
 
   @override
-  String get searchCustomers => 'جستجوی مشتری‌ها';
+  String get searchCustomers => 'جستجوی مشتریان';
 
   @override
   String get greeting => 'سلام،';
@@ -151,7 +194,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get registeredInvoices => 'فاکتورهای ثبت‌شده';
 
   @override
-  String get registeredCustomers => 'مشتری‌ها';
+  String get registeredCustomers => 'مشتریان';
 
   @override
   String get registeredServices => 'سرویس‌های ثبت‌شده';
@@ -170,4 +213,64 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get quickActions => 'اقدام سریع';
+
+  @override
+  String get customerProfile => 'پروفایل مشتری';
+
+  @override
+  String get serviceHistory => 'تاریخچه خدمات';
+
+  @override
+  String get invoiceHistory => 'تاریخچه فاکتورها';
+
+  @override
+  String get paymentHistory => 'تاریخچه پرداخت‌ها';
+
+  @override
+  String get viewAll => 'مشاهده همه';
+
+  @override
+  String get emptyServices => 'سرویسی برای این مشتری ثبت نشده است.';
+
+  @override
+  String get emptyInvoices => 'فاکتوری برای این مشتری ثبت نشده است.';
+
+  @override
+  String get emptyPayments => 'پرداختی برای این مشتری ثبت نشده است.';
+
+  @override
+  String get registerService => 'ثبت سرویس';
+
+  @override
+  String get mobileNumber => 'شماره موبایل';
+
+  @override
+  String get fullNameHint => 'مثال: محمد رضایی';
+
+  @override
+  String get mobileNumberHint => '0912 123 4567';
+
+  @override
+  String get emailHint => 'name@example.com';
+
+  @override
+  String get addressHint => 'مثال: تهران، خیابان …';
+
+  @override
+  String get notesHint => 'توضیحاتی درباره این مشتری بنویسید…';
+
+  @override
+  String get requiredField => 'این فیلد الزامی است';
+
+  @override
+  String get invalidMobileNumber => 'شماره موبایل معتبر نیست';
+
+  @override
+  String get invalidEmail => 'ایمیل معتبر نیست';
+
+  @override
+  String get createCustomer => 'ایجاد مشتری';
+
+  @override
+  String get fillSample => 'پر کردن نمونه';
 }

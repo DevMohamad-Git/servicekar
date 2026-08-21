@@ -2,6 +2,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../features/customer/data/datasources/local/customer_local_datasource_impl.dart';
 import '../../../features/customer/data/repositories/customer_repository_impl.dart';
+import '../../../features/customer/data/services/customer_image_storage.dart';
 import '../../../features/customer/domain/entities/customer_entity.dart';
 import '../../../features/customer/domain/repositories/customer_repository.dart';
 import '../../../features/customer/domain/usecases/create_customer_usecase.dart';
@@ -38,6 +39,11 @@ final customerRepositoryProvider = Provider<CustomerRepository>(
   (ref) => CustomerRepositoryImpl(
     localDataSource: ref.watch(customerLocalDataSourceProvider),
   ),
+);
+
+/// App-private filesystem boundary for customer profile images.
+final customerImageStorageProvider = Provider<CustomerImageStorage>(
+  (_) => LocalCustomerImageStorage(),
 );
 
 // ─── Use cases ────────────────────────────────────────────────────────────
@@ -128,6 +134,7 @@ class CreateCustomerController extends Notifier<void> {
     String? email,
     String? address,
     String? notes,
+    String? profileImagePath,
     List<String> tags = const <String>[],
   }) async {
     final useCase = ref.read(createCustomerUseCaseProvider);
@@ -139,6 +146,7 @@ class CreateCustomerController extends Notifier<void> {
         email: email,
         address: address,
         notes: notes,
+        profileImagePath: profileImagePath,
         tags: tags,
       ),
     );

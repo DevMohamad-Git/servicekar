@@ -67,6 +67,7 @@ void main() {
         id: 'c1',
         fullName: 'Alice',
         phoneNumber: '+98 912 000 0000',
+        profileImagePath: 'customers/c1/avatar.jpg',
       );
 
       final saveResult = await repo.createCustomer(input);
@@ -81,6 +82,7 @@ void main() {
       final entity = (read as Right<CustomerFailure, CustomerEntity>).value;
       expect(entity.fullName, 'Alice');
       expect(entity.phoneNumber, '+98 912 000 0000');
+      expect(entity.profileImagePath, 'customers/c1/avatar.jpg');
     });
 
     test('getCustomerById returns CustomerNotFoundFailure on miss', () async {
@@ -130,6 +132,7 @@ void main() {
         phoneNumber: '+98 912 000 0000',
         email: 'a@example.com',
         address: 'Tehran',
+        profileImagePath: 'customers/c1/avatar.png',
         tags: ['vip', 'cash'],
       );
       await fake.save(model);
@@ -139,6 +142,7 @@ void main() {
       final e = (fetched as Right<CustomerFailure, CustomerEntity>).value;
       expect(e.email, 'a@example.com');
       expect(e.address, 'Tehran');
+      expect(e.profileImagePath, 'customers/c1/avatar.png');
       expect(e.tags, ['vip', 'cash']);
     });
 
