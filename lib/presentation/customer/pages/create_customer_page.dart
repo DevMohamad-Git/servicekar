@@ -84,8 +84,12 @@ class _CreateCustomerPageState extends ConsumerState<CreateCustomerPage> {
     _formKey = GlobalKey<FormState>();
   }
 
-  Future<void> _submit() async {
+  void _dismissKeyboard() {
     FocusManager.instance.primaryFocus?.unfocus();
+  }
+
+  Future<void> _submit() async {
+    _dismissKeyboard();
     if (!_formKey.currentState!.validate()) return;
     setState(() => _submitting = true);
 
@@ -188,47 +192,46 @@ class _CreateCustomerPageState extends ConsumerState<CreateCustomerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: true,
       appBar: CustomerPageHeader(
         title: context.l10n.newCustomer,
+        subtitle: 'ثبت و ایجاد مشتری',
+        titleFontWeight: FontWeight.w600,
         onBack: () => context.router.maybePop(),
-        actions: [
-          ListenableBuilder(
-            listenable: Listenable.merge([_fullName, _phone]),
-            builder: (context, _) => TextButton(
-              onPressed: _submitting || !_isFormValid ? null : _submit,
-              child: Text(context.l10n.save),
-            ),
-          ),
-        ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-              child: CreateCustomerFormWidget(
-                formKey: _formKey,
-                fullNameController: _fullName,
-                phoneController: _phone,
-                emailController: _email,
-                addressController: _address,
-                notesController: _notes,
-                profileImage: _profileImage,
-                onProfileImageTap: _openProfileImageActions,
+      body: Listener(
+        behavior: HitTestBehavior.translucent,
+        onPointerDown: (_) => _dismissKeyboard(),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                child: CreateCustomerFormWidget(
+                  formKey: _formKey,
+                  fullNameController: _fullName,
+                  phoneController: _phone,
+                  emailController: _email,
+                  addressController: _address,
+                  notesController: _notes,
+                  profileImage: _profileImage,
+                  onProfileImageTap: _openProfileImageActions,
+                ),
               ),
             ),
-          ),
-          ListenableBuilder(
-            listenable: Listenable.merge([_fullName, _phone]),
-            builder: (context, _) => _SubmitActionBar(
-              submitting: _submitting,
-              enabled: _isFormValid,
-              onSubmit: _submit,
+            ListenableBuilder(
+              listenable: Listenable.merge([_fullName, _phone]),
+              builder: (context, _) => _SubmitActionBar(
+                submitting: _submitting,
+                enabled: _isFormValid,
+                onSubmit: _submit,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -252,7 +255,8 @@ class _SubmitActionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
 
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
@@ -277,9 +281,12 @@ class _SubmitActionBar extends StatelessWidget {
           child: FilledButton(
             onPressed: submitting || !enabled ? null : onSubmit,
             style: FilledButton.styleFrom(
-              textStyle: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
+              backgroundColor: scheme.primary,
+              foregroundColor: scheme.onPrimary,
+              disabledBackgroundColor: scheme.onSurface.withValues(alpha: 0.12),
+              disabledForegroundColor: scheme.onSurface.withValues(alpha: 0.38),
+              textStyle: theme.textTheme.labelLarge?.copyWith(
+                fontWeight: FontWeight.w600,
               ),
             ),
             child: submitting

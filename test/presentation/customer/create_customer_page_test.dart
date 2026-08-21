@@ -72,9 +72,30 @@ void main() {
     expect(find.text('ایمیل'), findsOneWidget);
     expect(find.text('آدرس'), findsOneWidget);
     expect(find.text('یادداشت / توضیحات'), findsOneWidget);
+    expect(find.text('ذخیره'), findsNothing);
+    expect(find.text('ایجاد مشتری'), findsOneWidget);
 
     // Required fields start empty, so the primary CTA is disabled.
     expect(submitButton(tester).onPressed, isNull);
+  });
+
+  testWidgets('dismisses focus when tapping outside a text field', (tester) async {
+    usePhoneViewport(tester);
+
+    await tester.pumpWidget(buildPage());
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byType(TextFormField).first);
+    await tester.pump();
+    final firstInput = tester.widget<EditableText>(
+      find.byType(EditableText).first,
+    );
+    expect(firstInput.focusNode.hasFocus, isTrue);
+
+    // Tap the empty gutter beside the form, outside every input.
+    await tester.tapAt(const Offset(4, 300));
+    await tester.pump();
+    expect(firstInput.focusNode.hasFocus, isFalse);
   });
 
   testWidgets('stays scrollable and overflow-free on a small viewport', (

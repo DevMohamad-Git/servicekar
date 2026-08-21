@@ -66,6 +66,7 @@ class CustomerPageHeader extends StatefulWidget
     required this.title,
     this.subtitle,
     this.titleIcon,
+    this.titleFontWeight = FontWeight.w700,
     this.onBack,
     this.actions = const [],
   });
@@ -78,6 +79,10 @@ class CustomerPageHeader extends StatefulWidget
 
   /// Optional icon rendered just before [title] (only the list page uses it).
   final IconData? titleIcon;
+
+  /// Weight used for the centered title. Existing pages keep the stronger
+  /// default; Create Customer can opt into a softer semibold hierarchy.
+  final FontWeight titleFontWeight;
 
   /// When non-null, a back button is shown on the left edge.
   final VoidCallback? onBack;
@@ -139,8 +144,8 @@ class _CustomerPageHeaderState extends State<CustomerPageHeader> {
     final baseTitleSize = theme.textTheme.titleLarge?.fontSize ?? 22.0;
     final titleStyle = theme.textTheme.titleLarge?.copyWith(
       color: kTextPrimaryColor,
-      fontWeight: FontWeight.w700,
-      fontSize: baseTitleSize + 4,
+      fontWeight: widget.titleFontWeight,
+      fontSize: baseTitleSize + 2,
     );
 
     // ─── Slot builders ────────────────────────────────────────────
@@ -277,7 +282,7 @@ class _HeaderTitle extends StatelessWidget {
     final subtitleStyle = theme.textTheme.labelLarge?.copyWith(
       color: kGrey3Color,
       fontWeight: FontWeight.w500,
-      fontSize: baseSubtitleSize + 2,
+      fontSize: baseSubtitleSize,
     );
 
     return Column(
