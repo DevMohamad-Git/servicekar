@@ -174,7 +174,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
   void _openCreateCustomer(BuildContext context) {
     // Reuse the existing customer-registration route; the form is outside
     // this UI-only task.
-    context.router.push(const CreateCustomerRoute());
+    context.router.push(CreateCustomerRoute());
   }
 
   void _handleCustomerTap(CustomerCardData customer) {
