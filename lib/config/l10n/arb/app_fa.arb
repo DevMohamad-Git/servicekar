@@ -333,5 +333,109 @@
   "fillSample": "پر کردن نمونه",
   "@fillSample": {
     "description": "Tooltip for the action that fills the create form with sample values."
+  },
+  "serviceEntry": "ثبت سرویس",
+  "@serviceEntry": {
+    "description": "AppBar title of the service-entry page."
+  },
+  "serviceEntrySubtitle": "اطلاعات سرویس و هزینه‌های انجام‌شده را ثبت کنید.",
+  "@serviceEntrySubtitle": {
+    "description": "Subtitle under the service-entry page title."
+  },
+  "selectCustomer": "انتخاب مشتری",
+  "@selectCustomer": {
+    "description": "Section heading prompting the user to select a customer."
+  },
+  "changeCustomer": "تغییر مشتری",
+  "@changeCustomer": {
+    "description": "Action label to change the selected customer."
+  },
+  "searchCustomerHint": "جستجوی مشتریان…",
+  "@searchCustomerHint": {
+    "description": "Search field hint for the customer selection search bar."
+  },
+  "serviceType": "نوع سرویس",
+  "@serviceType": {
+    "description": "Label for the service-type dropdown field."
+  },
+  "serviceTypePeriodic": "سرویس دوره‌ای",
+  "@serviceTypePeriodic": {
+    "description": "Dropdown option: periodic service."
+  },
+  "serviceTypeRepair": "تعمیر",
+  "@serviceTypeRepair": {
+    "description": "Dropdown option: repair."
+  },
+  "serviceTypeInstallation": "نصب",
+  "@serviceTypeInstallation": {
+    "description": "Dropdown option: installation."
+  },
+  "serviceDescription": "شرح سرویس",
+  "@serviceDescription": {
+    "description": "Label for the multi-line service-description field."
+  },
+  "serviceDescriptionHint": "مثلاً تعویض پمپ و سرویس کامل دستگاه",
+  "@serviceDescriptionHint": {
+    "description": "Placeholder for the service-description text field."
+  },
+  "serviceFee": "هزینه اجرت",
+  "@serviceFee": {
+    "description": "Label for the labour-cost field."
+  },
+  "partsFee": "هزینه قطعات",
+  "@partsFee": {
+    "description": "Label for the parts-cost field."
+  },
+  "serviceDate": "تاریخ سرویس",
+  "@serviceDate": {
+    "description": "Label for the service-date picker."
+  },
+  "nextServiceReminder": "یادآوری سرویس بعدی",
+  "@nextServiceReminder": {
+    "description": "Label for the toggle that enables next-service reminder."
+  },
+  "nextServiceDate": "تاریخ سرویس بعدی",
+  "@nextServiceDate": {
+    "description": "Label for the next-service-date picker field."
+  },
+  "servicePhotos": "عکس‌های سرویس",
+  "@servicePhotos": {
+    "description": "Section heading for the service-photos area."
+  },
+  "addServicePhoto": "افزودن عکس سرویس",
+  "@addServicePhoto": {
+    "description": "Tooltip / accessibility label for the add-service-photo tile."
+  },
+  "choosePhotoSource": "انتخاب منبع تصویر",
+  "@choosePhotoSource": {
+    "description": "Title of the bottom sheet that lets the user pick camera or gallery."
+  },
+  "serviceSubmitted": "سرویس با موفقیت ثبت شد",
+  "@serviceSubmitted": {
+    "description": "Snackbar message after a successful mock service submission."
+  },
+  "serviceSubmitError": "ثبت سرویس با خطا مواجه شد",
+  "@serviceSubmitError": {
+    "description": "Mock error message shown when service submission fails."
+  },
+  "serviceDetails": "جزئیات سرویس",
+  "@serviceDetails": {
+    "description": "Card header grouping service type and description fields."
+  },
+  "serviceCosts": "هزینه‌های سرویس",
+  "@serviceCosts": {
+    "description": "Card header grouping the fee inputs and the total row."
+  },
+  "servicePhotoError": "دسترسی به دوربین یا گالری ممکن نیست؛ لطفاً مجوزها را بررسی کنید",
+  "@servicePhotoError": {
+    "description": "Snackbar shown when picking a service photo fails or permission is denied."
+  },
+  "totalCost": "مجموع هزینه",
+  "@totalCost": {
+    "description": "Label for the read-only field showing the sum of service fee and parts fee."
+  },
+  "noCustomersFound": "مشتری‌ای یافت نشد",
+  "@noCustomersFound": {
+    "description": "Empty state shown when customer search returns no results."
   }
 }

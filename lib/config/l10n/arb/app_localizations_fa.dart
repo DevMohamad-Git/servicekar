@@ -273,4 +273,84 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get fillSample => 'پر کردن نمونه';
+
+  @override
+  String get serviceEntry => 'ثبت سرویس';
+
+  @override
+  String get serviceEntrySubtitle =>
+      'اطلاعات سرویس و هزینه‌های انجام‌شده را ثبت کنید.';
+
+  @override
+  String get selectCustomer => 'انتخاب مشتری';
+
+  @override
+  String get changeCustomer => 'تغییر مشتری';
+
+  @override
+  String get searchCustomerHint => 'جستجوی مشتریان…';
+
+  @override
+  String get serviceType => 'نوع سرویس';
+
+  @override
+  String get serviceTypePeriodic => 'سرویس دوره‌ای';
+
+  @override
+  String get serviceTypeRepair => 'تعمیر';
+
+  @override
+  String get serviceTypeInstallation => 'نصب';
+
+  @override
+  String get serviceDescription => 'شرح سرویس';
+
+  @override
+  String get serviceDescriptionHint => 'مثلاً تعویض پمپ و سرویس کامل دستگاه';
+
+  @override
+  String get serviceFee => 'هزینه اجرت';
+
+  @override
+  String get partsFee => 'هزینه قطعات';
+
+  @override
+  String get serviceDate => 'تاریخ سرویس';
+
+  @override
+  String get nextServiceReminder => 'یادآوری سرویس بعدی';
+
+  @override
+  String get nextServiceDate => 'تاریخ سرویس بعدی';
+
+  @override
+  String get servicePhotos => 'عکس‌های سرویس';
+
+  @override
+  String get addServicePhoto => 'افزودن عکس سرویس';
+
+  @override
+  String get choosePhotoSource => 'انتخاب منبع تصویر';
+
+  @override
+  String get serviceSubmitted => 'سرویس با موفقیت ثبت شد';
+
+  @override
+  String get serviceSubmitError => 'ثبت سرویس با خطا مواجه شد';
+
+  @override
+  String get serviceDetails => 'جزئیات سرویس';
+
+  @override
+  String get serviceCosts => 'هزینه‌های سرویس';
+
+  @override
+  String get servicePhotoError =>
+      'دسترسی به دوربین یا گالری ممکن نیست؛ لطفاً مجوزها را بررسی کنید';
+
+  @override
+  String get totalCost => 'مجموع هزینه';
+
+  @override
+  String get noCustomersFound => 'مشتری‌ای یافت نشد';
 }
