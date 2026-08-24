@@ -396,4 +396,19 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get paymentSubmitError => 'ثبت پرداخت با خطا مواجه شد';
+
+  @override
+  String get paymentsSubtitle => 'پرداخت‌های دریافت‌شده از مشتریان را ببینید.';
+
+  @override
+  String get allPayments => 'همه';
+
+  @override
+  String get totalReceived => 'مجموع دریافتی‌ها';
+
+  @override
+  String get withinThisMonth => 'درون این ماه';
+
+  @override
+  String get numberOfPayments => 'تعداد پرداخت‌ها';
 }

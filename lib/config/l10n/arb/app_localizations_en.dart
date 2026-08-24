@@ -396,4 +396,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get paymentSubmitError => 'Could not register the payment';
+
+  @override
+  String get paymentsSubtitle =>
+      'See the payments received from your customers.';
+
+  @override
+  String get allPayments => 'All';
+
+  @override
+  String get totalReceived => 'Total received';
+
+  @override
+  String get withinThisMonth => 'This month';
+
+  @override
+  String get numberOfPayments => 'Number of Payments';
 }

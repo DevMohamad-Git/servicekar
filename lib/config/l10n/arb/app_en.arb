@@ -172,5 +172,25 @@
   "paymentSubmitError": "Could not register the payment",
   "@paymentSubmitError": {
     "description": "Mock error message shown when payment submission fails."
+  },
+  "paymentsSubtitle": "See the payments received from your customers.",
+  "@paymentsSubtitle": {
+    "description": "Subtitle under the payments-list page title."
+  },
+  "allPayments": "All",
+  "@allPayments": {
+    "description": "Filter pill on the payments list: show every payment."
+  },
+  "totalReceived": "Total received",
+  "@totalReceived": {
+    "description": "Caption before the summed received amount on the payments list."
+  },
+  "withinThisMonth": "This month",
+  "@withinThisMonth": {
+    "description": "Caption under the payment count on the payments-list summary card."
+  },
+  "numberOfPayments": "Number of Payments",
+  "@numberOfPayments": {
+    "description": "Caption above the payment count on the payments-list summary card."
   }
 }

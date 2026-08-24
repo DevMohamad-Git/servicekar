@@ -493,5 +493,25 @@
   "paymentSubmitError": "ثبت پرداخت با خطا مواجه شد",
   "@paymentSubmitError": {
     "description": "Mock error message shown when payment submission fails."
+  },
+  "paymentsSubtitle": "پرداخت‌های دریافت‌شده از مشتریان را ببینید.",
+  "@paymentsSubtitle": {
+    "description": "Subtitle under the payments-list page title."
+  },
+  "allPayments": "همه",
+  "@allPayments": {
+    "description": "Filter pill on the payments list: show every payment."
+  },
+  "totalReceived": "مجموع دریافتی‌ها",
+  "@totalReceived": {
+    "description": "Caption before the summed received amount on the payments list."
+  },
+  "withinThisMonth": "درون این ماه",
+  "@withinThisMonth": {
+    "description": "Caption under the payment count on the payments-list summary card."
+  },
+  "numberOfPayments": "تعداد پرداخت‌ها",
+  "@numberOfPayments": {
+    "description": "Caption above the payment count on the payments-list summary card."
   }
 }

@@ -865,6 +865,36 @@ abstract class AppLocalizations {
   /// In fa, this message translates to:
   /// **'ثبت پرداخت با خطا مواجه شد'**
   String get paymentSubmitError;
+
+  /// Subtitle under the payments-list page title.
+  ///
+  /// In fa, this message translates to:
+  /// **'پرداخت‌های دریافت‌شده از مشتریان را ببینید.'**
+  String get paymentsSubtitle;
+
+  /// Filter pill on the payments list: show every payment.
+  ///
+  /// In fa, this message translates to:
+  /// **'همه'**
+  String get allPayments;
+
+  /// Caption before the summed received amount on the payments list.
+  ///
+  /// In fa, this message translates to:
+  /// **'مجموع دریافتی‌ها'**
+  String get totalReceived;
+
+  /// Caption under the payment count on the payments-list summary card.
+  ///
+  /// In fa, this message translates to:
+  /// **'درون این ماه'**
+  String get withinThisMonth;
+
+  /// Caption above the payment count on the payments-list summary card.
+  ///
+  /// In fa, this message translates to:
+  /// **'تعداد پرداخت‌ها'**
+  String get numberOfPayments;
 }
 
 class _AppLocalizationsDelegate
