@@ -107,6 +107,7 @@ class _PaymentEntryPageState extends State<PaymentEntryPage> {
     final picked = await showJalaliDatePicker(
       context,
       initialDate: _formState.paymentDate ?? DateTime.now(),
+      title: context.l10n.paymentDate,
     );
     if (picked != null) {
       setState(() => _formState.paymentDate = picked);
@@ -404,7 +405,7 @@ class _FormContent extends StatelessWidget {
             children: [
               _CardHeader(
                 icon: Icons.calendar_month_outlined,
-                title: l10n.paymentDate,
+      title: context.l10n.paymentDate,
               ),
               const SizedBox(height: 14),
               _DateTile(

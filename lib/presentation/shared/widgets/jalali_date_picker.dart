@@ -20,17 +20,26 @@ import '../../../core/utils/jalali_date.dart';
 Future<DateTime?> showJalaliDatePicker(
   BuildContext context, {
   DateTime? initialDate,
+
+  /// Dialog title. Defaults to the service-date label for backwards
+  /// compatibility with the service-entry page; other hosts (e.g. the
+  /// payment-entry page) pass their own localized label.
+  String? title,
 }) {
   return showDialog<DateTime>(
     context: context,
-    builder: (ctx) => _JalaliDatePickerDialog(initialDate: initialDate),
+    builder: (ctx) =>
+        _JalaliDatePickerDialog(initialDate: initialDate, title: title),
   );
 }
 
 class _JalaliDatePickerDialog extends StatefulWidget {
-  const _JalaliDatePickerDialog({this.initialDate});
+  const _JalaliDatePickerDialog({this.initialDate, this.title});
 
   final DateTime? initialDate;
+
+  /// Dialog title; null falls back to the service-date label.
+  final String? title;
 
   @override
   State<_JalaliDatePickerDialog> createState() =>
@@ -112,7 +121,7 @@ class _JalaliDatePickerDialogState extends State<_JalaliDatePickerDialog> {
                 children: [
                   // Title
                   Text(
-                    l10n.serviceDate,
+                    widget.title ?? l10n.serviceDate,
                     style: theme.textTheme.titleMedium?.copyWith(
                       color: kTextPrimaryColor,
                       fontWeight: FontWeight.w700,
