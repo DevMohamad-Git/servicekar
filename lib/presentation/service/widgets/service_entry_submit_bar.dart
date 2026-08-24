@@ -6,11 +6,10 @@ import '../logic/service_entry_state.dart';
 
 /// Bottom-pinned submit button bar for the service-entry page.
 ///
-/// Spans the full width of the page with the same visual radius as the
-/// form cards above (16 dp) so the primary CTA feels like part of the
-/// same visual family.  Text uses `labelLarge.w600` — the same
-/// typography convention as the `_SubmitActionBar` in
-/// `CreateCustomerPage`.
+/// Spans the full width of the page with the same button geometry as
+/// the `_SubmitActionBar` in `CreateCustomerPage`: 52 dp height and the
+/// global FilledButton theme radius (12 dp), so every primary form CTA
+/// in the app looks identical. Text uses `labelLarge.w600`.
 class ServiceEntrySubmitBar extends StatelessWidget {
   const ServiceEntrySubmitBar({
     super.key,
@@ -61,7 +60,9 @@ class ServiceEntrySubmitBar extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(0, 12, 0, 14),
+      // Same bar padding as `_SubmitActionBar` in `CreateCustomerPage`:
+      // a 16 dp horizontal inset so the button doesn't touch the edges.
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(
@@ -92,7 +93,7 @@ class ServiceEntrySubmitBar extends StatelessWidget {
           ),
           child: SizedBox(
             width: double.infinity,
-            height: 56,
+            height: 52,
             child: FilledButton(
               key: ValueKey<ServiceEntrySubmitState>(submitState),
               onPressed: disabled ? null : (showRetry ? onRetry : onSubmit),
@@ -107,9 +108,6 @@ class ServiceEntrySubmitBar extends StatelessWidget {
                 ),
                 textStyle: theme.textTheme.labelLarge?.copyWith(
                   fontWeight: FontWeight.w600,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
                 ),
               ),
               child: child,
