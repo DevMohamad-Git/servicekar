@@ -144,20 +144,23 @@ class _CustomerListPageState extends State<CustomerListPage> {
 
     // The filter pills narrow the mock list by account status.
     final filtered = switch (_selectedFilterIndex) {
-      1 => _mockCustomers
-          .where((c) => c.status == CustomerCardStatus.debtor)
-          .toList(),
-      2 => _mockCustomers
-          .where((c) => c.status == CustomerCardStatus.creditor)
-          .toList(),
-      3 => _mockCustomers
-          .where((c) => c.status == CustomerCardStatus.settled)
-          .toList(),
+      1 =>
+        _mockCustomers
+            .where((c) => c.status == CustomerCardStatus.debtor)
+            .toList(),
+      2 =>
+        _mockCustomers
+            .where((c) => c.status == CustomerCardStatus.creditor)
+            .toList(),
+      3 =>
+        _mockCustomers
+            .where((c) => c.status == CustomerCardStatus.settled)
+            .toList(),
       _ => _mockCustomers,
     };
 
     // Alphabetical sections: one faint letter header per first initial,
-        // giving the scroll an anchor without adding visual noise.
+    // giving the scroll an anchor without adding visual noise.
     final sections = <String, List<CustomerCardData>>{};
     for (final customer in filtered) {
       final letter = customer.name.trim().isEmpty
@@ -225,6 +228,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
     // TODO: Connect retry to the data source when the UI leaves mock mode.
   }
 }
+
 /// Filter pills shown above the body. Tapping a pill reports the new index
 /// to the page, which decides which state to show beneath it.
 class _CustomerFilterBar extends StatelessWidget {
@@ -427,5 +431,52 @@ const List<CustomerCardData> _mockCustomers = <CustomerCardData>[
     name: 'مرضیه حسینی',
     phoneNumber: '09301112233',
     status: CustomerCardStatus.settled,
+  ),
+  CustomerCardData(
+    id: 'customer-6',
+    name: 'رضا کریمی',
+    phoneNumber: '09112223344',
+    status: CustomerCardStatus.debtor,
+    balance: 780000,
+  ),
+  CustomerCardData(
+    id: 'customer-7',
+    name: 'زهرا موسوی',
+    phoneNumber: '09354445566',
+    status: CustomerCardStatus.creditor,
+    balance: 640000,
+  ),
+  CustomerCardData(
+    id: 'customer-8',
+    name: 'امیر حسینی',
+    phoneNumber: '09195556677',
+    status: CustomerCardStatus.settled,
+  ),
+  CustomerCardData(
+    id: 'customer-9',
+    name: 'فاطمه احمدی',
+    phoneNumber: '09017778899',
+    status: CustomerCardStatus.debtor,
+    balance: 1950000,
+  ),
+  CustomerCardData(
+    id: 'customer-10',
+    name: 'مهدی نوری',
+    phoneNumber: '09128889900',
+    status: CustomerCardStatus.creditor,
+    balance: 420000,
+  ),
+  CustomerCardData(
+    id: 'customer-11',
+    name: 'نرگس صادقی',
+    phoneNumber: '09369998877',
+    status: CustomerCardStatus.settled,
+  ),
+  CustomerCardData(
+    id: 'customer-12',
+    name: 'حامد رحیمی',
+    phoneNumber: '09113334455',
+    status: CustomerCardStatus.debtor,
+    balance: 3100000,
   ),
 ];
