@@ -34,6 +34,7 @@ class CustomerAccountSummaryWidget extends StatelessWidget {
     required this.status,
     required this.amount,
     required this.lastUpdated,
+    this.outerPadding = const EdgeInsets.fromLTRB(14, 0, 14, 14),
   });
 
   final CustomerAccountStatus status;
@@ -45,6 +46,11 @@ class CustomerAccountSummaryWidget extends StatelessWidget {
   /// Pre-formatted "last updated" caption, e.g. `'امروز، ۹:۱۵'`.
   final String lastUpdated;
 
+  /// Inset between the grey box and its host surface. Defaults to the
+  /// profile-card inset; hosts that already pad their content (e.g. a
+  /// form card) pass a tighter inset so the summary fills its slot.
+  final EdgeInsetsGeometry outerPadding;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -52,8 +58,8 @@ class CustomerAccountSummaryWidget extends StatelessWidget {
     final statusColor = _statusColor(status, scheme);
 
     return Padding(
-      // Inset the grey box from the profile card's edges.
-      padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
+      // Inset the grey box from the host surface's edges.
+      padding: outerPadding,
       child: Container(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
         decoration: BoxDecoration(
@@ -72,10 +78,12 @@ class CustomerAccountSummaryWidget extends StatelessWidget {
                   const SizedBox(height: 8),
                   // Soft tinted pill (the 12%-tint chip convention used by
                   // the dashboard): a semantic icon beside the status word.
+                  // Sized one step up (titleSmall + 18dp icon) so the
+                  // account state is legible at a glance on any host page.
                   Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 6,
+                      horizontal: 12,
+                      vertical: 8,
                     ),
                     decoration: BoxDecoration(
                       color: statusColor.withValues(alpha: 0.12),
@@ -84,7 +92,7 @@ class CustomerAccountSummaryWidget extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(_statusIcon(status), size: 16, color: statusColor),
+                        Icon(_statusIcon(status), size: 18, color: statusColor),
                         const SizedBox(width: 6),
                         FittedBox(
                           fit: BoxFit.scaleDown,
@@ -93,7 +101,7 @@ class CustomerAccountSummaryWidget extends StatelessWidget {
                             status.label,
                             maxLines: 1,
                             softWrap: false,
-                            style: theme.textTheme.labelLarge?.copyWith(
+                            style: theme.textTheme.titleSmall?.copyWith(
                               color: statusColor,
                               fontWeight: FontWeight.w700,
                             ),
