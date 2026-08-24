@@ -208,7 +208,10 @@ class _SummaryCard extends StatelessWidget {
       child: Row(
         children: [
           // ── Received-total pane (start side — right in RTL) ──
+          // Flex 3: the total is the card's focal datum, so it claims
+          // the wider share and pushes the divider toward the count.
           Expanded(
+            flex: 3,
             child: Row(
               children: [
                 Container(
@@ -231,7 +234,7 @@ class _SummaryCard extends StatelessWidget {
                     children: [
                       Text(
                         l10n.totalReceived,
-                        style: theme.textTheme.labelMedium?.copyWith(
+                        style: theme.textTheme.titleSmall?.copyWith(
                           color: scheme.onSurfaceVariant,
                           fontWeight: FontWeight.w600,
                         ),
@@ -246,6 +249,7 @@ class _SummaryCard extends StatelessWidget {
                           textDirection: TextDirection.rtl,
                           style: theme.textTheme.headlineSmall?.copyWith(
                             color: kSuccessColor,
+                            fontSize: 30,
                             fontWeight: FontWeight.w800,
                             height: 1.15,
                             letterSpacing: -0.3,
@@ -255,7 +259,7 @@ class _SummaryCard extends StatelessWidget {
                       const SizedBox(height: 2),
                       Text(
                         l10n.toman,
-                        style: theme.textTheme.labelMedium?.copyWith(
+                        style: theme.textTheme.titleSmall?.copyWith(
                           color: scheme.onSurfaceVariant,
                           fontWeight: FontWeight.w500,
                         ),
@@ -274,9 +278,10 @@ class _SummaryCard extends StatelessWidget {
           ),
           const SizedBox(width: 14),
           // ── In-month count pane (end side — left in RTL) ──
-          // A slightly smaller, centered block: title above, the bare
-          // count, then the month caption beneath.
+          // Flex 2: a deliberately narrower, centered block — title
+          // above, the bare count, then the month caption beneath.
           Expanded(
+            flex: 2,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
