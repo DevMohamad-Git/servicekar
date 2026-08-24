@@ -64,6 +64,10 @@ class _HomePageState extends ConsumerState<HomePage>
     ref.read(appRouterProvider).push(ServiceEntryRoute());
   }
 
+  void _openPaymentEntry() {
+    ref.read(appRouterProvider).push(PaymentEntryRoute());
+  }
+
   @override
   Widget build(BuildContext context) {
     final debtors = ref.watch(totalDebtorsControllerProvider);
@@ -112,6 +116,7 @@ class _HomePageState extends ConsumerState<HomePage>
             HomeBottomNav(
               onComingSoon: _showComingSoon,
               onRegisterService: _openServiceEntry,
+              onRegisterPayment: _openPaymentEntry,
             ),
           ],
         ),

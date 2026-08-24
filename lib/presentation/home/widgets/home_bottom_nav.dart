@@ -15,7 +15,9 @@ import '../../../core/constants/general_constants.dart';
 /// tabs show a "coming soon" toast until their features land. The centre
 /// FAB opens a quick-action sheet with four actions: ثبت مشتری routes to
 /// the customer form, ثبت سرویس routes to the service-entry form, and
-/// ثبت پرداختی / ثبت فاکتور show a "coming soon" toast.
+/// both the پرداخت‌ها tab and the ثبت پرداخت action route to the
+/// payment-entry form when [onRegisterPayment] is provided (ثبت فاکتور
+/// still shows a "coming soon" toast).
 ///
 /// Order (start → end, i.e. right → left in RTL): موارد بیشتر، فاکتورها،
 /// FAB، ثبت پرداخت، ثبت مشتری.
@@ -24,10 +26,15 @@ class HomeBottomNav extends StatelessWidget {
     super.key,
     required this.onComingSoon,
     required this.onRegisterService,
+    this.onRegisterPayment,
   });
 
   final VoidCallback onComingSoon;
   final VoidCallback onRegisterService;
+
+  /// When null (default), the ثبت پرداخت quick action still shows the
+  /// "coming soon" toast.
+  final VoidCallback? onRegisterPayment;
 
   void _openQuickActions(BuildContext context) {
     final router = context.router;
@@ -48,7 +55,11 @@ class HomeBottomNav extends StatelessWidget {
           },
           onRegisterPayment: () {
             Navigator.of(sheetContext).pop();
-            onComingSoon();
+            if (onRegisterPayment != null) {
+              onRegisterPayment!();
+            } else {
+              onComingSoon();
+            }
           },
           onRegisterInvoice: () {
             Navigator.of(sheetContext).pop();
@@ -107,7 +118,7 @@ class HomeBottomNav extends StatelessWidget {
                     _NavItem(
                       icon: Icons.credit_card_outlined,
                       label: context.l10n.payments,
-                      onTap: onComingSoon,
+                      onTap: onRegisterPayment ?? onComingSoon,
                     ),
                     _NavItem(
                       icon: Icons.groups_rounded,
