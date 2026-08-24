@@ -41,10 +41,9 @@ void main() {
     expect(tester.takeException(), isNull);
     expect(find.text('علی رضایی'), findsOneWidget);
     expect(find.text('0912 123 4567'), findsOneWidget);
-    expect(find.text('بدهکار'), findsOneWidget);
-    // No tag, icon, or amount — just the plain word.
-    expect(find.textContaining('تومان'), findsNothing);
-    expect(find.textContaining('۲,۵۰۰,۰۰۰'), findsNothing);
+    // Debtor cards show the bare amount — no status word.
+    expect(find.text('بدهکار'), findsNothing);
+    expect(find.textContaining('۲,۵۰۰,۰۰۰'), findsOneWidget);
   });
 
   testWidgets('creditor and settled cards show their plain status words', (
@@ -65,8 +64,9 @@ void main() {
     );
 
     expect(tester.takeException(), isNull);
-    expect(find.text('بستانکار'), findsOneWidget);
-    expect(find.textContaining('تومان'), findsNothing);
+    // Creditor cards show the bare green amount — no status word.
+    expect(find.text('بستانکار'), findsNothing);
+    expect(find.textContaining('۳۵۰,۰۰۰'), findsOneWidget);
   });
 
   testWidgets('settled card shows تسویه without any amount', (tester) async {
@@ -85,6 +85,7 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(find.text('تسویه'), findsOneWidget);
+    // Settled customers show no amount next to the status.
     expect(find.textContaining('تومان'), findsNothing);
   });
 

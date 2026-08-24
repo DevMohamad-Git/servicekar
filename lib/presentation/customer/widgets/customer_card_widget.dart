@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../config/themes/app_themes.dart';
+import '../../../core/utils/money_formatter.dart';
 
 /// Status variants used only to present the UI mock cards.
 enum CustomerCardStatus { debtor, creditor, settled }
@@ -46,17 +47,24 @@ class CustomerCardData {
 /// two-zone grid so every row aligns when scanning down the list:
 ///
 ///   * start side — status-tinted avatar, then a name + phone column;
-///   * end side   — the plain status word (بدهکار / بستانکار / تسویه) in its
-///     semantic colour, anchored to the card's end edge so every card's
-///     status sits at the same x-position.
+///   * end side   — data-first status zone: the bare amount (red for
+///     debtors, green for creditors) or the quiet «تسویه» pill, anchored
+///     to the card's end edge so every card's state sits at the same
+///     x-position.
 ///
-/// Tappability is signalled by a soft brand-tinted ripple on press instead
-/// of a chevron.
+/// Tappability is signalled by a soft brand-tinted ripple on press plus
+/// the trailing chevron.
 class CustomerCardWidget extends StatelessWidget {
   const CustomerCardWidget({super.key, required this.customer, this.onTap});
 
   final CustomerCardData customer;
   final VoidCallback? onTap;
+
+  /// Whether the end side shows the bare amount. Settled customers
+  /// carry no number — the green «تسویه» pill alone says enough.
+  bool get _showBalance =>
+      customer.balance != null &&
+      customer.status != CustomerCardStatus.settled;
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +76,10 @@ class CustomerCardWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
+        // Hairline border (the app's field-card recipe) so the card keeps
+        // a crisp edge even when it sits on a white surface, while the
+        // soft shadow still lifts it off the grey list canvas.
+        border: Border.all(color: kGrey4Color.withValues(alpha: 0.5)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.06),
@@ -91,7 +103,7 @@ class CustomerCardWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
             child: Row(
               children: [
-                _CustomerAvatar(color: statusColor),
+                CustomerAvatar(color: statusColor),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
@@ -102,12 +114,12 @@ class CustomerCardWidget extends StatelessWidget {
                         customer.name,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        // Headline-style name, tuned down from the 24sp Bold
-                        // that read too heavy: 18sp SemiBold keeps it the
-                        // card's main line without shouting.
+                        // Headline-style name kept one weight below bold
+                        // (w500): still the card's main line, but lighter
+                        // so the data beside it can breathe.
                         style: theme.textTheme.titleMedium?.copyWith(
                           color: kTextPrimaryColor,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -140,15 +152,64 @@ class CustomerCardWidget extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                // Plain status word — no tag, icon, or amount, per the
-                // requested simplification. Only the semantic colour stays.
-                Text(
-                  customer.status.label,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: statusColor,
-                    fontWeight: FontWeight.w700,
+                // End-side status zone — data-first, one glance:
+                //   * debtor   → the bare outstanding amount in a red
+                //     halo pill;
+                //   * creditor → the bare credit amount in a green halo
+                //     pill;
+                //   * settled  → the quiet green «تسویه» pill (there is
+                //     no number worth showing).
+                // All three share the app-wide 12%-tint halo so every
+                // state reads as one family; numbers stay bold-but-small
+                // so they scan without shouting. A FittedBox keeps long
+                // amounts on one line.
+                if (_showBalance)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: statusColor.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: Text(
+                        formatPersianMoney(customer.balance!),
+                        maxLines: 1,
+                        textDirection: TextDirection.rtl,
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          color: statusColor,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  )
+                else
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: statusColor.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Text(
+                      customer.status.label,
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: statusColor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
-                ),
+                const SizedBox(width: 4),
+                // Trailing chevron — the RTL end-side affordance used by
+                // the date tiles and quick-action rows; together with the
+                // soft brand ripple it signals tappability.
+                const Icon(Icons.chevron_left, size: 20, color: kGrey3Color),
               ],
             ),
           ),
@@ -158,20 +219,26 @@ class CustomerCardWidget extends StatelessWidget {
   }
 }
 
-/// Circular avatar tinted by the customer's status colour, holding a
-/// person glyph instead of initials.
-class _CustomerAvatar extends StatelessWidget {
-  const _CustomerAvatar({required this.color});
+/// Circular avatar holding the app's person glyph (آدمک) — the same
+/// profile placeholder the customer list card uses. Tint it with any
+/// accent colour; the glyph softens to 70% so the tint stays
+/// informational.
+class CustomerAvatar extends StatelessWidget {
+  const CustomerAvatar({super.key, required this.color, this.radius = 22});
 
   final Color color;
+
+  /// Avatar radius. The glyph scales proportionally (24dp at the
+  /// default 22dp radius).
+  final double radius;
 
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-      radius: 22,
+      radius: radius,
       backgroundColor: color.withValues(alpha: 0.12),
       child: _PersonOutlineIcon(
-        size: 24,
+        size: radius * 24 / 22,
         // Icon colour softened a touch so the status tint stays
         // informational instead of shouting next to the card text.
         color: color.withValues(alpha: 0.7),
@@ -180,12 +247,14 @@ class _CustomerAvatar extends StatelessWidget {
   }
 }
 
-/// Accent colour for one status: debt is red, settled is green, credit is
-/// neutral grey — the same mapping the account summary uses.
+/// Accent colour for one status: debt is red, credit is green (the
+/// user-facing convention for this card — the whole creditor section
+/// reads green), settled is green too but word-only — the same mapping
+/// the account summary uses for debtor/settled.
 Color _statusColor(CustomerCardStatus status, ColorScheme scheme) =>
     switch (status) {
       CustomerCardStatus.debtor => scheme.error,
-      CustomerCardStatus.creditor => kGrey2Color,
+      CustomerCardStatus.creditor => kSuccessColor,
       CustomerCardStatus.settled => kSuccessColor,
     };
 

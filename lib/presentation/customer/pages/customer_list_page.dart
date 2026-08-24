@@ -39,12 +39,12 @@ class CustomerListPage extends StatefulWidget {
 class _CustomerListPageState extends State<CustomerListPage> {
   int _selectedFilterIndex = 0;
 
-  /// The corner "+" FAB belongs to the "همه" list only; the other filters
-  /// have their own states, so the FAB is hidden for them.
+  /// The corner "+" FAB belongs to the customer list; preview states
+  /// that force a non-data body hide it.
   bool get _shouldShowFab {
     final forced = widget.displayState;
     if (forced != null) return forced == CustomerListDisplayState.data;
-    return _selectedFilterIndex == 0;
+    return true;
   }
 
   @override
@@ -76,11 +76,22 @@ class _CustomerListPageState extends State<CustomerListPage> {
             // app's neutral grey surface so the white customer cards read
             // as distinct elevated surfaces — tonal contrast defines where
             // each card starts and ends, instead of relying on faint
-            // shadows on a white page.
+            // shadows on a white page. Filter flips cross-fade so the
+            // body change reads as one continuous surface, not a snap.
             Expanded(
               child: ColoredBox(
                 color: kBackgroundColor,
-                child: _buildState(context),
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 250),
+                  switchInCurve: Curves.easeOutCubic,
+                  switchOutCurve: Curves.easeInCubic,
+                  child: KeyedSubtree(
+                    key: ValueKey<int>(
+                      widget.displayState?.index ?? _selectedFilterIndex,
+                    ),
+                    child: _buildState(context),
+                  ),
+                ),
               ),
             ),
           ],
@@ -105,17 +116,9 @@ class _CustomerListPageState extends State<CustomerListPage> {
       return _buildDisplayState(context, forced);
     }
 
-    // Only "همه" shows the customer list; debtors show the error state,
-    // invoices show the empty state, and not-yet-invoiced shows loading.
-    return switch (_selectedFilterIndex) {
-      0 => _buildDataState(context),
-      1 => CustomerListErrorStateWidget(onRetry: _handleRetry),
-      2 => EmptyCustomerStateWidget(
-        onCreatePressed: () => _openCreateCustomer(context),
-      ),
-      3 => const CustomerListLoadingStateWidget(),
-      _ => _buildDataState(context),
-    };
+    // Every filter shows real data — the mock list is narrowed by the
+    // selected status instead of faking error / empty / loading states.
+    return _buildDataState(context);
   }
 
   Widget _buildDisplayState(
@@ -139,13 +142,37 @@ class _CustomerListPageState extends State<CustomerListPage> {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
 
+    // The filter pills narrow the mock list by account status.
+    final filtered = switch (_selectedFilterIndex) {
+      1 => _mockCustomers
+          .where((c) => c.status == CustomerCardStatus.debtor)
+          .toList(),
+      2 => _mockCustomers
+          .where((c) => c.status == CustomerCardStatus.creditor)
+          .toList(),
+      3 => _mockCustomers
+          .where((c) => c.status == CustomerCardStatus.settled)
+          .toList(),
+      _ => _mockCustomers,
+    };
+
+    // Alphabetical sections: one faint letter header per first initial,
+        // giving the scroll an anchor without adding visual noise.
+    final sections = <String, List<CustomerCardData>>{};
+    for (final customer in filtered) {
+      final letter = customer.name.trim().isEmpty
+          ? '…'
+          : customer.name.trim().characters.first;
+      (sections[letter] ??= []).add(customer);
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 14, 20, 8),
           child: Text(
-            '${formatPersianNumber(_mockCustomers.length)} مشتری',
+            '${formatPersianNumber(filtered.length)} مشتری',
             textAlign: TextAlign.right,
             style: theme.textTheme.labelLarge?.copyWith(
               color: scheme.onSurfaceVariant,
@@ -154,17 +181,30 @@ class _CustomerListPageState extends State<CustomerListPage> {
           ),
         ),
         Expanded(
-          child: ListView.separated(
+          child: ListView(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 96),
-            itemCount: _mockCustomers.length,
-            separatorBuilder: (context, index) => const SizedBox(height: 10),
-            itemBuilder: (context, index) {
-              final customer = _mockCustomers[index];
-              return CustomerCardWidget(
-                customer: customer,
-                onTap: () => _handleCustomerTap(customer),
-              );
-            },
+            children: [
+              for (final entry in sections.entries) ...[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(4, 6, 4, 8),
+                  child: Text(
+                    entry.key,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: scheme.onSurfaceVariant,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                for (var i = 0; i < entry.value.length; i++) ...[
+                  if (i > 0) const SizedBox(height: 10),
+                  CustomerCardWidget(
+                    customer: entry.value[i],
+                    onTap: () => _handleCustomerTap(entry.value[i]),
+                  ),
+                ],
+                const SizedBox(height: 14),
+              ],
+            ],
           ),
         ),
       ],
@@ -204,22 +244,22 @@ class _CustomerFilterBar extends StatelessWidget {
       colorOf: (scheme) => scheme.primary,
     ),
     _CustomerFilterOption(
-      icon: Icons.people_outline,
-      selectedIcon: Icons.people,
+      icon: Icons.trending_down,
+      selectedIcon: Icons.trending_down,
       label: 'بدهکاران',
       colorOf: (scheme) => scheme.error,
     ),
     _CustomerFilterOption(
-      icon: Icons.receipt_long_outlined,
-      selectedIcon: Icons.receipt_long,
-      label: 'فاکتورها',
-      colorOf: (_) => kSuccessColor,
+      icon: Icons.trending_up,
+      selectedIcon: Icons.trending_up,
+      label: 'بستانکاران',
+      colorOf: (_) => kGrey2Color,
     ),
     _CustomerFilterOption(
-      icon: Icons.receipt_outlined,
-      selectedIcon: Icons.receipt,
-      label: 'فاکتور نشده‌ها',
-      colorOf: (_) => kGrey2Color,
+      icon: Icons.check_circle_outline,
+      selectedIcon: Icons.check_circle,
+      label: 'تسویه‌شده‌ها',
+      colorOf: (_) => kSuccessColor,
     ),
   ];
 

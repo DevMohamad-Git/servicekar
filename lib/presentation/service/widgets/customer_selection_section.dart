@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../config/l10n/l10n.dart';
 import '../../../config/themes/app_themes.dart';
+import '../../customer/widgets/customer_card_widget.dart';
 import '../logic/service_entry_state.dart';
 
 /// Customer-selection section for the service-entry page.
@@ -208,7 +209,10 @@ class CustomerSelectionSection extends StatelessWidget {
                 width: 2,
               ),
             ),
-            child: _InitialsAvatar(name: customer.name, solid: true),
+            child: CustomerAvatar(
+              color: _accentFor(customer.name),
+              radius: 19,
+            ),
           ),
           const SizedBox(width: 12),
 
@@ -304,7 +308,7 @@ class _CustomerRow extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           child: Row(
             children: [
-              _InitialsAvatar(name: customer.name),
+              CustomerAvatar(color: _accentFor(customer.name), radius: 19),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
@@ -333,9 +337,9 @@ class _CustomerRow extends StatelessWidget {
   }
 }
 
-// ─── Initials avatar ─────────────────────────────────────────
+// ─── Person avatar ───────────────────────────────────────────
 
-/// Soft accent colors for the initials avatars. Values mirror the
+/// Soft accent colors for the avatars. Values mirror the
 /// dashboard KPI palette (navy / teal / purple / amber / green) so no
 /// new saturated hue enters the app.
 const List<Color> _kAvatarAccents = [
@@ -347,43 +351,6 @@ const List<Color> _kAvatarAccents = [
   Color(0xFFDB2777),
 ];
 
-/// Rounded-square avatar showing the customer's first initial over a
-/// soft deterministic tint derived from the name — the modern contact-
-/// list treatment instead of an anonymous person glyph.
-class _InitialsAvatar extends StatelessWidget {
-  const _InitialsAvatar({required this.name, this.solid = false});
-
-  final String name;
-
-  /// When true, renders as a filled accent circle with white initials
-  /// (used for the selected-customer state).
-  final bool solid;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final trimmed = name.trim();
-    final initial = trimmed.isEmpty ? '?' : trimmed.characters.first;
-    final accent = _kAvatarAccents[trimmed.hashCode % _kAvatarAccents.length];
-
-    final shape = BorderRadius.circular(12);
-
-    return Container(
-      width: 38,
-      height: 38,
-      decoration: BoxDecoration(
-        color: solid ? accent : accent.withValues(alpha: 0.12),
-        borderRadius: solid ? null : shape,
-        shape: solid ? BoxShape.circle : BoxShape.rectangle,
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        initial,
-        style: theme.textTheme.titleMedium?.copyWith(
-          color: solid ? Colors.white : accent,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-    );
-  }
-}
+/// Deterministic accent for a customer name, stable across rebuilds.
+Color _accentFor(String name) =>
+    _kAvatarAccents[name.trim().hashCode % _kAvatarAccents.length];
