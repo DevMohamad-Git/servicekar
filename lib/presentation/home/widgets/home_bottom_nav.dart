@@ -14,10 +14,10 @@ import '../../../core/constants/general_constants.dart';
 /// "ثبت مشتری" and "ثبت سرویس" are wired to real screens; the remaining
 /// tabs show a "coming soon" toast until their features land. The centre
 /// FAB opens a quick-action sheet with four actions: ثبت مشتری routes to
-/// the customer form, ثبت سرویس routes to the service-entry form, and
-/// both the پرداخت‌ها tab and the ثبت پرداخت action route to the
-/// payment-entry form when [onRegisterPayment] is provided (ثبت فاکتور
-/// still shows a "coming soon" toast).
+/// the customer form, ثبت سرویس routes to the service-entry form, the
+/// پرداخت‌ها tab routes to the payments list, and the ثبت پرداخت action
+/// routes to the payment-entry form when [onRegisterPayment] is provided
+/// (ثبت فاکتور still shows a "coming soon" toast).
 ///
 /// Order (start → end, i.e. right → left in RTL): موارد بیشتر، فاکتورها،
 /// FAB، ثبت پرداخت، ثبت مشتری.
@@ -118,7 +118,8 @@ class HomeBottomNav extends StatelessWidget {
                     _NavItem(
                       icon: Icons.credit_card_outlined,
                       label: context.l10n.payments,
-                      onTap: onRegisterPayment ?? onComingSoon,
+                      onTap: () =>
+                          context.router.push(const PaymentsListRoute()),
                     ),
                     _NavItem(
                       icon: Icons.groups_rounded,
