@@ -191,11 +191,19 @@ class CustomerSelectionSection extends StatelessWidget {
     return Container(
       key: const ValueKey('selected'),
       padding: const EdgeInsets.all(16),
+      // Same plain white surface as the search state — no colour tint,
+      // so the selected card reads as the same box family.
       decoration: BoxDecoration(
-        // Soft primary tint — not a gradient, just a tinted surface.
-        color: scheme.primary.withValues(alpha: 0.06),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: scheme.primary.withValues(alpha: 0.15)),
+        border: Border.all(color: kGrey4Color.withValues(alpha: 0.7)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.035),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Row(
         children: [
