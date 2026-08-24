@@ -353,4 +353,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noCustomersFound => 'No customers found';
+
+  @override
+  String get paymentEntry => 'Register payment';
+
+  @override
+  String get paymentEntrySubtitle =>
+      'Record the payment received from the customer.';
+
+  @override
+  String get accountSummary => 'Account summary';
+
+  @override
+  String get paymentAmount => 'Payment amount';
+
+  @override
+  String get paymentMethod => 'Payment method';
+
+  @override
+  String get paymentMethodCash => 'Cash';
+
+  @override
+  String get paymentMethodCard => 'Card to card';
+
+  @override
+  String get trackingNumber => 'Tracking number';
+
+  @override
+  String get trackingNumberHint => 'e.g. 123456789';
+
+  @override
+  String get paymentDate => 'Payment date';
+
+  @override
+  String get paymentNote => 'Payment note';
+
+  @override
+  String get paymentNoteHint => 'Add a note about this payment…';
+
+  @override
+  String get paymentSubmitted => 'Payment registered successfully';
+
+  @override
+  String get paymentSubmitError => 'Could not register the payment';
 }

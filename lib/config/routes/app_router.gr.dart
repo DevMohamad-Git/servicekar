@@ -237,6 +237,52 @@ class HomeRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [PaymentEntryPage]
+class PaymentEntryRoute extends PageRouteInfo<PaymentEntryRouteArgs> {
+  PaymentEntryRoute({
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          PaymentEntryRoute.name,
+          args: PaymentEntryRouteArgs(key: key),
+          initialChildren: children,
+        );
+
+  static const String name = 'PaymentEntryRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<PaymentEntryRouteArgs>(
+        orElse: () => const PaymentEntryRouteArgs(),
+      );
+      return PaymentEntryPage(key: args.key);
+    },
+  );
+}
+
+class PaymentEntryRouteArgs {
+  const PaymentEntryRouteArgs({this.key});
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'PaymentEntryRouteArgs{key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PaymentEntryRouteArgs) return false;
+    return key == other.key;
+  }
+
+  @override
+  int get hashCode => key.hashCode;
+}
+
+/// generated route for
 /// [ServiceEntryPage]
 class ServiceEntryRoute extends PageRouteInfo<ServiceEntryRouteArgs> {
   ServiceEntryRoute({

@@ -437,5 +437,61 @@
   "noCustomersFound": "مشتری‌ای یافت نشد",
   "@noCustomersFound": {
     "description": "Empty state shown when customer search returns no results."
+  },
+  "paymentEntry": "ثبت پرداخت",
+  "@paymentEntry": {
+    "description": "AppBar title of the payment-entry page."
+  },
+  "paymentEntrySubtitle": "اطلاعات پرداخت دریافت‌شده از مشتری را ثبت کنید.",
+  "@paymentEntrySubtitle": {
+    "description": "Subtitle under the payment-entry page title."
+  },
+  "accountSummary": "خلاصه وضعیت حساب",
+  "@accountSummary": {
+    "description": "Card header for the selected customer's account summary."
+  },
+  "paymentAmount": "مبلغ پرداختی",
+  "@paymentAmount": {
+    "description": "Label for the paid-amount field."
+  },
+  "paymentMethod": "روش پرداخت",
+  "@paymentMethod": {
+    "description": "Label for the payment-method selector."
+  },
+  "paymentMethodCash": "نقدی",
+  "@paymentMethodCash": {
+    "description": "Payment-method option: cash."
+  },
+  "paymentMethodCard": "کارت به کارت",
+  "@paymentMethodCard": {
+    "description": "Payment-method option: card-to-card transfer."
+  },
+  "trackingNumber": "شماره پیگیری",
+  "@trackingNumber": {
+    "description": "Optional tracking-number field shown for card-to-card payments."
+  },
+  "trackingNumberHint": "مثال: 123456789",
+  "@trackingNumberHint": {
+    "description": "Placeholder example for the tracking-number field; Latin digits per app policy."
+  },
+  "paymentDate": "تاریخ پرداخت",
+  "@paymentDate": {
+    "description": "Label for the payment-date picker."
+  },
+  "paymentNote": "یادداشت پرداخت",
+  "@paymentNote": {
+    "description": "Label for the optional multi-line payment-note field."
+  },
+  "paymentNoteHint": "توضیحاتی درباره این پرداخت بنویسید…",
+  "@paymentNoteHint": {
+    "description": "Placeholder hint for the payment-note field."
+  },
+  "paymentSubmitted": "پرداخت با موفقیت ثبت شد",
+  "@paymentSubmitted": {
+    "description": "Snackbar message after a successful mock payment submission."
+  },
+  "paymentSubmitError": "ثبت پرداخت با خطا مواجه شد",
+  "@paymentSubmitError": {
+    "description": "Mock error message shown when payment submission fails."
   }
 }

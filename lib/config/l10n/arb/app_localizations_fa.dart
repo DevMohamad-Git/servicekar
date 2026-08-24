@@ -353,4 +353,47 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get noCustomersFound => 'مشتری‌ای یافت نشد';
+
+  @override
+  String get paymentEntry => 'ثبت پرداخت';
+
+  @override
+  String get paymentEntrySubtitle =>
+      'اطلاعات پرداخت دریافت‌شده از مشتری را ثبت کنید.';
+
+  @override
+  String get accountSummary => 'خلاصه وضعیت حساب';
+
+  @override
+  String get paymentAmount => 'مبلغ پرداختی';
+
+  @override
+  String get paymentMethod => 'روش پرداخت';
+
+  @override
+  String get paymentMethodCash => 'نقدی';
+
+  @override
+  String get paymentMethodCard => 'کارت به کارت';
+
+  @override
+  String get trackingNumber => 'شماره پیگیری';
+
+  @override
+  String get trackingNumberHint => 'مثال: 123456789';
+
+  @override
+  String get paymentDate => 'تاریخ پرداخت';
+
+  @override
+  String get paymentNote => 'یادداشت پرداخت';
+
+  @override
+  String get paymentNoteHint => 'توضیحاتی درباره این پرداخت بنویسید…';
+
+  @override
+  String get paymentSubmitted => 'پرداخت با موفقیت ثبت شد';
+
+  @override
+  String get paymentSubmitError => 'ثبت پرداخت با خطا مواجه شد';
 }

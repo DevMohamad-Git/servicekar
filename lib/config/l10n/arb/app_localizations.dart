@@ -781,6 +781,90 @@ abstract class AppLocalizations {
   /// In fa, this message translates to:
   /// **'مشتری‌ای یافت نشد'**
   String get noCustomersFound;
+
+  /// AppBar title of the payment-entry page.
+  ///
+  /// In fa, this message translates to:
+  /// **'ثبت پرداخت'**
+  String get paymentEntry;
+
+  /// Subtitle under the payment-entry page title.
+  ///
+  /// In fa, this message translates to:
+  /// **'اطلاعات پرداخت دریافت‌شده از مشتری را ثبت کنید.'**
+  String get paymentEntrySubtitle;
+
+  /// Card header for the selected customer's account summary.
+  ///
+  /// In fa, this message translates to:
+  /// **'خلاصه وضعیت حساب'**
+  String get accountSummary;
+
+  /// Label for the paid-amount field.
+  ///
+  /// In fa, this message translates to:
+  /// **'مبلغ پرداختی'**
+  String get paymentAmount;
+
+  /// Label for the payment-method selector.
+  ///
+  /// In fa, this message translates to:
+  /// **'روش پرداخت'**
+  String get paymentMethod;
+
+  /// Payment-method option: cash.
+  ///
+  /// In fa, this message translates to:
+  /// **'نقدی'**
+  String get paymentMethodCash;
+
+  /// Payment-method option: card-to-card transfer.
+  ///
+  /// In fa, this message translates to:
+  /// **'کارت به کارت'**
+  String get paymentMethodCard;
+
+  /// Optional tracking-number field shown for card-to-card payments.
+  ///
+  /// In fa, this message translates to:
+  /// **'شماره پیگیری'**
+  String get trackingNumber;
+
+  /// Placeholder example for the tracking-number field; Latin digits per app policy.
+  ///
+  /// In fa, this message translates to:
+  /// **'مثال: 123456789'**
+  String get trackingNumberHint;
+
+  /// Label for the payment-date picker.
+  ///
+  /// In fa, this message translates to:
+  /// **'تاریخ پرداخت'**
+  String get paymentDate;
+
+  /// Label for the optional multi-line payment-note field.
+  ///
+  /// In fa, this message translates to:
+  /// **'یادداشت پرداخت'**
+  String get paymentNote;
+
+  /// Placeholder hint for the payment-note field.
+  ///
+  /// In fa, this message translates to:
+  /// **'توضیحاتی درباره این پرداخت بنویسید…'**
+  String get paymentNoteHint;
+
+  /// Snackbar message after a successful mock payment submission.
+  ///
+  /// In fa, this message translates to:
+  /// **'پرداخت با موفقیت ثبت شد'**
+  String get paymentSubmitted;
+
+  /// Mock error message shown when payment submission fails.
+  ///
+  /// In fa, this message translates to:
+  /// **'ثبت پرداخت با خطا مواجه شد'**
+  String get paymentSubmitError;
 }
 
 class _AppLocalizationsDelegate

@@ -116,5 +116,61 @@
   "@totalCost": {
     "description": "Label for the read-only field showing the sum of service fee and parts fee."
   },
-  "noCustomersFound": "No customers found"
+  "noCustomersFound": "No customers found",
+  "paymentEntry": "Register payment",
+  "@paymentEntry": {
+    "description": "AppBar title of the payment-entry page."
+  },
+  "paymentEntrySubtitle": "Record the payment received from the customer.",
+  "@paymentEntrySubtitle": {
+    "description": "Subtitle under the payment-entry page title."
+  },
+  "accountSummary": "Account summary",
+  "@accountSummary": {
+    "description": "Card header for the selected customer's account summary."
+  },
+  "paymentAmount": "Payment amount",
+  "@paymentAmount": {
+    "description": "Label for the paid-amount field."
+  },
+  "paymentMethod": "Payment method",
+  "@paymentMethod": {
+    "description": "Label for the payment-method selector."
+  },
+  "paymentMethodCash": "Cash",
+  "@paymentMethodCash": {
+    "description": "Payment-method option: cash."
+  },
+  "paymentMethodCard": "Card to card",
+  "@paymentMethodCard": {
+    "description": "Payment-method option: card-to-card transfer."
+  },
+  "trackingNumber": "Tracking number",
+  "@trackingNumber": {
+    "description": "Optional tracking-number field shown for card-to-card payments."
+  },
+  "trackingNumberHint": "e.g. 123456789",
+  "@trackingNumberHint": {
+    "description": "Placeholder example for the tracking-number field; Latin digits per app policy."
+  },
+  "paymentDate": "Payment date",
+  "@paymentDate": {
+    "description": "Label for the payment-date picker."
+  },
+  "paymentNote": "Payment note",
+  "@paymentNote": {
+    "description": "Label for the optional multi-line payment-note field."
+  },
+  "paymentNoteHint": "Add a note about this payment…",
+  "@paymentNoteHint": {
+    "description": "Placeholder hint for the payment-note field."
+  },
+  "paymentSubmitted": "Payment registered successfully",
+  "@paymentSubmitted": {
+    "description": "Snackbar message after a successful mock payment submission."
+  },
+  "paymentSubmitError": "Could not register the payment",
+  "@paymentSubmitError": {
+    "description": "Mock error message shown when payment submission fails."
+  }
 }

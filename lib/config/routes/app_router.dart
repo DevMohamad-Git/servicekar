@@ -6,6 +6,7 @@ import '../../presentation/customer/pages/customer_details_page.dart';
 import '../../presentation/customer/pages/customer_list_page.dart';
 import '../../presentation/customer/pages/edit_customer_page.dart';
 import '../../presentation/home/pages/home_page.dart';
+import '../../presentation/payment/pages/payment_entry_page.dart';
 import '../../presentation/customer/pages/create_customer_submit.dart';
 import '../../presentation/customer/services/profile_image_picker.dart';
 import '../../presentation/service/pages/service_entry_page.dart';
@@ -38,5 +39,6 @@ class AppRouter extends RootStackRouter {
       path: '/customers/:customerId/edit',
     ),
     AutoRoute(page: ServiceEntryRoute.page, path: '/services/new'),
+    AutoRoute(page: PaymentEntryRoute.page, path: '/payments/new'),
   ];
 }
