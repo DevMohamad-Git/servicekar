@@ -283,6 +283,22 @@ class PaymentEntryRouteArgs {
 }
 
 /// generated route for
+/// [PaymentsListPage]
+class PaymentsListRoute extends PageRouteInfo<void> {
+  const PaymentsListRoute({List<PageRouteInfo>? children})
+    : super(PaymentsListRoute.name, initialChildren: children);
+
+  static const String name = 'PaymentsListRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const PaymentsListPage();
+    },
+  );
+}
+
+/// generated route for
 /// [ServiceEntryPage]
 class ServiceEntryRoute extends PageRouteInfo<ServiceEntryRouteArgs> {
   ServiceEntryRoute({
