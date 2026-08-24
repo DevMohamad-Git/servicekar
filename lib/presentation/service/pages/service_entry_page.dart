@@ -383,17 +383,12 @@ class _FormContent extends StatelessWidget {
 
         // ─── 2. Service details (type + description) ────────────
         _FormCard(
-          accent: kServiceDetailsAccent,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _CardHeader(
-                icon: Icons.build_circle_outlined,
+                icon: Icons.build_outlined,
                 title: l10n.serviceDetails,
-                gradient: const [
-                  kServiceDetailsAccent,
-                  kServiceDetailsAccentLight,
-                ],
               ),
               const SizedBox(height: 14),
               _FieldLabel(label: l10n.serviceType),
@@ -438,14 +433,12 @@ class _FormContent extends StatelessWidget {
 
         // ─── 3. Costs ───────────────────────────────────────────
         _FormCard(
-          accent: kServiceCostsAccent,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _CardHeader(
-                icon: Icons.payments_outlined,
+                icon: Icons.credit_card_outlined,
                 title: l10n.serviceCosts,
-                gradient: const [kServiceCostsAccent, kServiceCostsAccentLight],
               ),
               const SizedBox(height: 14),
               Row(
@@ -454,7 +447,7 @@ class _FormContent extends StatelessWidget {
                     child: _NumberField(
                       controller: serviceFeeController,
                       label: l10n.serviceFee,
-                      prefixIcon: Icons.construction_rounded,
+                      prefixIcon: Icons.build_rounded,
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -462,7 +455,7 @@ class _FormContent extends StatelessWidget {
                     child: _NumberField(
                       controller: partsFeeController,
                       label: l10n.partsFee,
-                      prefixIcon: Icons.settings_rounded,
+                      prefixIcon: Icons.handyman_outlined,
                     ),
                   ),
                 ],
@@ -476,17 +469,12 @@ class _FormContent extends StatelessWidget {
 
         // ─── 4. Schedule (service date + reminder) ──────────────
         _FormCard(
-          accent: kServiceScheduleAccent,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _CardHeader(
-                icon: Icons.event_available_outlined,
+                icon: Icons.calendar_month_outlined,
                 title: l10n.serviceDate,
-                gradient: const [
-                  kServiceScheduleAccent,
-                  kServiceScheduleAccentLight,
-                ],
               ),
               const SizedBox(height: 14),
               _DateTile(
@@ -508,9 +496,21 @@ class _FormContent extends StatelessWidget {
         const SizedBox(height: 18),
 
         // ─── 5. Service photos ──────────────────────────────────
-        ServicePhotosSection(
-          photos: formState.photos,
-          onAddPhoto: onOpenPhotoSourcePicker,
+        _FormCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _CardHeader(
+                icon: Icons.image_outlined,
+                title: l10n.servicePhotos,
+              ),
+              const SizedBox(height: 14),
+              ServicePhotosSection(
+                photos: formState.photos,
+                onAddPhoto: onOpenPhotoSourcePicker,
+              ),
+            ],
+          ),
         ),
 
         // ─── Bottom breathing room under the submit bar ─────────
@@ -530,33 +530,18 @@ class _FormContent extends StatelessWidget {
 /// direction and the border picks up the same hue, colour-coding the
 /// section while keeping inputs (grey-filled) perfectly readable.
 class _FormCard extends StatelessWidget {
-  const _FormCard({required this.child, this.accent});
+  const _FormCard({required this.child});
 
   final Widget child;
 
-  /// Section accent driving the gradient wash + tinted border.
-  final Color? accent;
-
   @override
   Widget build(BuildContext context) {
-    final accent = this.accent;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: accent == null ? Colors.white : null,
-        gradient: accent == null
-            ? null
-            : LinearGradient(
-                begin: AlignmentDirectional.topStart,
-                end: AlignmentDirectional.bottomEnd,
-                colors: [Colors.white, accent.withValues(alpha: 0.07)],
-              ),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: accent == null
-              ? kGrey4Color.withValues(alpha: 0.7)
-              : accent.withValues(alpha: 0.22),
-        ),
+        border: Border.all(color: kGrey4Color.withValues(alpha: 0.7)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.035),
@@ -570,56 +555,41 @@ class _FormCard extends StatelessWidget {
   }
 }
 
-/// Prominent card header: gradient icon chip + bold title.
+/// Card header: icon chip + subtitle-style title.
 ///
-/// Section titles are the typographic anchors of the page, so they render
-/// one weight heavier than anything else in the card. The chip carries
-/// the section's accent gradient with a matching glow, so each card is
-/// identifiable by colour before it is read.
+/// Uses `titleSmall.w600` — the exact typography convention from
+/// `_SectionWithSurface` in CreateCustomerPage — so section headers
+/// feel uniform across the app.
 class _CardHeader extends StatelessWidget {
   const _CardHeader({
     required this.icon,
     required this.title,
-    required this.gradient,
   });
 
   final IconData icon;
   final String title;
 
-  /// Two-stop accent gradient filling the icon chip.
-  final List<Color> gradient;
-
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Row(
       children: [
         Container(
           width: 38,
           height: 38,
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: AlignmentDirectional.topStart,
-              end: AlignmentDirectional.bottomEnd,
-              colors: gradient,
-            ),
+            color: scheme.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: gradient.first.withValues(alpha: 0.35),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
           ),
-          child: Icon(icon, size: 20, color: Colors.white),
+          child: Icon(icon, size: 20, color: scheme.primary),
         ),
         const SizedBox(width: 12),
         Expanded(
           child: Text(
             title,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
               color: kTextPrimaryColor,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -628,10 +598,11 @@ class _CardHeader extends StatelessWidget {
   }
 }
 
-/// Secondary label above a field inside a card.
+/// Field label inside a form card.
 ///
-/// Deliberately smaller and muted so it reads as metadata under the bold
-/// card header rather than competing with it.
+/// Uses `labelLarge.onSurfaceVariant.w500` — the exact typography
+/// convention from `_CreateField` in CreateCustomerPage — so field
+/// labels feel uniform across the app.
 class _FieldLabel extends StatelessWidget {
   const _FieldLabel({required this.label});
 
@@ -639,11 +610,12 @@ class _FieldLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Text(
       label,
-      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-        color: kGrey2Color,
-        fontWeight: FontWeight.w600,
+      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+        color: scheme.onSurfaceVariant,
+        fontWeight: FontWeight.w500,
       ),
     );
   }
@@ -774,6 +746,7 @@ class _NumberFieldState extends State<_NumberField> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
     return TextFormField(
       controller: widget.controller,
       keyboardType: TextInputType.number,
@@ -784,9 +757,9 @@ class _NumberFieldState extends State<_NumberField> {
       ),
       decoration: InputDecoration(
         labelText: widget.label,
-        labelStyle: theme.textTheme.labelSmall?.copyWith(
-          color: kGrey3Color,
-          fontWeight: FontWeight.w400,
+        labelStyle: theme.textTheme.labelLarge?.copyWith(
+          color: scheme.onSurfaceVariant,
+          fontWeight: FontWeight.w500,
         ),
         prefixIcon: Icon(widget.prefixIcon, size: 16, color: kGrey3Color),
       ),
@@ -891,10 +864,9 @@ class _ReminderSection extends StatelessWidget {
       children: [
         // Compact toggle row — icon, subtle label, small switch.
         Row(
-          children: [
-            Icon(
-              Icons.notifications_outlined,
-              size: 16,
+          children: [              Icon(
+                Icons.notifications_none,
+                size: 16,
               color: enabled ? scheme.primary : kGrey3Color,
             ),
             const SizedBox(width: 8),
@@ -928,7 +900,7 @@ class _ReminderSection extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 10),
                   child: _DateTile(
                     label: formatDisplayDate(nextDate),
-                    icon: Icons.event_rounded,
+                    icon: Icons.calendar_month_outlined,
                     onTap: onPickDate,
                   ),
                 )
@@ -968,30 +940,27 @@ class _TotalCostField extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    final scheme = theme.colorScheme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: AlignmentDirectional.topStart,
-          end: AlignmentDirectional.bottomEnd,
-          colors: [Colors.white, kServiceCostsAccent.withValues(alpha: 0.10)],
-        ),
+        color: scheme.surfaceContainerHighest.withValues(alpha: 0.55),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: kServiceCostsAccent.withValues(alpha: 0.30)),
+        border: Border.all(color: kGrey4Color.withValues(alpha: 0.6)),
       ),
       child: Row(
         children: [
-          const Icon(
-            Icons.calculate_outlined,
+          Icon(
+            Icons.account_balance_wallet_outlined,
             size: 20,
-            color: kServiceCostsAccent,
+            color: scheme.primary,
           ),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
               label,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: kGrey2Color,
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: scheme.onSurfaceVariant,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -1004,7 +973,7 @@ class _TotalCostField extends StatelessWidget {
               '${_formatWithCommas(value)} ${context.l10n.toman}',
               textDirection: TextDirection.rtl,
               style: theme.textTheme.titleSmall?.copyWith(
-                color: kServiceCostsAccent,
+                color: scheme.primary,
                 fontWeight: FontWeight.w700,
               ),
             ),

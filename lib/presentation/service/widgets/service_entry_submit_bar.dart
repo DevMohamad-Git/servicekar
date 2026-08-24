@@ -6,17 +6,11 @@ import '../logic/service_entry_state.dart';
 
 /// Bottom-pinned submit button bar for the service-entry page.
 ///
-/// Stays above the keyboard and within one-hand reach. The button is the
-/// largest control on the page — 66dp tall with a 20dp radius, one step
-/// above the 16dp form cards, so the primary action visibly outranks
-/// every other element. Visual state follows [submitState] and
-/// cross-fades between states with a subtle scale:
-///   * `idle` — enabled or disabled [FilledButton] reading "ثبت سرویس";
-///   * `submitting` — disabled button with a [CircularProgressIndicator];
-///   * `success` — green filled button with a checkmark for a brief
-///     moment before the page resets;
-///   * `error` — red filled button with "تلاش دوباره" that simulates a
-///     failure next submission.
+/// Spans the full width of the page with the same visual radius as the
+/// form cards above (16 dp) so the primary CTA feels like part of the
+/// same visual family.  Text uses `labelLarge.w600` — the same
+/// typography convention as the `_SubmitActionBar` in
+/// `CreateCustomerPage`.
 class ServiceEntrySubmitBar extends StatelessWidget {
   const ServiceEntrySubmitBar({
     super.key,
@@ -57,8 +51,8 @@ class ServiceEntrySubmitBar extends StatelessWidget {
       child = Text(l10n.retry);
     } else if (isSubmitting) {
       child = SizedBox(
-        height: 24,
-        width: 24,
+        height: 22,
+        width: 22,
         child: CircularProgressIndicator(
           strokeWidth: 2.5,
           valueColor: AlwaysStoppedAnimation<Color>(fgColor),
@@ -67,57 +61,55 @@ class ServiceEntrySubmitBar extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 14),
+      padding: const EdgeInsets.fromLTRB(0, 12, 0, 14),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(
-          top: BorderSide(color: kGrey4Color.withValues(alpha: 0.6)),
+          top: BorderSide(color: kGrey4Color.withValues(alpha: 0.8)),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 16,
-            offset: const Offset(0, -4),
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 12,
+            offset: const Offset(0, -3),
           ),
         ],
       ),
       child: SafeArea(
         top: false,
-        child: SizedBox(
-          width: double.infinity,
-          height: 66,
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 220),
-            switchInCurve: Curves.easeOutCubic,
-            switchOutCurve: Curves.easeInCubic,
-            transitionBuilder: (transitionChild, animation) => FadeTransition(
-              opacity: animation,
-              child: ScaleTransition(
-                scale: Tween<double>(begin: 0.94, end: 1).animate(
-                  CurvedAnimation(parent: animation, curve: Curves.easeOut),
-                ),
-                child: transitionChild,
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 220),
+          switchInCurve: Curves.easeOutCubic,
+          switchOutCurve: Curves.easeInCubic,
+          transitionBuilder: (transitionChild, animation) => FadeTransition(
+            opacity: animation,
+            child: ScaleTransition(
+              scale: Tween<double>(begin: 0.94, end: 1).animate(
+                CurvedAnimation(parent: animation, curve: Curves.easeOut),
               ),
+              child: transitionChild,
             ),
+          ),
+          child: SizedBox(
+            width: double.infinity,
+            height: 56,
             child: FilledButton(
-              // Keyed by state so AnimatedSwitcher swaps the whole button
-              // look (colour + content) as one cross-fading unit.
               key: ValueKey<ServiceEntrySubmitState>(submitState),
               onPressed: disabled ? null : (showRetry ? onRetry : onSubmit),
               style: FilledButton.styleFrom(
                 backgroundColor: bgColor,
                 foregroundColor: fgColor,
-                textStyle: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
                 disabledBackgroundColor: scheme.onSurface.withValues(
                   alpha: 0.12,
                 ),
                 disabledForegroundColor: scheme.onSurface.withValues(
                   alpha: 0.38,
                 ),
+                textStyle: theme.textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(16),
                 ),
               ),
               child: child,

@@ -70,15 +70,4 @@ const kActivityInvoiceBackground = Color(0x1F2563EB);
 const kActivityCustomerBackground = Color(0x1F8B5CF6);
 const kActivityOutflowBackground = Color(0x1FDC2626);
 
-// ─── Service-entry card gradients ──────────────────────────────
-// Two-stop accent pairs for the service-entry form cards. The strong
-// pair fills the header icon chip (white glyph on top); the first stop
-// alone tints the card wash, border, and cost total. Semantics follow
-// the established palette: blue = service details, teal = technical /
-// money, amber = the schedule card that hosts the reminder toggle.
-const kServiceDetailsAccent = Color(0xFF1565C0);
-const kServiceDetailsAccentLight = Color(0xFF42A5F5);
-const kServiceCostsAccent = Color(0xFF00838F);
-const kServiceCostsAccentLight = Color(0xFF26C6DA);
-const kServiceScheduleAccent = Color(0xFFF9A825);
-const kServiceScheduleAccentLight = Color(0xFFFDD835);
+

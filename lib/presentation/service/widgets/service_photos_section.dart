@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../../../config/l10n/l10n.dart';
 import '../../../config/themes/app_themes.dart';
 import '../logic/service_entry_state.dart';
 
@@ -25,36 +24,20 @@ class ServicePhotosSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final theme = Theme.of(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          l10n.servicePhotos,
-          style: theme.textTheme.titleSmall?.copyWith(
-            color: kTextPrimaryColor,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 10),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              if (photos.isNotEmpty)
-                ...photos.map(
-                  (photo) => Padding(
-                    padding: const EdgeInsetsDirectional.only(end: 10),
-                    child: _PhotoTile(key: ValueKey(photo.id)),
-                  ),
-                ),
-              _AddPhotoTile(onTap: onAddPhoto),
-            ],
-          ),
-        ),
-      ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          if (photos.isNotEmpty)
+            ...photos.map(
+              (photo) => Padding(
+                padding: const EdgeInsetsDirectional.only(end: 10),
+                child: _PhotoTile(key: ValueKey(photo.id)),
+              ),
+            ),
+          _AddPhotoTile(onTap: onAddPhoto),
+        ],
+      ),
     );
   }
 }
