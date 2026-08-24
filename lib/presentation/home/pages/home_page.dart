@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../config/l10n/l10n.dart';
+import '../../../config/routes/app_router.dart';
 import '../../../injection/feature_injection/dashboard_providers.dart';
 import '../../../injection/global_providers.dart';
 import '../widgets/business_overview_section.dart';
@@ -59,6 +60,10 @@ class _HomePageState extends ConsumerState<HomePage>
         .displayToast(context, message: context.l10n.comingSoon);
   }
 
+  void _openServiceEntry() {
+    ref.read(appRouterProvider).push(ServiceEntryRoute());
+  }
+
   @override
   Widget build(BuildContext context) {
     final debtors = ref.watch(totalDebtorsControllerProvider);
@@ -104,7 +109,10 @@ class _HomePageState extends ConsumerState<HomePage>
                 ),
               ),
             ),
-            HomeBottomNav(onComingSoon: _showComingSoon),
+            HomeBottomNav(
+              onComingSoon: _showComingSoon,
+              onRegisterService: _openServiceEntry,
+            ),
           ],
         ),
       ),

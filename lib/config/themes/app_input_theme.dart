@@ -38,23 +38,23 @@ InputDecorationTheme buildAppInputTheme(ColorScheme scheme) {
     ),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(color: scheme.outline),
+      borderSide: BorderSide.none,
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(color: scheme.outline),
+      borderSide: BorderSide.none,
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(color: scheme.primary, width: 2),
+      borderSide: BorderSide.none,
     ),
     errorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(color: scheme.error, width: 2),
+      borderSide: BorderSide.none,
     ),
     focusedErrorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(color: scheme.error, width: 2),
+      borderSide: BorderSide.none,
     ),
     labelStyle: TextStyle(color: scheme.onSurfaceVariant),
     floatingLabelStyle: TextStyle(color: scheme.primary),

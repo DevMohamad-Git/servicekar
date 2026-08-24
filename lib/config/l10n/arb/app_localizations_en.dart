@@ -273,4 +273,84 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fillSample => 'Fill sample';
+
+  @override
+  String get serviceEntry => 'Register service';
+
+  @override
+  String get serviceEntrySubtitle => 'Enter the service information and costs.';
+
+  @override
+  String get selectCustomer => 'Select customer';
+
+  @override
+  String get changeCustomer => 'Change customer';
+
+  @override
+  String get searchCustomerHint => 'Search customers…';
+
+  @override
+  String get serviceType => 'Service type';
+
+  @override
+  String get serviceTypePeriodic => 'Periodic service';
+
+  @override
+  String get serviceTypeRepair => 'Repair';
+
+  @override
+  String get serviceTypeInstallation => 'Installation';
+
+  @override
+  String get serviceDescription => 'Service description';
+
+  @override
+  String get serviceDescriptionHint =>
+      'e.g. Replace the pump and fully service the device';
+
+  @override
+  String get serviceFee => 'Labour cost';
+
+  @override
+  String get partsFee => 'Parts cost';
+
+  @override
+  String get serviceDate => 'Service date';
+
+  @override
+  String get nextServiceReminder => 'Next service reminder';
+
+  @override
+  String get nextServiceDate => 'Next service date';
+
+  @override
+  String get servicePhotos => 'Service photos';
+
+  @override
+  String get addServicePhoto => 'Add service photo';
+
+  @override
+  String get choosePhotoSource => 'Choose photo source';
+
+  @override
+  String get serviceSubmitted => 'Service registered successfully';
+
+  @override
+  String get serviceSubmitError => 'Could not register the service';
+
+  @override
+  String get serviceDetails => 'Service details';
+
+  @override
+  String get serviceCosts => 'Service costs';
+
+  @override
+  String get servicePhotoError =>
+      'Camera or gallery is unavailable. Please check permissions.';
+
+  @override
+  String get totalCost => 'Total cost';
+
+  @override
+  String get noCustomersFound => 'No customers found';
 }

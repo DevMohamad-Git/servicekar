@@ -308,7 +308,9 @@ class _IconThumbnail extends StatelessWidget {
   }
 }
 
-/// Calendar icon + Jalali date caption.
+/// Calendar icon + Jalali date caption — intentionally small and
+/// low-contrast so it reads as metadata, never competing with the
+/// card's title or description.
 class _DateLabel extends StatelessWidget {
   const _DateLabel({required this.dateLabel});
 
@@ -316,14 +318,12 @@ class _DateLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(
           Icons.calendar_month_outlined,
-          size: 14,
+          size: 12,
           color: kGrey3Color,
         ),
         const SizedBox(width: 4),
@@ -332,8 +332,11 @@ class _DateLabel extends StatelessWidget {
             dateLabel,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.labelSmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w400,
+              color: kGrey3Color,
+              height: 1.3,
             ),
           ),
         ),

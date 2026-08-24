@@ -625,6 +625,162 @@ abstract class AppLocalizations {
   /// In fa, this message translates to:
   /// **'پر کردن نمونه'**
   String get fillSample;
+
+  /// AppBar title of the service-entry page.
+  ///
+  /// In fa, this message translates to:
+  /// **'ثبت سرویس'**
+  String get serviceEntry;
+
+  /// Subtitle under the service-entry page title.
+  ///
+  /// In fa, this message translates to:
+  /// **'اطلاعات سرویس و هزینه‌های انجام‌شده را ثبت کنید.'**
+  String get serviceEntrySubtitle;
+
+  /// Section heading prompting the user to select a customer.
+  ///
+  /// In fa, this message translates to:
+  /// **'انتخاب مشتری'**
+  String get selectCustomer;
+
+  /// Action label to change the selected customer.
+  ///
+  /// In fa, this message translates to:
+  /// **'تغییر مشتری'**
+  String get changeCustomer;
+
+  /// Search field hint for the customer selection search bar.
+  ///
+  /// In fa, this message translates to:
+  /// **'جستجوی مشتریان…'**
+  String get searchCustomerHint;
+
+  /// Label for the service-type dropdown field.
+  ///
+  /// In fa, this message translates to:
+  /// **'نوع سرویس'**
+  String get serviceType;
+
+  /// Dropdown option: periodic service.
+  ///
+  /// In fa, this message translates to:
+  /// **'سرویس دوره‌ای'**
+  String get serviceTypePeriodic;
+
+  /// Dropdown option: repair.
+  ///
+  /// In fa, this message translates to:
+  /// **'تعمیر'**
+  String get serviceTypeRepair;
+
+  /// Dropdown option: installation.
+  ///
+  /// In fa, this message translates to:
+  /// **'نصب'**
+  String get serviceTypeInstallation;
+
+  /// Label for the multi-line service-description field.
+  ///
+  /// In fa, this message translates to:
+  /// **'شرح سرویس'**
+  String get serviceDescription;
+
+  /// Placeholder for the service-description text field.
+  ///
+  /// In fa, this message translates to:
+  /// **'مثلاً تعویض پمپ و سرویس کامل دستگاه'**
+  String get serviceDescriptionHint;
+
+  /// Label for the labour-cost field.
+  ///
+  /// In fa, this message translates to:
+  /// **'هزینه اجرت'**
+  String get serviceFee;
+
+  /// Label for the parts-cost field.
+  ///
+  /// In fa, this message translates to:
+  /// **'هزینه قطعات'**
+  String get partsFee;
+
+  /// Label for the service-date picker.
+  ///
+  /// In fa, this message translates to:
+  /// **'تاریخ سرویس'**
+  String get serviceDate;
+
+  /// Label for the toggle that enables next-service reminder.
+  ///
+  /// In fa, this message translates to:
+  /// **'یادآوری سرویس بعدی'**
+  String get nextServiceReminder;
+
+  /// Label for the next-service-date picker field.
+  ///
+  /// In fa, this message translates to:
+  /// **'تاریخ سرویس بعدی'**
+  String get nextServiceDate;
+
+  /// Section heading for the service-photos area.
+  ///
+  /// In fa, this message translates to:
+  /// **'عکس‌های سرویس'**
+  String get servicePhotos;
+
+  /// Tooltip / accessibility label for the add-service-photo tile.
+  ///
+  /// In fa, this message translates to:
+  /// **'افزودن عکس سرویس'**
+  String get addServicePhoto;
+
+  /// Title of the bottom sheet that lets the user pick camera or gallery.
+  ///
+  /// In fa, this message translates to:
+  /// **'انتخاب منبع تصویر'**
+  String get choosePhotoSource;
+
+  /// Snackbar message after a successful mock service submission.
+  ///
+  /// In fa, this message translates to:
+  /// **'سرویس با موفقیت ثبت شد'**
+  String get serviceSubmitted;
+
+  /// Mock error message shown when service submission fails.
+  ///
+  /// In fa, this message translates to:
+  /// **'ثبت سرویس با خطا مواجه شد'**
+  String get serviceSubmitError;
+
+  /// Card header grouping service type and description fields.
+  ///
+  /// In fa, this message translates to:
+  /// **'جزئیات سرویس'**
+  String get serviceDetails;
+
+  /// Card header grouping the fee inputs and the total row.
+  ///
+  /// In fa, this message translates to:
+  /// **'هزینه‌های سرویس'**
+  String get serviceCosts;
+
+  /// Snackbar shown when picking a service photo fails or permission is denied.
+  ///
+  /// In fa, this message translates to:
+  /// **'دسترسی به دوربین یا گالری ممکن نیست؛ لطفاً مجوزها را بررسی کنید'**
+  String get servicePhotoError;
+
+  /// Label for the read-only field showing the sum of service fee and parts fee.
+  ///
+  /// In fa, this message translates to:
+  /// **'مجموع هزینه'**
+  String get totalCost;
+
+  /// Empty state shown when customer search returns no results.
+  ///
+  /// In fa, this message translates to:
+  /// **'مشتری‌ای یافت نشد'**
+  String get noCustomersFound;
 }
 
 class _AppLocalizationsDelegate

@@ -11,18 +11,23 @@ import '../../../core/constants/general_constants.dart';
 /// Rendered as a floating, rounded dock inset from the bottom edge, with
 /// a soft grey gradient so it reads as a raised, prominent control bar
 /// without competing with the page content.
-/// Only "ثبت مشتری" is wired to a real screen today; the other tabs show a
-/// "coming soon" toast until their features land. The centre FAB opens a
-/// quick-action sheet with four actions: ثبت مشتری routes to the customer
-/// form, while ثبت سرویس، ثبت پرداختی and ثبت فاکتور show a "coming soon"
-/// toast.
+/// "ثبت مشتری" and "ثبت سرویس" are wired to real screens; the remaining
+/// tabs show a "coming soon" toast until their features land. The centre
+/// FAB opens a quick-action sheet with four actions: ثبت مشتری routes to
+/// the customer form, ثبت سرویس routes to the service-entry form, and
+/// ثبت پرداختی / ثبت فاکتور show a "coming soon" toast.
 ///
 /// Order (start → end, i.e. right → left in RTL): موارد بیشتر، فاکتورها،
 /// FAB، ثبت پرداخت، ثبت مشتری.
 class HomeBottomNav extends StatelessWidget {
-  const HomeBottomNav({super.key, required this.onComingSoon});
+  const HomeBottomNav({
+    super.key,
+    required this.onComingSoon,
+    required this.onRegisterService,
+  });
 
   final VoidCallback onComingSoon;
+  final VoidCallback onRegisterService;
 
   void _openQuickActions(BuildContext context) {
     final router = context.router;
@@ -35,11 +40,11 @@ class HomeBottomNav extends StatelessWidget {
         return _QuickActionSheet(
           onRegisterCustomer: () {
             Navigator.of(sheetContext).pop();
-            router.push(const CreateCustomerRoute());
+            router.push(CreateCustomerRoute());
           },
           onRegisterService: () {
             Navigator.of(sheetContext).pop();
-            onComingSoon();
+            onRegisterService();
           },
           onRegisterPayment: () {
             Navigator.of(sheetContext).pop();
@@ -108,7 +113,7 @@ class HomeBottomNav extends StatelessWidget {
                       icon: Icons.groups_rounded,
                       label: context.l10n.customers,
                       onTap: () =>
-                          context.router.push(const CustomerListRoute()),
+                          context.router.push(CustomerListRoute()),
                     ),
                   ],
                 ),
@@ -160,9 +165,9 @@ class _NavItem extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               label,
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: kGrey2Color,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.labelSmall?.copyWith(color: kGrey2Color),
             ),
           ],
         ),
@@ -318,17 +323,13 @@ class _QuickActionTile extends StatelessWidget {
                 child: Text(
                   label,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: kTextPrimaryColor,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    color: kTextPrimaryColor,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
               const SizedBox(width: 8),
-              const Icon(
-                Icons.chevron_left,
-                size: 22,
-                color: kGrey3Color,
-              ),
+              const Icon(Icons.chevron_left, size: 22, color: kGrey3Color),
             ],
           ),
         ),

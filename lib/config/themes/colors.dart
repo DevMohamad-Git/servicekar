@@ -69,3 +69,5 @@ const kActivityIncomeBackground = Color(0x1F16A34A);
 const kActivityInvoiceBackground = Color(0x1F2563EB);
 const kActivityCustomerBackground = Color(0x1F8B5CF6);
 const kActivityOutflowBackground = Color(0x1FDC2626);
+
+
