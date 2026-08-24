@@ -80,8 +80,20 @@ class ServiceEntryFormState {
   DateTime? nextServiceDate;
   List<MockServicePhoto> photos;
 
-  /// Whether the form has enough data to submit (customer selected at minimum).
-  bool get canSubmit => selectedCustomer != null;
+  /// Whether the form has enough data to submit.
+  ///
+  /// All of the following are required before the submit button lights up:
+  ///   * A customer is selected;
+  ///   * A service fee (هزینه اجرت) is entered;
+  ///   * A parts fee (هزینه قطعات) is entered;
+  ///   * A service date is picked.
+  bool get canSubmit =>
+      selectedCustomer != null &&
+      serviceFee != null &&
+      serviceFee!.trim().isNotEmpty &&
+      partsFee != null &&
+      partsFee!.trim().isNotEmpty &&
+      serviceDate != null;
 }
 
 /// Service photo captured/picked through image_picker.

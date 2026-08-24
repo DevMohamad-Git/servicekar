@@ -62,7 +62,12 @@ class _ServiceEntryPageState extends State<ServiceEntryPage> {
         int.tryParse(_serviceFeeController.text.replaceAll(',', '')) ?? 0;
     final partsFee =
         int.tryParse(_partsFeeController.text.replaceAll(',', '')) ?? 0;
-    setState(() => _totalFee = serviceFee + partsFee);
+    setState(() {
+      _totalFee = serviceFee + partsFee;
+      // Keep form-state fee fields in sync so canSubmit reacts live.
+      _formState.serviceFee = _serviceFeeController.text;
+      _formState.partsFee = _partsFeeController.text;
+    });
   }
 
   @override
