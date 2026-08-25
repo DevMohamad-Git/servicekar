@@ -50,10 +50,10 @@ class _PaymentsListPageState extends State<PaymentsListPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // ─── (a) Count + total-received box ────────────────
+              // ─── (a) Count + total-received summary tiles ──────
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
-                child: _SummaryCard(
+                child: _PaymentsSummary(
                   count: _filteredPayments.length,
                   total: _filteredTotal,
                 ),
@@ -175,27 +175,103 @@ const List<Color> _kAvatarAccents = [
   Color(0xFFDB2777),
 ];
 
-/// (a) Two-pane summary card from the reference design: the received
-/// total (wallet badge + green amount + toman) on the start side, the
-/// in-month payment count on the end side, separated by a thin divider
-/// — the same two-pane recipe as `CustomerAccountSummaryWidget`.
-class _SummaryCard extends StatelessWidget {
-  const _SummaryCard({required this.count, required this.total});
+/// (a) Summary strip above the list: two equal KPI tiles in the same
+/// visual language as the dashboard's "نمای کلی کسب‌وکار" cards — a
+/// tinted icon chip on top, a muted label, one loud number, and a
+/// small caption beneath.
+///
+/// The received-total tile keeps the payment rows' income green so the
+/// figure that sums the rows matches their halo pills; the count tile
+/// stays neutral (text-primary number on the KPI navy chip), matching
+/// the dashboard's count tiles. No new hue enters the app.
+class _PaymentsSummary extends StatelessWidget {
+  const _PaymentsSummary({required this.count, required this.total});
 
   final int count;
   final double total;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
     final l10n = context.l10n;
 
+    // IntrinsicHeight pins both tiles to the same height so the strip
+    // reads as one balanced row even when a long amount scales down.
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Received total (start side — right in RTL).
+          Expanded(
+            child: _SummaryTile(
+              icon: Icons.account_balance_wallet_outlined,
+              accent: kSuccessColor,
+              label: l10n.totalReceived,
+              value: formatPersianMoney(total),
+              valueColor: kSuccessColor,
+              caption: l10n.toman,
+            ),
+          ),
+          const SizedBox(width: 12),
+          // In-month payment count (end side — left in RTL).
+          Expanded(
+            child: _SummaryTile(
+              icon: Icons.format_list_numbered_rounded,
+              accent: kKpiInvoice,
+              label: l10n.numberOfPayments,
+              value: formatPersianNumber(count),
+              valueColor: kTextPrimaryColor,
+              caption: l10n.withinThisMonth,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// One summary tile: a white card with the page's own recipe (hairline
+/// border + soft shadow, 16-radius — the same as the filter container
+/// and the payment rows below) wrapping a centred column: tinted icon
+/// chip, muted one-line label, the loud number slot, then a small
+/// caption so both tiles share the same vertical rhythm.
+class _SummaryTile extends StatelessWidget {
+  const _SummaryTile({
+    required this.icon,
+    required this.accent,
+    required this.label,
+    required this.value,
+    required this.valueColor,
+    required this.caption,
+  });
+
+  /// Glyph shown inside the [accent]-tinted chip.
+  final IconData icon;
+
+  /// Chip accent; its 12% fill follows the app's soft-tint convention.
+  final Color accent;
+
+  /// Muted one-line title under the chip (e.g. «مجموع دریافتی‌ها»).
+  final String label;
+
+  /// Pre-formatted headline figure (Persian digits). Fades between
+  /// values when the active filter changes instead of popping.
+  final String value;
+
+  /// Ink for [value] — income green for the total, neutral for counts.
+  final Color valueColor;
+
+  /// Small trailing line («تومان» / «درون این ماه»).
+  final String caption;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: kGrey4Color.withValues(alpha: 0.5)),
         boxShadow: [
           BoxShadow(
@@ -205,112 +281,56 @@ class _SummaryCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
+      child: Column(
         children: [
-          // ── Received-total pane (start side — right in RTL) ──
-          // Flex 3: the total is the card's focal datum, so it claims
-          // the wider share and pushes the divider toward the count.
-          Expanded(
-            flex: 3,
-            child: Row(
-              children: [
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: scheme.primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Icon(
-                    Icons.account_balance_wallet_outlined,
-                    size: 24,
-                    color: scheme.primary,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.totalReceived,
-                        style: theme.textTheme.titleSmall?.copyWith(
-                          color: scheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      FittedBox(
-                        fit: BoxFit.scaleDown,
-                        alignment: AlignmentDirectional.centerStart,
-                        child: Text(
-                          formatPersianMoney(total),
-                          maxLines: 1,
-                          textDirection: TextDirection.rtl,
-                          style: theme.textTheme.headlineSmall?.copyWith(
-                            color: kSuccessColor,
-                            fontSize: 30,
-                            fontWeight: FontWeight.w800,
-                            height: 1.15,
-                            letterSpacing: -0.3,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        l10n.toman,
-                        style: theme.textTheme.titleSmall?.copyWith(
-                          color: scheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+          // KPI icon chip — the dashboard's 40dp / 12%-tint convention.
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: accent.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, size: 20, color: accent),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: kGrey3Color,
+              fontWeight: FontWeight.w600,
             ),
           ),
-          // Thin vertical separator between the two panes.
-          Container(
-            width: 1,
-            height: 52,
-            color: kGrey3Color.withValues(alpha: 0.55),
+          const SizedBox(height: 4),
+          FittedBox(
+            // Scale oversize amounts down (the dashboard KPI cards'
+            // approach) instead of ever overflowing the tile.
+            fit: BoxFit.scaleDown,
+            alignment: AlignmentDirectional.center,
+            child: AnimatedSwitcher(
+              duration: _kPillAnimationDuration,
+              child: Text(
+                value,
+                key: ValueKey<String>(value),
+                maxLines: 1,
+                style: theme.textTheme.titleLarge?.copyWith(
+                  color: valueColor,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
           ),
-          const SizedBox(width: 14),
-          // ── In-month count pane (end side — left in RTL) ──
-          // Flex 2: a deliberately narrower, centered block — title
-          // above, the bare count, then the month caption beneath.
-          Expanded(
-            flex: 2,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  l10n.numberOfPayments,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: scheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  formatPersianNumber(count),
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    color: kTextPrimaryColor,
-                    fontWeight: FontWeight.w800,
-                    height: 1.15,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  l10n.withinThisMonth,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: scheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
+          const SizedBox(height: 2),
+          Text(
+            caption,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
         ],
