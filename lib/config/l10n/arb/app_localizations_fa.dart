@@ -411,4 +411,57 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get numberOfPayments => 'تعداد پرداخت‌ها';
+
+  @override
+  String get debtorsTitle => 'بدهکاران';
+
+  @override
+  String get debtorsSubtitle =>
+      'شما در این صفحه می‌توانید بدهکاران خود را مشاهده و برای آن‌ها پیامک یادآوری ارسال بکنید.';
+
+  @override
+  String get sortByHighestDebt => 'بیشترین بدهی';
+
+  @override
+  String get sortByLowestDebt => 'کمترین بدهی';
+
+  @override
+  String get sendReminderSms => 'ارسال پیامک یادآوری';
+
+  @override
+  String get bulkReminderEntry => 'ارسال پیامک یادآوری برای چند مشتری';
+
+  @override
+  String sendBulkReminders(String count) {
+    return 'ارسال یادآوری ($count)';
+  }
+
+  @override
+  String get emptyDebtors => 'در حال حاضر مشتری بدهکاری ندارید.';
+
+  @override
+  String get debtorsLoadError => 'دریافت فهرست بدهکاران با خطا مواجه شد.';
+
+  @override
+  String get selectAll => 'انتخاب همه';
+
+  @override
+  String get deselectAll => 'لغو انتخاب همه';
+
+  @override
+  String selectedCount(String count) {
+    return '$count مورد انتخاب شد';
+  }
+
+  @override
+  String reminderSmsQueued(String fullName) {
+    return 'پیامک یادآوری برای $fullName ارسال شد';
+  }
+
+  @override
+  String get bulkSmsUnavailable =>
+      'این امکان به زودی از طریق سرشماره‌های ارسال پیامک گروهی، در دسترس قرار می‌گیرد. می‌توانید تا آن موقع از امکان ارسال پیامک به صورت تکی استفاده بکنید.';
+
+  @override
+  String get lastServiceDateLabel => 'آخرین سرویس';
 }

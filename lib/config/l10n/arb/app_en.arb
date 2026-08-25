@@ -192,5 +192,75 @@
   "numberOfPayments": "Number of Payments",
   "@numberOfPayments": {
     "description": "Caption above the payment count on the payments-list summary card."
+  },
+
+  "debtorsTitle": "Debtors",
+  "@debtorsTitle": {
+    "description": "AppBar title of the debtors-list page."
+  },
+  "debtorsSubtitle": "Here you can view your debtors and send them reminder SMS messages.",
+  "@debtorsSubtitle": {
+    "description": "Intro paragraph under the debtors page title."
+  },
+  "sortByHighestDebt": "Highest debt",
+  "@sortByHighestDebt": {
+    "description": "Sort segment: descending by outstanding amount."
+  },
+  "sortByLowestDebt": "Lowest debt",
+  "@sortByLowestDebt": {
+    "description": "Sort segment: ascending by outstanding amount."
+  },
+  "sendReminderSms": "Send reminder SMS",
+  "@sendReminderSms": {
+    "description": "Per-card action label for sending one reminder SMS."
+  },
+  "bulkReminderEntry": "Send reminder SMS to several customers",
+  "@bulkReminderEntry": {
+    "description": "Bottom CTA that enters multi-select mode."
+  },
+  "sendBulkReminders": "Send reminders ({count})",
+  "@sendBulkReminders": {
+    "description": "Group-send CTA label while rows are selected.",
+    "placeholders": {
+      "count": { "type": "String" }
+    }
+  },
+  "emptyDebtors": "You don't have any debtors right now.",
+  "@emptyDebtors": {
+    "description": "Empty state of the debtors list."
+  },
+  "debtorsLoadError": "Could not load the debtors list.",
+  "@debtorsLoadError": {
+    "description": "Error state body of the debtors list."
+  },
+  "selectAll": "Select all",
+  "@selectAll": {
+    "description": "Master checkbox label selecting every visible debtor."
+  },
+  "deselectAll": "Deselect all",
+  "@deselectAll": {
+    "description": "Master checkbox label clearing the selection."
+  },
+  "selectedCount": "{count} selected",
+  "@selectedCount": {
+    "description": "Live selection-count pill; count is pre-formatted Persian digits.",
+    "placeholders": {
+      "count": { "type": "String" }
+    }
+  },
+  "reminderSmsQueued": "Reminder SMS for {fullName} was sent",
+  "@reminderSmsQueued": {
+    "description": "Toast confirming a single reminder SMS for the customer.",
+    "placeholders": {
+      "fullName": { "type": "String" }
+    }
+  },
+  "bulkSmsUnavailable": "This feature will soon be available through bulk-SMS shortcode numbers. Until then, you can send reminder SMS one customer at a time.",
+  "@bulkSmsUnavailable": {
+    "description": "Toast explaining group SMS is not available yet."
+  },
+  "lastServiceDateLabel": "Last service",
+  "@lastServiceDateLabel": {
+    "description": "Meta label above a debtor's last service date."
   }
 }

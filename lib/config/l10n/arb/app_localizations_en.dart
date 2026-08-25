@@ -412,4 +412,57 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get numberOfPayments => 'Number of Payments';
+
+  @override
+  String get debtorsTitle => 'Debtors';
+
+  @override
+  String get debtorsSubtitle =>
+      'Here you can view your debtors and send them reminder SMS messages.';
+
+  @override
+  String get sortByHighestDebt => 'Highest debt';
+
+  @override
+  String get sortByLowestDebt => 'Lowest debt';
+
+  @override
+  String get sendReminderSms => 'Send reminder SMS';
+
+  @override
+  String get bulkReminderEntry => 'Send reminder SMS to several customers';
+
+  @override
+  String sendBulkReminders(String count) {
+    return 'Send reminders ($count)';
+  }
+
+  @override
+  String get emptyDebtors => 'You don\'t have any debtors right now.';
+
+  @override
+  String get debtorsLoadError => 'Could not load the debtors list.';
+
+  @override
+  String get selectAll => 'Select all';
+
+  @override
+  String get deselectAll => 'Deselect all';
+
+  @override
+  String selectedCount(String count) {
+    return '$count selected';
+  }
+
+  @override
+  String reminderSmsQueued(String fullName) {
+    return 'Reminder SMS for $fullName was sent';
+  }
+
+  @override
+  String get bulkSmsUnavailable =>
+      'This feature will soon be available through bulk-SMS shortcode numbers. Until then, you can send reminder SMS one customer at a time.';
+
+  @override
+  String get lastServiceDateLabel => 'Last service';
 }

@@ -895,6 +895,96 @@ abstract class AppLocalizations {
   /// In fa, this message translates to:
   /// **'تعداد پرداخت‌ها'**
   String get numberOfPayments;
+
+  /// AppBar title of the debtors-list page.
+  ///
+  /// In fa, this message translates to:
+  /// **'بدهکاران'**
+  String get debtorsTitle;
+
+  /// Intro paragraph under the debtors page title.
+  ///
+  /// In fa, this message translates to:
+  /// **'شما در این صفحه می‌توانید بدهکاران خود را مشاهده و برای آن‌ها پیامک یادآوری ارسال بکنید.'**
+  String get debtorsSubtitle;
+
+  /// Sort segment: descending by outstanding amount.
+  ///
+  /// In fa, this message translates to:
+  /// **'بیشترین بدهی'**
+  String get sortByHighestDebt;
+
+  /// Sort segment: ascending by outstanding amount.
+  ///
+  /// In fa, this message translates to:
+  /// **'کمترین بدهی'**
+  String get sortByLowestDebt;
+
+  /// Per-card action label for sending one reminder SMS.
+  ///
+  /// In fa, this message translates to:
+  /// **'ارسال پیامک یادآوری'**
+  String get sendReminderSms;
+
+  /// Bottom CTA that enters multi-select mode.
+  ///
+  /// In fa, this message translates to:
+  /// **'ارسال پیامک یادآوری برای چند مشتری'**
+  String get bulkReminderEntry;
+
+  /// Group-send CTA label while rows are selected.
+  ///
+  /// In fa, this message translates to:
+  /// **'ارسال یادآوری ({count})'**
+  String sendBulkReminders(String count);
+
+  /// Empty state of the debtors list.
+  ///
+  /// In fa, this message translates to:
+  /// **'در حال حاضر مشتری بدهکاری ندارید.'**
+  String get emptyDebtors;
+
+  /// Error state body of the debtors list.
+  ///
+  /// In fa, this message translates to:
+  /// **'دریافت فهرست بدهکاران با خطا مواجه شد.'**
+  String get debtorsLoadError;
+
+  /// Master checkbox label selecting every visible debtor.
+  ///
+  /// In fa, this message translates to:
+  /// **'انتخاب همه'**
+  String get selectAll;
+
+  /// Master checkbox label clearing the selection.
+  ///
+  /// In fa, this message translates to:
+  /// **'لغو انتخاب همه'**
+  String get deselectAll;
+
+  /// Live selection-count pill; count is pre-formatted Persian digits.
+  ///
+  /// In fa, this message translates to:
+  /// **'{count} مورد انتخاب شد'**
+  String selectedCount(String count);
+
+  /// Toast confirming a single reminder SMS for the customer.
+  ///
+  /// In fa, this message translates to:
+  /// **'پیامک یادآوری برای {fullName} ارسال شد'**
+  String reminderSmsQueued(String fullName);
+
+  /// Toast explaining group SMS is not available yet.
+  ///
+  /// In fa, this message translates to:
+  /// **'این امکان به زودی از طریق سرشماره‌های ارسال پیامک گروهی، در دسترس قرار می‌گیرد. می‌توانید تا آن موقع از امکان ارسال پیامک به صورت تکی استفاده بکنید.'**
+  String get bulkSmsUnavailable;
+
+  /// Meta label above a debtor's last service date.
+  ///
+  /// In fa, this message translates to:
+  /// **'آخرین سرویس'**
+  String get lastServiceDateLabel;
 }
 
 class _AppLocalizationsDelegate

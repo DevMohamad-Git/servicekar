@@ -513,5 +513,75 @@
   "numberOfPayments": "تعداد پرداخت‌ها",
   "@numberOfPayments": {
     "description": "Caption above the payment count on the payments-list summary card."
+  },
+
+  "debtorsTitle": "بدهکاران",
+  "@debtorsTitle": {
+    "description": "AppBar title of the debtors-list page."
+  },
+  "debtorsSubtitle": "شما در این صفحه می‌توانید بدهکاران خود را مشاهده و برای آن‌ها پیامک یادآوری ارسال بکنید.",
+  "@debtorsSubtitle": {
+    "description": "Intro paragraph under the debtors page title."
+  },
+  "sortByHighestDebt": "بیشترین بدهی",
+  "@sortByHighestDebt": {
+    "description": "Sort segment: descending by outstanding amount."
+  },
+  "sortByLowestDebt": "کمترین بدهی",
+  "@sortByLowestDebt": {
+    "description": "Sort segment: ascending by outstanding amount."
+  },
+  "sendReminderSms": "ارسال پیامک یادآوری",
+  "@sendReminderSms": {
+    "description": "Per-card action label for sending one reminder SMS."
+  },
+  "bulkReminderEntry": "ارسال پیامک یادآوری برای چند مشتری",
+  "@bulkReminderEntry": {
+    "description": "Bottom CTA that enters multi-select mode."
+  },
+  "sendBulkReminders": "ارسال یادآوری ({count})",
+  "@sendBulkReminders": {
+    "description": "Group-send CTA label while rows are selected.",
+    "placeholders": {
+      "count": { "type": "String" }
+    }
+  },
+  "emptyDebtors": "در حال حاضر مشتری بدهکاری ندارید.",
+  "@emptyDebtors": {
+    "description": "Empty state of the debtors list."
+  },
+  "debtorsLoadError": "دریافت فهرست بدهکاران با خطا مواجه شد.",
+  "@debtorsLoadError": {
+    "description": "Error state body of the debtors list."
+  },
+  "selectAll": "انتخاب همه",
+  "@selectAll": {
+    "description": "Master checkbox label selecting every visible debtor."
+  },
+  "deselectAll": "لغو انتخاب همه",
+  "@deselectAll": {
+    "description": "Master checkbox label clearing the selection."
+  },
+  "selectedCount": "{count} مورد انتخاب شد",
+  "@selectedCount": {
+    "description": "Live selection-count pill; count is pre-formatted Persian digits.",
+    "placeholders": {
+      "count": { "type": "String" }
+    }
+  },
+  "reminderSmsQueued": "پیامک یادآوری برای {fullName} ارسال شد",
+  "@reminderSmsQueued": {
+    "description": "Toast confirming a single reminder SMS for the customer.",
+    "placeholders": {
+      "fullName": { "type": "String" }
+    }
+  },
+  "bulkSmsUnavailable": "این امکان به زودی از طریق سرشماره‌های ارسال پیامک گروهی، در دسترس قرار می‌گیرد. می‌توانید تا آن موقع از امکان ارسال پیامک به صورت تکی استفاده بکنید.",
+  "@bulkSmsUnavailable": {
+    "description": "Toast explaining group SMS is not available yet."
+  },
+  "lastServiceDateLabel": "آخرین سرویس",
+  "@lastServiceDateLabel": {
+    "description": "Meta label above a debtor's last service date."
   }
 }

@@ -174,6 +174,22 @@ class CustomerListRouteArgs {
 }
 
 /// generated route for
+/// [DebtorsListPage]
+class DebtorsListRoute extends PageRouteInfo<void> {
+  const DebtorsListRoute({List<PageRouteInfo>? children})
+    : super(DebtorsListRoute.name, initialChildren: children);
+
+  static const String name = 'DebtorsListRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const DebtorsListPage();
+    },
+  );
+}
+
+/// generated route for
 /// [EditCustomerPage]
 class EditCustomerRoute extends PageRouteInfo<EditCustomerRouteArgs> {
   EditCustomerRoute({
