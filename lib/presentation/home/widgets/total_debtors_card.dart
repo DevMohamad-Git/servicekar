@@ -25,8 +25,7 @@ class TotalDebtorsCard extends StatelessWidget {
   final bool isLoading;
   final bool hasError;
 
-  /// Currently routed to a "coming soon" toast (the debtors screen is not
-  /// built yet).
+  /// Routed to the debtors list page (`/debtors`).
   final VoidCallback onViewDebtors;
 
   @override

@@ -68,6 +68,10 @@ class _HomePageState extends ConsumerState<HomePage>
     ref.read(appRouterProvider).push(PaymentEntryRoute());
   }
 
+  void _openDebtors() {
+    ref.read(appRouterProvider).push(const DebtorsListRoute());
+  }
+
   @override
   Widget build(BuildContext context) {
     final debtors = ref.watch(totalDebtorsControllerProvider);
@@ -99,7 +103,7 @@ class _HomePageState extends ConsumerState<HomePage>
                       amount: debtorsAmount,
                       isLoading: debtors.isLoading,
                       hasError: debtors.hasError,
-                      onViewDebtors: _showComingSoon,
+                      onViewDebtors: _openDebtors,
                     ),
                     const SizedBox(height: 28),
                     BusinessOverviewSection(

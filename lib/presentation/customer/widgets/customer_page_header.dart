@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../../config/themes/app_themes.dart';
@@ -65,6 +67,7 @@ class CustomerPageHeader extends StatefulWidget
     super.key,
     required this.title,
     this.subtitle,
+    this.subtitleMaxLines = 1,
     this.titleIcon,
     this.titleFontWeight = FontWeight.w700,
     this.onBack,
@@ -76,6 +79,12 @@ class CustomerPageHeader extends StatefulWidget
 
   /// Optional second line shown under [title] (only the list page uses it).
   final String? subtitle;
+
+  /// Max lines [subtitle] may wrap to. Defaults to the legacy
+  /// single-line band; pages with a long intro (debtors) opt into a
+  /// higher cap and the toolbar grows to the *measured* wrapped
+  /// height, so no fixed extra padding is ever guessed.
+  final int subtitleMaxLines;
 
   /// Optional icon rendered just before [title] (only the list page uses it).
   final IconData? titleIcon;
@@ -115,11 +124,17 @@ class CustomerPageHeader extends StatefulWidget
 /// new height into the widget's `preferredSize` so Scaffold's next
 /// layout pass reserves a slot as tall as the rendered header.
 class _CustomerPageHeaderState extends State<CustomerPageHeader> {
+  /// Extra toolbar height beyond [kAppbarHeight] contributed by a
+  /// wrapped multi-line [CustomerPageHeader.subtitle]. Zero for every
+  /// legacy single-line caller.
+  double _subtitleExtra = 0;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final topInset = MediaQuery.of(context).padding.top;
-    final next = Size.fromHeight(topInset + kAppbarHeight);
+    _subtitleExtra = _measureSubtitleExtra();
+    final next = Size.fromHeight(topInset + kAppbarHeight + _subtitleExtra);
     if (next.height != widget._preferredSize.height) {
       // Field-mutation pattern is the canonical Flutter way to expose a
       // MediaQuery-derived preferredSize from a PreferredSizeWidget;
@@ -131,6 +146,36 @@ class _CustomerPageHeaderState extends State<CustomerPageHeader> {
       // the OS inset.
       setState(() => widget._preferredSize = next);
     }
+  }
+
+  /// Measures how much taller than one line the wrapped subtitle will
+  /// paint at the current width / text scale. Uses TextPainter with
+  /// the exact style + constraints the visible Text gets, so the
+  /// reserved height matches reality instead of a guessed line count.
+  double _measureSubtitleExtra() {
+    final subtitle = widget.subtitle;
+    if (subtitle == null || widget.subtitleMaxLines <= 1) return 0;
+
+    final theme = Theme.of(context);
+    final mediaQuery = MediaQuery.of(context);
+    final maxWidth = math.max(
+      0.0,
+      mediaQuery.size.width - 2 * _kHeaderSlotSize,
+    );
+
+    double measure(int maxLines) {
+      final painter = TextPainter(
+        text: TextSpan(text: subtitle, style: _subtitleStyle(theme)),
+        textDirection: Directionality.of(context),
+        maxLines: maxLines,
+        textScaler: MediaQuery.textScalerOf(context),
+      )..layout(maxWidth: maxWidth);
+      final height = painter.height;
+      painter.dispose();
+      return height;
+    }
+
+    return math.max(0.0, measure(widget.subtitleMaxLines) - measure(1));
   }
 
   @override
@@ -194,7 +239,7 @@ class _CustomerPageHeaderState extends State<CustomerPageHeader> {
           SafeArea(
             bottom: false,
             child: SizedBox(
-              height: kAppbarHeight,
+              height: kAppbarHeight + _subtitleExtra,
               child: IconTheme.merge(
                 data: const IconThemeData(color: kTextPrimaryColor),
                 child: Row(
@@ -206,6 +251,7 @@ class _CustomerPageHeaderState extends State<CustomerPageHeader> {
                         child: _HeaderTitle(
                           title: widget.title,
                           subtitle: widget.subtitle,
+                          subtitleMaxLines: widget.subtitleMaxLines,
                           titleIcon: widget.titleIcon,
                           titleStyle: titleStyle,
                         ),
@@ -226,17 +272,32 @@ class _CustomerPageHeaderState extends State<CustomerPageHeader> {
 /// Two-line title used inside [CustomerPageHeader]: an optional icon
 /// plus the prominent title, and an optional faint subtitle beneath
 /// it.
+/// Shared subtitle style — one source of truth for both the visible
+/// [Text] and the TextPainter height measurement in
+/// [_CustomerPageHeaderState]: 16sp (labelLarge), soft grey, medium
+/// weight, exactly as every other page's header subtitle.
+TextStyle? _subtitleStyle(ThemeData theme) {
+  final baseSubtitleSize = theme.textTheme.labelLarge?.fontSize ?? 14.0;
+  return theme.textTheme.labelLarge?.copyWith(
+    color: kGrey3Color,
+    fontWeight: FontWeight.w500,
+    fontSize: baseSubtitleSize,
+  );
+}
+
 class _HeaderTitle extends StatelessWidget {
   const _HeaderTitle({
     required this.title,
     required this.titleStyle,
     this.subtitle,
+    this.subtitleMaxLines = 1,
     this.titleIcon,
   });
 
   final String title;
-  final TextStyle? titleStyle;
   final String? subtitle;
+  final int subtitleMaxLines;
+  final TextStyle? titleStyle;
   final IconData? titleIcon;
 
   @override
@@ -274,16 +335,10 @@ class _HeaderTitle extends StatelessWidget {
       return titleWidget;
     }
 
-    // The subtitle is one step above labelLarge (~18sp) so it sits as
-    // an obvious secondary line under the 28sp title without
-    // overpowering it (labelLarge alone would feel too tight at
-    // 16sp against the now-larger title).
-    final baseSubtitleSize = theme.textTheme.labelLarge?.fontSize ?? 14.0;
-    final subtitleStyle = theme.textTheme.labelLarge?.copyWith(
-      color: kGrey3Color,
-      fontWeight: FontWeight.w500,
-      fontSize: baseSubtitleSize,
-    );
+    // The subtitle rides the theme's labelLarge role (16sp) tinted
+    // soft grey via [_subtitleStyle] — one step below the prominent
+    // title so it reads as an obvious secondary line.
+    final subtitleStyle = _subtitleStyle(theme);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -292,7 +347,7 @@ class _HeaderTitle extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           subtitle!,
-          maxLines: 1,
+          maxLines: subtitleMaxLines,
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
           style: subtitleStyle,
