@@ -85,7 +85,16 @@ class _DebtorsListPageState extends ConsumerState<DebtorsListPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               if (state.hasData) ...[
-                const SizedBox(height: 12),
+                // Glanceable context line («۶ بدهکار · مجموع بدهی …») —
+                // quiet metadata that answers «چقدر طلب دارم؟» in one
+                // fixation. Hidden in selection mode where the
+                // select-all strip owns this slot.
+                if (!state.selectionMode)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                    child: _DebtorsSummaryLine(debtors: state.debtors),
+                  ),
+                const SizedBox(height: 10),
                 // Sort control swaps for the select-all strip while
                 // multi-select mode is active.
                 Padding(
@@ -180,6 +189,38 @@ class _DebtorsListPageState extends ConsumerState<DebtorsListPage> {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+/// One-line summary above the list: debtor count plus the total
+/// outstanding, both in Persian digits. Presentation-only — it sums
+/// the rows the page already holds; no balance use case is involved.
+///
+/// Styled like the customer-list count label (muted, semibold) so the
+/// line reads as quiet context rather than a competing datum.
+class _DebtorsSummaryLine extends StatelessWidget {
+  const _DebtorsSummaryLine({required this.debtors});
+
+  final List<MockDebtor> debtors;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final total = debtors.fold<double>(0, (sum, d) => sum + d.debtAmount);
+
+    return Text(
+      context.l10n.debtorsSummaryLine(
+        formatPersianNumber(debtors.length),
+        formatPersianMoney(total),
+      ),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      textAlign: TextAlign.right,
+      style: theme.textTheme.labelLarge?.copyWith(
+        color: kGrey2Color,
+        fontWeight: FontWeight.w600,
       ),
     );
   }

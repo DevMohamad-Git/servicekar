@@ -31,7 +31,8 @@ class DebtorsSelectAllBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        // Same 16-radius recipe as every other container on this page.
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: kGrey4Color.withValues(alpha: 0.5)),
       ),
       child: Row(

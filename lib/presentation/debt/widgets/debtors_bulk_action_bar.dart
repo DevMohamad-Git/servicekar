@@ -96,7 +96,13 @@ class _SelectionActions extends StatelessWidget {
 
     return Row(
       children: [
-        OutlinedButton(onPressed: onExit, child: Text(l10n.cancel)),
+        // Quiet exit affordance — grey text instead of a boxed dark
+        // outline so it never competes with the group-send CTA.
+        TextButton(
+          onPressed: onExit,
+          style: TextButton.styleFrom(foregroundColor: kGrey2Color),
+          child: Text(l10n.cancel),
+        ),
         const SizedBox(width: 12),
         Expanded(
           child: FilledButton.icon(
