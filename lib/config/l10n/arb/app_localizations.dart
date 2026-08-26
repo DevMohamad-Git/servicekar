@@ -985,6 +985,12 @@ abstract class AppLocalizations {
   /// In fa, this message translates to:
   /// **'آخرین سرویس'**
   String get lastServiceDateLabel;
+
+  /// One-line summary above the list: debtor count plus the total outstanding amount; count and total are pre-formatted Persian digits.
+  ///
+  /// In fa, this message translates to:
+  /// **'{count} بدهکار · مجموع بدهی {total} تومان'**
+  String debtorsSummaryLine(String count, String total);
 }
 
 class _AppLocalizationsDelegate

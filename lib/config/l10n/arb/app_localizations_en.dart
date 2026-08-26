@@ -465,4 +465,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lastServiceDateLabel => 'Last service';
+
+  @override
+  String debtorsSummaryLine(String count, String total) {
+    return '$count debtors · $total Toman total outstanding';
+  }
 }

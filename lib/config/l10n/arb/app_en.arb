@@ -262,5 +262,13 @@
   "lastServiceDateLabel": "Last service",
   "@lastServiceDateLabel": {
     "description": "Meta label above a debtor's last service date."
+  },
+  "debtorsSummaryLine": "{count} debtors · {total} Toman total outstanding",
+  "@debtorsSummaryLine": {
+    "description": "One-line summary above the list: debtor count plus the total outstanding amount; count and total are pre-formatted Persian digits.",
+    "placeholders": {
+      "count": { "type": "String" },
+      "total": { "type": "String" }
+    }
   }
 }

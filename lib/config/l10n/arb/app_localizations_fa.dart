@@ -464,4 +464,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get lastServiceDateLabel => 'آخرین سرویس';
+
+  @override
+  String debtorsSummaryLine(String count, String total) {
+    return '$count بدهکار · مجموع بدهی $total تومان';
+  }
 }
